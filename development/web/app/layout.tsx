@@ -23,6 +23,12 @@ export default async function RootLayout({
     } as NavbarItem,
     {
       name: "Eventos", href: "/events"
+    } as NavbarItem,
+    {
+      name: "Usuarios", href: "/user"
+    } as NavbarItem,
+    {
+      name: "Example event", href: "/exampleevent"
     } as NavbarItem
   ]
   return (
