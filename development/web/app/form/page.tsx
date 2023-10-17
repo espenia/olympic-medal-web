@@ -1,6 +1,6 @@
 'use client';
 import React, { useState } from 'react';
-import './Formulario.css'; 
+import { Card, Title, Text, Button } from '@tremor/react';
 
 const FormularioCuestionario = () => {
   const [horas, setHoras] = useState(0);
@@ -38,12 +38,12 @@ const FormularioCuestionario = () => {
   };
 
   return (
-    <div className="container mt-4">
-      <h2 className="cuestionario-titulo">Cuestionario</h2>
+    <main className="p-4 md:p-10 mx-auto max-w-7xl">
+      <Title className="cuestionario-titulo">Cuestionario</Title>
       <form onSubmit={handleSubmit}>
         <div className="form-row">
           <div className="col-4">
-            <label className="label-horas">Horas</label>
+            <Text className="label-horas">Horas</Text>
             <input
               type="number"
               className="form-control input-tiempo"
@@ -53,7 +53,7 @@ const FormularioCuestionario = () => {
             />
           </div>
           <div className="col-4">
-            <label className="label-minutos">Minutos</label>
+            <Text className="label-minutos">Minutos</Text>
             <input
               type="number"
               className="form-control input-tiempo"
@@ -63,7 +63,7 @@ const FormularioCuestionario = () => {
             />
           </div>
           <div className="col-4">
-            <label className="label-segundos">Segundos</label>
+            <Text className="label-segundos">Segundos</Text>
             <input
               type="number"
               className="form-control input-tiempo"
@@ -73,13 +73,18 @@ const FormularioCuestionario = () => {
             />
           </div>
         </div>
-        <button type="submit" className="btn btn-primary mt-3">Enviar</button>
+        <Button type="submit" className="btn-primary mt-3">
+          Enviar
+        </Button>
       </form>
 
       {enviado && (
-        <p className="mt-3 alert alert-success enviado-mensaje">¡Gracias por enviar tus respuestas!</p>
+        <Text className="mt-3 alert-success enviado-mensaje">
+          ¡Gracias por enviar tus calificaciones!
+          Apenas sean verificadas por un admin, las veras en tu medallero
+        </Text>
       )}
-    </div>
+    </main>
   );
 };
 
