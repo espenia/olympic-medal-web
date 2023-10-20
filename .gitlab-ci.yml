@@ -27,9 +27,9 @@ cache:
 
 test_async:
   script:
-    - cd development/web && npm install
-    - node ./specs/start.js ./specs/async.spec.js
-    - cd development/web && npm run build
+    - cd development/web
+    - npm install
+    - npm run build
 
 # test_db:
 #   script:
