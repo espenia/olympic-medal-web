@@ -28,12 +28,16 @@ cache:
 
 build_web:
   script:
+    - sudo apt get update
+    - sudo apt install nodejs@20.1.0
     - cd development/web
     - npm install
     - npm run build
 
 test_infrastructure:
   script:
+    - sudo apt get update
+    - sudo apt install nodejs@20.1.0
     - cd development/infrastructure
     - npm install
     - npm test
