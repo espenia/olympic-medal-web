@@ -24,6 +24,7 @@ image: node:latest
 cache:
   paths:
     - development/web/node_modules/
+    - development/infrastructure/node_modules/
 
 # build_web:
 #   script:
