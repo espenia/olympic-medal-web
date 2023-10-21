@@ -25,11 +25,17 @@ cache:
   paths:
     - development/web/node_modules/
 
-test_async:
+build_web:
   script:
     - cd development/web
     - npm install
     - npm run build
+
+test_infrastructure:
+  script:
+    - cd development/infrastructure
+    - npm install
+    - npm test
 
 # test_db:
 #   script:
