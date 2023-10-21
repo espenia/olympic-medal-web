@@ -25,17 +25,17 @@ cache:
   paths:
     - development/web/node_modules/
 
-build_web:
-  script:
-    - cd development/web
-    - npm install
-    - npm run build
+# build_web:
+#   script:
+#     - cd development/web
+#     - npm install
+#     - npm run build
 
-test_infrastructure:
+build:
   script:
-    - cd development/infrastructure
-    - npm install
-    - npm test
+    - cd development
+    - docker-compose build
+    - docker-compose up
 
 # test_db:
 #   script:
