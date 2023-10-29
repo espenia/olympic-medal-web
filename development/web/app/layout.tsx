@@ -7,9 +7,9 @@ import { Suspense } from 'react';
 import NavbarItem from '@/src/navbar/navbar-item';
 
 export const metadata = {
-  title: 'Next.js 13 + PlanetScale + NextAuth + Tailwind CSS',
+  title: 'Portal de deportistas - Medallero',
   description:
-    'A user admin dashboard configured with Next.js, PlanetScale, NextAuth, Tailwind CSS, TypeScript, ESLint, and Prettier.'
+    'Administre participaciones en eventos deportivos, suba resultados y compare su medallero con amigos.'
 };
 
 export default async function RootLayout({
