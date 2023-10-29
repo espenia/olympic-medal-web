@@ -46,6 +46,7 @@ image: node:latest
 deploy:
   stage: deploy
   script: 
+    - cd development
     - docker-compose down -v
     - docker-compose up --build -d
   environment: production
