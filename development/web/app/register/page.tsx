@@ -4,39 +4,67 @@ import React, { useState } from 'react';
 import axios from 'axios'; // Quiza podamos usar otra libreria
 import { Card, Title, Text, Button } from '@tremor/react';
 
-const Registro = () => {
-  const [userData, setUserData] = useState({
-    username: '',
-    nombre: '',
-    apellido: '',
-    fechaNacimiento: '',
-    password: ''
-  });
+// @ts-ignore
+import { experimental_useFormStatus as useFormStatus } from 'react-dom'
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setUserData({
-      ...userData,
-      [name]: value
-    });
-  };
+// @ts-ignore
+import { experimental_useFormState as useFormState } from 'react-dom'
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      const response = await axios.post('/register', userData);
-      console.log('Usuario registrado con éxito:', response.data);
-      setUserData({
-        username: '',
-        nombre: '',
-        apellido: '',
-        fechaNacimiento: '',
-        password: ''
-      });
-    } catch (error) {
-      console.error('Error al registrar el usuario:', error);
-    }
-  };
+import { register } from './actions';
+
+const initialState = {
+  username: '',
+  firstName: '',
+  lastName: '',
+  birthdate: '',
+  password: ''
+};
+
+function SubmitButton() {
+  const { pending } = useFormStatus()
+
+  return (
+    <button type="submit" aria-disabled={pending} className="bg-blue-500 text-white p-2 mt-4">
+      Enviar
+    </button>
+  )
+}
+
+export default function Registro() {
+  const [state, formAction] = useFormState(register, initialState)
+
+  // const [userData, setUserData] = useState({
+  //   username: '',
+  //   nombre: '',
+  //   apellido: '',
+  //   fechaNacimiento: '',
+  //   password: ''
+  // });
+
+  // const handleChange = (e) => {
+  //   const { name, value } = e.target;
+  //   setUserData({
+  //     ...userData,
+  //     [name]: value
+  //   });
+  // };
+
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+  //   try {
+  //     const response = await axios.post('/register', userData);
+  //     console.log('Usuario registrado con éxito:', response.data);
+  //     setUserData({
+  //       username: '',
+  //       nombre: '',
+  //       apellido: '',
+  //       fechaNacimiento: '',
+  //       password: ''
+  //     });
+  //   } catch (error) {
+  //     console.error('Error al registrar el usuario:', error);
+  //   }
+  // };
 
   return (
     <main className="p-4 md:p-10 mx-auto max-w-7xl">
@@ -44,41 +72,41 @@ const Registro = () => {
       <Text>
         Ingresa tus datos para registrarte.
       </Text>
-      <form onSubmit={handleSubmit}>
+      <form action={formAction}>
         <div>
           <label>Nombre de usuario:</label>
           <input
-            type="text"
+            type="email"
+            id="username"
             name="username"
-            value={userData.username}
-            onChange={handleChange}
+            required
           />
         </div>
         <div>
           <label>Nombre:</label>
           <input
             type="text"
-            name="nombre"
-            value={userData.nombre}
-            onChange={handleChange}
+            name="firstName"
+            id="firstName"
+            required
           />
         </div>
         <div>
           <label>Apellido:</label>
           <input
             type="text"
-            name="apellido"
-            value={userData.apellido}
-            onChange={handleChange}
+            name="lastName"
+            id="lastName"
+            required
           />
         </div>
         <div>
           <label>Fecha de nacimiento:</label>
           <input
             type="date"
-            name="fechaNacimiento"
-            value={userData.fechaNacimiento}
-            onChange={handleChange}
+            name="birthdate"
+            id="birthDate"
+            required
           />
         </div>
         <div>
@@ -86,14 +114,16 @@ const Registro = () => {
           <input
             type="password"
             name="password"
-            value={userData.password}
-            onChange={handleChange}
+            id="password"
+            required
           />
         </div>
-        <Button type="submit">Registrarse</Button>
+        {/* <Button type="submit">Registrarse</Button> */}
+        <SubmitButton />
+        <p aria-live="polite" className="sr-only" role="status">
+          {state?.message}
+        </p>
       </form>
     </main>
   );
 };
-
-export default Registro;

@@ -21,10 +21,10 @@ image: node:latest
 
 # This folder is cached between builds
 # https://docs.gitlab.com/ee/ci/yaml/index.html#cache
-cache:
-  paths:
-    - development/web/node_modules/
-    - development/infrastructure/node_modules/
+# cache:
+#   paths:
+#     - development/web/node_modules/
+#     - development/infrastructure/node_modules/
 
 # build_web:
 #   script:
@@ -32,11 +32,11 @@ cache:
 #     - npm install
 #     - npm run build
 
-build:
-  script:
-    - cd development
-    - docker-compose build
-    - docker-compose up
+# build:
+#   script:
+#     - cd development
+#     - docker-compose build
+#     - docker-compose up
 
 # test_db:
 #   script:
@@ -45,5 +45,7 @@ build:
 
 deploy:
   stage: deploy
-  script: echo "Define your deployment script!"
+  script: 
+    - docker-compose down -v
+    - docker-compose up --build -d
   environment: production

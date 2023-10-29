@@ -27,7 +27,6 @@ export default function Events() {
   };
 
   return (
-    <Router>
     <main className="p-4 md:p-10 mx-auto max-w-7xl">
       <Title className="text-3xl font-bold">{eventoDeportivo.nombre}</Title>
       <Text className="text-lg">{eventoDeportivo.descripcion}</Text>
@@ -52,13 +51,12 @@ export default function Events() {
         </Card>
 
         {!eventoDeportivo.abierto && (
-          <Link to="/form">
+          <a href="/form">
             <Button className="bg-blue-500 text-white mt-4">Cuestionario</Button>
-          </Link>
+          </a>
         )}
       </Card>
     </main>
-    </Router>
   );
 }
 
