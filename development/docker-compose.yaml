@@ -13,5 +13,5 @@ services:
     ports:
       - "35000:35000"
     depends_on:
-      - tests
+      - web-tests
     command: bash -c "cd web && npm install && npm run build && npm run start" &
