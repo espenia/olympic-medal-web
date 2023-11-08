@@ -1,21 +1,22 @@
 import IUseCase from "../common/interfaces/useCase";
-import IEventService from "../common/interfaces/eventService";
-import { UUID } from "crypto";
+import type IEventService from "../common/interfaces/eventService";
+import EventCommentDto from "../../entities/events/comment";
+import { Inject, Service } from "typedi";
 
+@Service('commenteventusecase')
 export default class CommentEventUseCase implements IUseCase<void> {
     private readonly service : IEventService;
-    comment : string;
-    eventId : UUID
+    comment? : EventCommentDto;
 
     /**
      *
      */
-    constructor(service : IEventService) {
+    constructor(@Inject('eventservice') service : IEventService) {
         this.service = service;
     }
 
     handle(): Promise<void> {
-        return this.service.commentEventAsync(this.eventId, this.comment);
+        return this.service.commentEventAsync(this.comment!);
     }
 
 }

@@ -8,9 +8,9 @@ WORKDIR /usr/src/app
 # where available (npm@5+)
 COPY . .
 
-EXPOSE 35000
+EXPOSE 35000 35001
 
-ENV PORT 35000
+# ENV PORT 35000
 
 # RUN npm install
 # If you are building your code for production

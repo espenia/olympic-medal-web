@@ -1,17 +1,33 @@
 version: '3.9'
 
+networks:
+  medallero_default:
+    name: medallero_default
+    external: true
+
 services:
   web-tests:
     build: .
     ports:
-      - "5002:5002"
-    command: bash -c "cd infrastructure && npm install && npm run test" &
+      - "5003:5003"
+    command: bash -c "cd usecases && npm install && cd .. && cd infrastructure && npm install && npm update && npm run test" &
     volumes:
       - "./:/usr/src/app"
   web:
     build: .
     ports:
       - "35000:35000"
+    networks:
+      - medallero_default
     depends_on:
       - web-tests
-    command: bash -c "cd web && npm install && npm run build && npm run start" &
+    command: bash -c "cd infrastructure && npm install && cd .. && cd usecases && npm install && cd .. && cd web && npm install && npm update && npm run build && npm run start" &
+  backoffice:
+    build: .
+    ports:
+      - "35001:35001"
+    networks:
+      - medallero_default
+    depends_on:
+      - web-tests
+    command: bash -c "cd infrastructure && npm install && cd .. && cd usecases && npm install && cd .. && cd backoffice && npm install && npm update && npm run build && npm run start" &

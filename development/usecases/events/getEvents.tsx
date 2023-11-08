@@ -1,19 +1,30 @@
 import EventDto from "../../entities/events/event";
-import IEventService from "../common/interfaces/eventService";
+import type IEventService from "../common/interfaces/eventService";
 import IUseCase from "../common/interfaces/useCase";
+import { UUID } from "crypto";
+import { Inject, Service } from "typedi";
 
+@Service('geteventsusecase')
 export default class GetEventsUseCase implements IUseCase<EventDto[]> {
     private readonly service : IEventService;
-    name : string | null;
+    name? : string;
+    id?: UUID;
 
     /**
      *
      */
-    constructor(service : IEventService) {
+    constructor(@Inject('eventservice') service : IEventService) {
         this.service = service;
     }
 
-    handle(): Promise<EventDto[]> {
+    async handle(): Promise<EventDto[]> {
+        if (this.id) {
+            const event = await this.service.getEventAsync(this.id);
+            const events = [];
+            if (event != null) {
+                events.push(event);
+            }
+        }
         return this.service.getEventsAsync(this.name);
     }
 }
