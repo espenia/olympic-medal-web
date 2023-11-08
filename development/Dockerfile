@@ -21,3 +21,9 @@ EXPOSE 35000 35001
 # RUN cd infrastructure && npm install
 
 # CMD cd infrastructure && npm run test
+
+RUN cd usecases && npm install && npm update && cd .. && cd infrastructure && npm install && npm update
+
+RUN cd web && npm install && npm update && npm run build
+
+RUN cd backoffice && npm install && npm update && npm run build

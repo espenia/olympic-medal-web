@@ -10,7 +10,7 @@ services:
     build: .
     ports:
       - "5003:5003"
-    command: bash -c "cd usecases && npm install && cd .. && cd infrastructure && npm install && npm update && npm run test" &
+    command: bash -c " cd infrastructure && npm run test"
     volumes:
       - "./:/usr/src/app"
   web:
@@ -21,7 +21,7 @@ services:
       - medallero_default
     depends_on:
       - web-tests
-    command: bash -c "cd infrastructure && npm install && cd .. && cd usecases && npm install && cd .. && cd web && npm install && npm update && npm run build && npm run start" &
+    command: bash -c "cd web && npm run start"
   backoffice:
     build: .
     ports:
@@ -30,4 +30,4 @@ services:
       - medallero_default
     depends_on:
       - web-tests
-    command: bash -c "cd infrastructure && npm install && cd .. && cd usecases && npm install && cd .. && cd backoffice && npm install && npm update && npm run build && npm run start" &
+    command: bash -c "cd backoffice && npm run start" &
