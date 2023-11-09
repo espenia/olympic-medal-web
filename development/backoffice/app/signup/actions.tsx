@@ -3,7 +3,7 @@
 import { revalidatePath } from 'next/cache'
 import { z } from 'zod'
 
-export async function register(prevState: any, formData: FormData) {
+export async function signup(prevState: any, formData: FormData) {
   const schema = z.object({
     username: z.string().email().min(1),
     password: z.string().min(1),

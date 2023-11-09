@@ -5,11 +5,13 @@ import Nav from '../src/navbar/nav';
 // import Toast from './toast';
 import { Suspense } from 'react';
 import NavbarItem from '@/src/navbar/navbar-item';
+import { getServerSession } from 'next-auth';
+import 'reflect-metadata';
 
 export const metadata = {
-  title: 'Portal de deportistas - Medallero',
+  title: 'Portal de administradores - Medallero',
   description:
-    'Administre participaciones en eventos deportivos, suba resultados y compare su medallero con amigos.'
+    'Administre eventos, cargue, apruebe o rechace resultados de los deportistas en los distintos eventos.'
 };
 
 export default async function RootLayout({
@@ -17,15 +19,10 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const navbar : NavbarItem[] = [
+  const session = await getServerSession();
+  const navbar : NavbarItem[] = session?.user ? [
     {
       name: "Inicio", href: "/"
-    } as NavbarItem,
-    {
-      name: "Login", href: "/login"
-    } as NavbarItem,
-    {
-      name: "Register", href: "/register"
     } as NavbarItem,
     {
       name: "Eventos", href: "/events"
@@ -34,22 +31,23 @@ export default async function RootLayout({
       name: "Usuarios", href: "/user"
     } as NavbarItem,
     {
-      name: "Mi perfil", href: "/profile"
+      name: "Mi Perfil", href: "/profile"
     } as NavbarItem,
+  ] : [
     {
-      name: "Example event", href: "/exampleevent"
-    } as NavbarItem
+      name: "Inicio", href: "/"
+    } as NavbarItem,
   ]
   return (
     <html lang="en" className="h-full bg-gray-50">
-      <body className="h-full">
-        <Suspense>
-          <Nav navigation={navbar} />
-        </Suspense>
-        {children}
-        {/* <Analytics /> */}
-        {/* <Toast /> */}
-      </body>
-    </html>
+        <body className="h-full">
+          <Suspense>
+            <Nav navigation={navbar} />
+          </Suspense>
+          {children}
+          {/* <Analytics /> */}
+          {/* <Toast /> */}
+        </body>
+      </html>
   );
 }
