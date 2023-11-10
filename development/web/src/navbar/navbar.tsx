@@ -1,6 +1,6 @@
 'use client';
 
-import { Fragment } from 'react';
+import { Fragment, useState } from 'react';
 import { usePathname } from 'next/navigation';
 import { Disclosure, Menu, Transition } from '@headlessui/react';
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
@@ -8,12 +8,14 @@ import { signIn, signOut } from 'next-auth/react';
 import Image from 'next/image';
 import NavbarItem from './navbar-item';
 
+
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ');
 }
 
 export default function Navbar({ user, navigation }: { user: any, navigation: NavbarItem[] }) {
   const pathname = usePathname();
+  const [signUpOpen, setSignUpOpen] = useState(false);
 
   return (
     <Disclosure as="nav" className="bg-white shadow-sm">
@@ -104,15 +106,26 @@ export default function Navbar({ user, navigation }: { user: any, navigation: Na
                       ) : (
                         <Menu.Item>
                           {({ active }) => (
-                            <button
-                              className={classNames(
-                                active ? 'bg-gray-100' : '',
-                                'flex w-full px-4 py-2 text-sm text-gray-700'
-                              )}
-                              onClick={() => signIn('github')}
-                            >
-                              Sign in
-                            </button>
+                            <>
+                              <button
+                                className={classNames(
+                                  active ? 'bg-gray-100' : '',
+                                  'flex w-full px-4 py-2 text-sm text-gray-700'
+                                )}
+                                onClick={() => signIn('github')}
+                              >
+                                Sign in
+                              </button>
+                              <a
+                                href="/signup"
+                                className={classNames(
+                                  active ? 'bg-gray-100' : '',
+                                  'flex w-full px-4 py-2 text-sm text-gray-700'
+                                )}
+                              >
+                                Sign up
+                              </a>
+                            </>
                           )}
                         </Menu.Item>
                       )}
@@ -186,7 +199,7 @@ export default function Navbar({ user, navigation }: { user: any, navigation: Na
               ) : (
                 <div className="mt-3 space-y-1">
                   <button
-                    onClick={() => signIn('github')}
+                    onClick={() => signIn('credentials')}
                     className="flex w-full px-4 py-2 text-base font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-800"
                   >
                     Sign in

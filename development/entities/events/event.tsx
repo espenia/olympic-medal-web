@@ -2,7 +2,7 @@ import { UUID } from "crypto";
 import EventCommentDto from "./comment";
 
 export default class EventDto {
-    id?: UUID;
+    id?: UUID | undefined;
     name? : string;
     description?: string;
     sportType?: string;
