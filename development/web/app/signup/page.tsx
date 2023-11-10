@@ -8,7 +8,7 @@ import { Card, Title, Text, Button } from '@tremor/react';
 const Registro = () => {
   const { register, handleSubmit, formState } = useForm();
 
-  const onSubmit = async (data) => {
+  const onSubmit = async (data: any) => {
     try {
       const response = await axios.post('/signup', data);
       console.log('Usuario registrado con éxito:', response.data);
@@ -26,7 +26,7 @@ const Registro = () => {
         <Text>Ingresa tus datos para registrarte.</Text>
         <form onSubmit={handleSubmit(onSubmit)}>
           <div>
-            <Text>Nombre de usuario:</Text>
+            <Text>Email:</Text>
             <input {...register('username', { required: true })} type="email" />
           </div>
           <div>

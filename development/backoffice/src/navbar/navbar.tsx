@@ -7,7 +7,6 @@ import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
 import { signIn, signOut } from 'next-auth/react';
 import Image from 'next/image';
 import NavbarItem from './navbar-item';
-import Registro from '../../app/signup/page';
 
 
 function classNames(...classes: string[]) {

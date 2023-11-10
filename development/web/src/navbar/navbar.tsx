@@ -7,7 +7,6 @@ import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
 import { signIn, signOut } from 'next-auth/react';
 import Image from 'next/image';
 import NavbarItem from './navbar-item';
-import SignUpForm from '../../app/signup/page.tsx';
 
 
 function classNames(...classes: string[]) {
@@ -126,7 +125,6 @@ export default function Navbar({ user, navigation }: { user: any, navigation: Na
                               >
                                 Sign up
                               </a>
-                              {signUpOpen && <SignUpForm onClose={() => setSignUpOpen(false)} />}
                             </>
                           )}
                         </Menu.Item>
