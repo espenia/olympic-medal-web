@@ -17,6 +17,7 @@ const Registro = () => {
       userDto.firstName = data.firstName;
       userDto.lastName = data.lastName;
       userDto.username = data.username;
+      userDto.email = data.email;
       userDto.password = data.password;
       userDto.birthdate = new Date(data.birthdate);
 
@@ -37,7 +38,11 @@ const Registro = () => {
         <form onSubmit={handleSubmit(onSubmit)}>
           <div>
             <Text>Email:</Text>
-            <input {...register('username', { required: true })} type="email" />
+            <input {...register('email', { required: true })} type="email" />
+          </div>
+          <div>
+            <Text>Nombre de Usuario:</Text>
+            <input {...register('username', { required: true })} type="text" />
           </div>
           <div>
             <Text>Nombre:</Text>
