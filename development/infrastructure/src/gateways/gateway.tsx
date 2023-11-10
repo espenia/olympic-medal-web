@@ -23,7 +23,7 @@ export default class ApiGateway implements IGateway {
     }
 
     async createUser(user : UserDto) {
-        const config = this.baseAxiosRequestConfig("post", "/auth/signup");
+        const config = this.signUpAxiosRequestConfig("/auth/signup");
         
         config.data = {
             "user_name": user.username,
@@ -70,6 +70,13 @@ export default class ApiGateway implements IGateway {
             method: method,
             url: this.apiBaseUrl + endpoint,
             headers: { 'X-Auth-Token': 'Bearer ' + this.credential?.payload }
+        };
+    }
+
+    private signUpAxiosRequestConfig( endpoint: string) : AxiosRequestConfig {
+        return {
+            method: 'post',
+            url: this.apiBaseUrl + endpoint,
         };
     }
 }
