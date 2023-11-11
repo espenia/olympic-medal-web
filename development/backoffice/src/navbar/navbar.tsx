@@ -98,7 +98,7 @@ export default function Navbar({ user, navigation }: { user: any, navigation: Na
                               )}
                               onClick={() => signOut()}
                             >
-                              Sign out
+                              Cerrar sesion
                             </button>
                           )}
                         </Menu.Item>
@@ -111,9 +111,9 @@ export default function Navbar({ user, navigation }: { user: any, navigation: Na
                                   active ? 'bg-gray-100' : '',
                                   'flex w-full px-4 py-2 text-sm text-gray-700'
                                 )}
-                                onClick={() => signIn('github')}
+                                onClick={() => signIn('credentials')}
                               >
-                                Sign in
+                                Iniciar sesion
                               </button>
                               <a
                                 href="/signup"
@@ -122,7 +122,7 @@ export default function Navbar({ user, navigation }: { user: any, navigation: Na
                                   'flex w-full px-4 py-2 text-sm text-gray-700'
                                 )}
                               >
-                                Sign up
+                                Registro
                               </a>
                             </>
                           )}
@@ -191,7 +191,7 @@ export default function Navbar({ user, navigation }: { user: any, navigation: Na
                       onClick={() => signOut()}
                       className="block px-4 py-2 text-base font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-800"
                     >
-                      Sign out
+                      Cerrar sesion
                     </button>
                   </div>
                 </>
@@ -201,7 +201,7 @@ export default function Navbar({ user, navigation }: { user: any, navigation: Na
                     onClick={() => signIn('credentials')}
                     className="flex w-full px-4 py-2 text-base font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-800"
                   >
-                    Sign in
+                    Iniciar sesion
                   </button>
                 </div>
               )}

@@ -45,7 +45,7 @@ export default async function RootLayout({
     <html lang="en" className="h-full bg-gray-50">
         <body className="h-full">
           <Suspense>
-            <Nav navigation={navbar} />
+            <Nav navigation={navbar} session={session} />
           </Suspense>
           {children}
           {/* <Analytics /> */}
