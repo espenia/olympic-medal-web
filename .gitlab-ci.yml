@@ -35,6 +35,7 @@ image: node:18-alpine
 build:
   script:
     - cd development
+    - docker-compose down -v
     - docker-compose build
 
 # test_db:
