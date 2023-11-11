@@ -15,7 +15,7 @@ const handler = NextAuth({
           // e.g. domain, username, password, 2FA token, etc.
           // You can pass any HTML attribute to the <input> tag through the object.
           credentials: {
-            username: { label: "Username", type: "text", placeholder: "user@example.com" },
+            username: { label: "Username", type: "text" },
             password: { label: "Password", type: "password" }
           },
           async authorize(credentials, req) {
@@ -26,7 +26,7 @@ const handler = NextAuth({
             // You can also use the `req` object to obtain additional parameters
             // (i.e., the request IP address)
             try {
-              if (!credentials || credentials.username.trim() === "" || credentials.password.trim() === "") {
+              if (!credentials || !credentials.username || !credentials.password || credentials.username.trim() === "" || credentials.password.trim() === "") {
                   throw new Error("Usuario y contrasenia requeridos.")
               }
               const res = new LoginUseCase(new AuthService());
@@ -47,6 +47,20 @@ const handler = NextAuth({
           }
         })
     ],
+    callbacks: {
+      async signIn({ user, account, profile, email, credentials }) {
+        return true
+      },
+      async redirect({ url, baseUrl }) {
+        return baseUrl
+      },
+      async session({ session, user, token }) {
+        return session
+      },
+      async jwt({ token, user, account, profile, isNewUser }) {
+        return token
+      }
+    }
   });
 
 export { handler as GET, handler as POST }

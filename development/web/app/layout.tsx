@@ -9,9 +9,9 @@ import { getServerSession } from 'next-auth';
 import 'reflect-metadata';
 
 export const metadata = {
-  title: 'Portal de administradores - Medallero',
+  title: 'Portal de deportistas - Medallero',
   description:
-    'Administre eventos, cargue, apruebe o rechace resultados de los deportistas en los distintos eventos.'
+    'Participe y administre sus resultados en eventos deportivos.'
 };
 
 export default async function RootLayout({
@@ -42,7 +42,7 @@ export default async function RootLayout({
     <html lang="en" className="h-full bg-gray-50">
         <body className="h-full">
           <Suspense>
-            <Nav navigation={navbar} />
+            <Nav navigation={navbar} session={session} />
           </Suspense>
           {children}
           {/* <Analytics /> */}

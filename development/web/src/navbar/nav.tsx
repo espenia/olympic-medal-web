@@ -1,10 +1,10 @@
 import Navbar from './navbar';
 import NavbarItem from './navbar-item';
+import { Session } from 'next-auth';
 
 // import { getServerSession } from 'next-auth/next';
 
-export default async function Nav({navigation} : {navigation : NavbarItem[]}) {
+export default async function Nav({navigation, session} : {navigation : NavbarItem[], session: Session | null}) {
   // const session = await getServerSession();
-  const session : any = null;
   return <Navbar user={session?.user} navigation={navigation} />;
 }

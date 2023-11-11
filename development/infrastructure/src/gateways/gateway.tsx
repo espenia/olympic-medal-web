@@ -28,6 +28,7 @@ export default class ApiGateway implements IGateway {
         config.data = {
             "user_name": user.username,
             "password": user.password,
+            "email": user.email,
             "first_name": user.firstName,
             "last_name": user.lastName,
             "birth_date": user.birthdate?.toISOString()
