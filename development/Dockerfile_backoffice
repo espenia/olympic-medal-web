@@ -34,7 +34,7 @@ RUN \
 FROM base AS builder
 WORKDIR /app
 COPY --from=deps /app/infrastructure/node_modules /app/infrastructure/node_modules
-COPY --from=deps /app/usecases/node_modules /app/infrastructure/node_modules
+COPY --from=deps /app/usecases/node_modules /app/usecases/node_modules
 COPY --from=deps /app/backoffice/node_modules /app/backoffice/node_modules
 COPY . .
 
