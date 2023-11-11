@@ -6,28 +6,27 @@ networks:
     external: true
 
 services:
-  web-tests:
-    build: .
-    ports:
-      - "5003:5003"
-    command: bash -c " cd infrastructure && npm run test"
-    volumes:
-      - "./:/usr/src/app"
+  tests:
+    build: 
+      context: .
+      dockerfile: Dockerfile_tests
   web:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile_web
     ports:
       - "35000:35000"
     networks:
       - medallero_default
     depends_on:
-      - web-tests
-    command: bash -c "cd web && npm run start"
+      - tests
   backoffice:
-    build: .
+    build: 
+      context: .
+      dockerfile: Dockerfile_backoffice
     ports:
       - "35001:35001"
     networks:
       - medallero_default
     depends_on:
-      - web-tests
-    command: bash -c "cd backoffice && npm run start" &
+      - tests

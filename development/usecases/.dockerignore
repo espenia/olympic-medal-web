@@ -1,4 +1,9 @@
+.dockerignore
 node_modules
 npm-debug.log
-coverage
-package-lock.json
+Dockerfile
+.git
+.gitignore
+.npmrc
+.next
+.next-env.d.ts

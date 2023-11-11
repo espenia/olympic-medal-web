@@ -2,11 +2,12 @@
 const nextConfig = {
     images: {
         domains: ['avatars.githubusercontent.com', 'avatar.vercel.sh']
-      },
-      experimental: {
-        serverActions: true,
-        externalDir: true
-      },
+    },
+    experimental: {
+      serverActions: true,
+      externalDir: true
+    },
+    output: 'standalone',
 }
 
 module.exports = nextConfig

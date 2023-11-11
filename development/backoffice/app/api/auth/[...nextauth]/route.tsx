@@ -5,6 +5,7 @@ import LoginUseCase from '../../../../../usecases/auth/loginUseCase';
 import AuthService from "../../../../../infrastructure/src/auth/authService"
 
 const handler = NextAuth({
+    secret: process.env.SECRET,
     providers: [
       CredentialsProvider({
           // The name to display on the sign in form (e.g. 'Sign in with...')
