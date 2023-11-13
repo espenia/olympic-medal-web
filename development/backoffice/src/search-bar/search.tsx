@@ -4,22 +4,26 @@ import { MagnifyingGlassIcon } from '@heroicons/react/24/solid';
 import { usePathname, useRouter } from 'next/navigation';
 import { useTransition } from 'react';
 
-export default function Search({ disabled }: { disabled?: boolean }) {
+export function Search({ disabled, onTextChanged }: { disabled?: boolean, onTextChanged?: (text?: string) => void } ) {
   const { replace } = useRouter();
   const pathname = usePathname();
   const [isPending, startTransition] = useTransition();
 
-  function handleSearch(term: string) {
+  async function handleSearch(term: string) {
     const params = new URLSearchParams(window.location.search);
     if (term) {
-      params.set('q', term);
+      params.set('searchText', term);
     } else {
-      params.delete('q');
+      params.delete('searchText');
     }
 
     startTransition(() => {
       replace(`${pathname}?${params.toString()}`);
     });
+
+    if (onTextChanged) {
+      onTextChanged!(term);
+    }
   }
 
   return (
