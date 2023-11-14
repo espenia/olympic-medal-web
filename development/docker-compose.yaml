@@ -15,7 +15,7 @@ services:
       context: .
       dockerfile: Dockerfile_web
     ports:
-      - "35002:35002"
+      - "35000:35000"
     networks:
       - medallero_default
     depends_on:
