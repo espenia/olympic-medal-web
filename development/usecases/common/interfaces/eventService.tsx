@@ -6,5 +6,5 @@ export default interface IEventService {
     createEvent(event: EventDto) : Promise<void>;
     commentEventAsync(comment: EventCommentDto): Promise<void>;
     getEventsAsync(name: string | undefined) : Promise<EventDto[]>;
-    getEventAsync(id: UUID) : Promise<EventDto | null>;
+    getEventAsync(id: UUID) : Promise<EventDto | undefined>;
 }

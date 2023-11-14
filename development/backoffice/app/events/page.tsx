@@ -26,11 +26,6 @@ export default function Events() {
       </Text>
       <Search onTextChanged={fetchEvents} />
       <Card className="mt-6">
-        <Flex justifyContent='end'>
-          <a href='/events/new'>
-            <Button>Nuevo</Button>
-          </a>
-        </Flex>
         <EventsTable events={events} />
       </Card>
     </main>

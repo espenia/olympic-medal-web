@@ -1,6 +1,6 @@
 'use client';
 
-import { Card, Title, Text, Col, TextInput, DatePicker, Textarea, Grid, Flex } from '@tremor/react';
+import { Card, Title, Text, Col, TextInput, DatePicker, Textarea, Grid, Flex, Button } from '@tremor/react';
 
 // @ts-ignore
 import { experimental_useFormState as useFormState } from 'react-dom'
@@ -33,8 +33,17 @@ export default function CrearEvento({ event, redirectTo } : {event? : EventDto, 
   return (
     <main className="p-4 md:p-10 mx-auto max-w-7xl">
       <Card>
-        <Title>{!event ? "Crear evento" : "Editar evento"}</Title>
-        <Text>{!event ? "Completa el detalle del evento" : "Edite el evento a continuacion."}</Text>
+        <Flex justifyContent="between" className="pb-8">
+          <Flex flexDirection='col' alignItems='start' className='ps-4'>
+            <Title>{!event ? "Crear evento" : "Editar evento"}</Title>
+            <Text>{!event ? "Completa el detalle del evento" : "Edite el evento a continuacion."}</Text>
+          </Flex>
+          <Flex justifyContent="end" className="pe-4">
+            <a href={event ? `/events/${event.id}` : `/events`}>
+              <Button variant="secondary">{event ? "Volver al evento" : "Volver a la lista"}</Button>
+            </a>
+          </Flex>
+        </Flex>
         <form onSubmit={formAction}>
           <Grid numItems={1} numItemsMd={2} className="gap-2 p-4">
             <Col>

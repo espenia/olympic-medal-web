@@ -29,6 +29,7 @@ export async function create(prevState: any, formData: FormData) {
   try {
     CreateEventUseCaseImpl.event = data;
     await CreateEventUseCaseImpl.handle();
+    return;
   } catch (e) {
     return { message: 'Failed to create' }
   }

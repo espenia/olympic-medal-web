@@ -1,39 +1,47 @@
-import { UUID } from "crypto";
+import { UUID, randomUUID } from "crypto";
 import IRepository from "../../../entities/common/interfaces/repository";
 import EventDto from "../../../entities/events/event";
 import { Service } from "typedi";
+import Parameters from "../../../entities/common/interfaces/parameters";
 
 @Service('eventinmemoryrepository')
 export default class EventInMemoryRepository implements IRepository<EventDto> {
 
-    private events : EventDto[]
+    private readonly events : EventDto[]
 
     constructor() {
-        this.events = [];
+        this.events = [new EventDto('0000-aaaa-bbbb-cccc-dddd', "prueba")];
     }
 
     createAsync(a: EventDto): Promise<void> {
+        a.id = randomUUID();
         this.events.push(a);
 
         return Promise.resolve();
     }
 
-    getAsync(id: UUID | null, name: string | undefined): Promise<EventDto[]> {
-        var eventfilter = this.getFilter(id, name);
+    getAsync(params: Parameters<EventDto>): Promise<EventDto[]> {
+        let events = this.events;
 
-        var result = eventfilter != null ? this.events.filter(eventfilter) : this.events;
+        if (params?.searchText) {
+            events = events.filter(x => x.name?.toUpperCase().includes(params!.searchText!.toUpperCase()) ?? true);
+        }
 
-        return new Promise<EventDto[]>((resolve) => resolve(result));
+        if (params?.id) {
+            events = events.filter(x => x.id === params!.id!);
+        }
+
+        return Promise.resolve(events);
     }
 
     private getFilter(eventId: UUID | null, name: string | undefined) : ((a: EventDto) => boolean) | null {
         var condition : ((x: EventDto) => boolean)[] = [];
 
-        if (name != null) {
-            condition.push((x: EventDto) => x.name == name);
+        if (name) {
+            condition.push((x: EventDto) => x.name?.toUpperCase().includes(name.toUpperCase()) ?? true);
         }
 
-        if (eventId != null) {
+        if (eventId) {
             condition.push((x: EventDto) => x.id === eventId);
         }
 

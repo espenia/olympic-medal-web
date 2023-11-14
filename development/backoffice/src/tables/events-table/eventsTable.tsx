@@ -1,6 +1,6 @@
-import { Button, Table, TableBody, TableCell, TableHead, TableHeaderCell, TableRow, Text } from "@tremor/react";
+import { Button, Flex, Grid, Table, TableBody, TableCell, TableHead, TableHeaderCell, TableRow, Text } from "@tremor/react";
 import EventDto from "../../../../entities/events/event";
-import { redirect } from "next/navigation";
+import { EyeIcon, PlusCircleIcon, XMarkIcon } from "@heroicons/react/24/outline";
 
 export default function EventsTable({ events }: { events: EventDto[] }) {
     return (
@@ -15,6 +15,18 @@ export default function EventsTable({ events }: { events: EventDto[] }) {
             </TableRow>
         </TableHead>
         <TableBody>
+          <TableRow className="transition-colors hover:border-gray-50 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-200/30">
+            <TableCell colSpan={5}>
+              <a style={{display: "block", fontWeight: "bold"}} href="/events/new">
+                <Flex flexDirection="row" justifyContent="start" alignItems="center">
+                  <PlusCircleIcon width={25}></PlusCircleIcon>
+                  <Text className="ms-3">
+                    Nuevo evento
+                  </Text>
+                </Flex>
+              </a>
+            </TableCell>
+          </TableRow>
             {!events || events.length === 0 
              ? 
              <TableRow>
@@ -33,10 +45,20 @@ export default function EventsTable({ events }: { events: EventDto[] }) {
                     <Text>{event.endDate?.toDateString() ?? "-"}</Text>
                   </TableCell>
                   <TableCell>
-                    <a href={`/events/${event.id}`}>
-                     <Button>Ver</Button>
-                    </a>
-                    <Button>Eliminar</Button>
+                    <Flex flexDirection="row" justifyContent="start" alignItems="start">
+                      <a href={`/events/${event.id}`}>
+                        <Button size="xs" variant="light" className="me-5">
+                          <EyeIcon width={20}>
+                            </EyeIcon>
+                        </Button>
+                      </a>
+                      <a>
+                        <Button size="xs" variant="light" color="red">
+                          <XMarkIcon width={20}>
+                            </XMarkIcon>
+                        </Button>
+                      </a>
+                    </Flex>
                   </TableCell>
                 </TableRow>
               ))}
