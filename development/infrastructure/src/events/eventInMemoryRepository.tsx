@@ -10,7 +10,7 @@ export default class EventInMemoryRepository implements IRepository<EventDto> {
     private readonly events : EventDto[]
 
     constructor() {
-        this.events = [new EventDto('0000-aaaa-bbbb-cccc-dddd', "prueba")];
+        this.events = [];
     }
 
     createAsync(a: EventDto): Promise<void> {
