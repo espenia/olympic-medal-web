@@ -5,7 +5,7 @@ const nextConfig = {
       },
     experimental: {
       serverActions: true,
-      externalDir: true
+      externalDir: true,
     },
     output: 'standalone',
 }

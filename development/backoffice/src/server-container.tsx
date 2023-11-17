@@ -30,15 +30,18 @@ Container.set<GetEventsUseCase>(GetEventsUseCase, new GetEventsUseCase(Container
 Container.set<CreateEventUseCase>(CreateEventUseCase, new CreateEventUseCase(Container.get<IEventService>(EventService)));
 Container.set<LoginUseCase>(LoginUseCase, new LoginUseCase(Container.get<IAuthService>(AuthService)));
 Container.set<RegistrationUseCase>(RegistrationUseCase, new RegistrationUseCase(Container.get<IUserService>(UserService)));
+Container.set<PasswordRecoverUseCase>(PasswordRecoverUseCase, new PasswordRecoverUseCase(Container.get<IAuthService>(AuthService)));
 
 const GetEventUseCaseImpl = Container.get<GetEventsUseCase>(GetEventsUseCase);
 const CreateEventUseCaseImpl = Container.get<CreateEventUseCase>(CreateEventUseCase);
 const LoginUseCaseImpl = Container.get<LoginUseCase>(LoginUseCase);
 const RegistrationUseCaseImpl = Container.get<RegistrationUseCase>(RegistrationUseCase);
+const PasswordRecoverUseCaseImpl = Container.get<PasswordRecoverUseCase>(PasswordRecoverUseCase);
 
 export {
     GetEventUseCaseImpl,
     CreateEventUseCaseImpl,
     LoginUseCaseImpl,
-    RegistrationUseCaseImpl
+    RegistrationUseCaseImpl,
+    PasswordRecoverUseCaseImpl
 }
