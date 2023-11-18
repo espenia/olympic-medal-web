@@ -20,10 +20,7 @@ export default class GetEventsUseCase implements IUseCase<EventDto[]> {
     async handle(): Promise<EventDto[]> {
         if (this.id) {
             const event = await this.service.getEventAsync(this.id);
-            const events = [];
-            if (event != null) {
-                events.push(event);
-            }
+            return [event!];
         }
         return this.service.getEventsAsync(this.name);
     }

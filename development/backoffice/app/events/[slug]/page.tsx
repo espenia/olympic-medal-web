@@ -1,37 +1,37 @@
-'use client';
-
-import { Card, Title, Text, Button } from '@tremor/react';
+import { Card, Title, Text, Button, Flex } from '@tremor/react';
 import { UUID } from 'crypto';
-import EventDto from '@../../../../entities/events/event';
+import getEvent from './actions';
 
 
-export default function Event({ params }: { params: { slug: UUID }}) {
+export default async function Event({ params }: { params: { slug: UUID }}) {
+  const event = await getEvent(params.slug);
 
-  const eventoDeportivo = new EventDto(
-    params.slug,
-    "Evento Deportivo",
-    "Descripción del evento deportivo",
-    "Maraton 10k",
-    "Argentina",
-    "Buenos Aires",
-    new Date(2023, 0, 1),
-    new Date(2023, 11, 30)
-  );
-
-  const open = eventoDeportivo.endDate && eventoDeportivo.endDate < new Date();
+  const open = event?.endDate && event?.endDate < new Date();
 
   return (
     <main className="p-4 md:p-10 mx-auto max-w-7xl">
-      <Title className="text-3xl font-bold">{eventoDeportivo.name}</Title>
-      <Text className="text-lg">{eventoDeportivo.description}</Text>
-      <Text className="text-lg">Tipo de deporte: {eventoDeportivo.sportType}</Text>
-      <Text className="text-lg">Localización: {eventoDeportivo.country}</Text>
-      <Text className="text-lg">Localización: {eventoDeportivo.state}</Text>
-      <Text className={`text-lg ${open ? 'text-green-500' : 'text-red-500'}`}>Estado: {open ? "Abierto" : "Cerrado"}</Text>
-      <Card className="mt-6">
-      <a href="/form">
-            <Button className="bg-blue-500 text-white mt-4">Cargar resultados</Button>
-          </a>
+      <Card>
+        <Flex justifyContent="between" className="pb-8">
+                <div>
+                  <Title className="text-3xl font-bold">{event?.name}</Title>
+                </div>
+                <Flex justifyContent="end" className="pe-4">
+                  <a href={`/events`}>
+                    <Button variant='secondary'>Volver a la lista</Button>
+                  </a>
+                </Flex>
+        </Flex>
+        <Text className="text-lg">{event?.description}</Text>
+        <Text className="text-lg">Tipo de deporte: {event?.sportType}</Text>
+        <Text className="text-lg">Localización: {event?.country}</Text>
+        <Text className="text-lg">Localización: {event?.state}</Text>
+        <Text className={`text-lg ${open ? 'text-green-500' : 'text-red-500'}`}>Estado: {open ? "Abierto" : "Cerrado"}</Text>
+        <a href={`/events/${params.slug}/edit`}>
+          <Button className="bg-blue-500 text-white mt-4">Editar informacion</Button>
+        </a>
+        <a href={`/events/${params.slug}/results`}>
+          <Button className="bg-blue-500 text-white mt-4">Resultados</Button>
+        </a>
       </Card>
     </main>
   );
