@@ -9,7 +9,7 @@ export function SubmitButton() {
  
   return (
     <Button type="submit" aria-disabled={pending}>
-      Enviar
+      Guardar
     </Button>
   )
 }

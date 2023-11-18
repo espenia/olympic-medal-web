@@ -1,6 +1,5 @@
 'use client';
 
-import "reflect-metadata";
 import React, { useState } from 'react';
 import { Card, Title, Text, TextInput, DatePicker, Grid, Col, Flex } from '@tremor/react';
 

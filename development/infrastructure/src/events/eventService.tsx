@@ -5,6 +5,7 @@ import IEventService from "../../../usecases/common/interfaces/eventService";
 import EventCommentDto from "../../../entities/events/comment";
 import Container, { Service } from "typedi";
 import EventInMemoryRepository from "./eventInMemoryRepository";
+import Parameters from "../../../entities/common/interfaces/parameters";
 
 @Service('eventservice')
 export default class EventService implements IEventService {
@@ -21,19 +22,25 @@ export default class EventService implements IEventService {
         return this.repository.createAsync(event);
     }
 
-    async getEventAsync(id: UUID): Promise<EventDto | null> {
-        var events = await this.repository.getAsync(id);
+    async getEventAsync(id: UUID): Promise<EventDto | undefined> {
+        const parameters  = new Parameters<EventDto>();
+        parameters.id = id;
+        var events = await this.repository.getAsync(parameters);
 
-        return !events.at(0) ? null : events.at(0)!;
+        return events.at(0)!;
     }
 
     async commentEventAsync(comment: EventCommentDto): Promise<void> {
-        var events = await this.repository.getAsync(comment.eventId);
+        const parameters = new Parameters<EventDto>();
+        parameters.id = comment.id;
+        var events = await this.repository.getAsync(parameters);
         var event = events.at(0);
         event?.comments?.push(comment);
     }
 
     getEventsAsync(name: string | undefined): Promise<EventDto[]> {
-        return this.repository.getAsync(name);
+        const parameters = new Parameters<EventDto>();
+        parameters.searchText = name;
+        return this.repository.getAsync(parameters);
     }
 }

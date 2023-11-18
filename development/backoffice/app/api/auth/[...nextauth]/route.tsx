@@ -1,8 +1,6 @@
-import "reflect-metadata";
 import NextAuth from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
-import LoginUseCase from '../../../../../usecases/auth/loginUseCase';
-import AuthService from "../../../../../infrastructure/src/auth/authService"
+import { LoginUseCaseImpl } from '@/src/server-container';
 
 const handler = NextAuth({
     secret: process.env.SECRET,
@@ -29,10 +27,9 @@ const handler = NextAuth({
               if (!credentials || !credentials.username || !credentials.password || credentials.username.trim() === "" || credentials.password.trim() === "") {
                   throw new Error("Usuario y contrasenia requeridos.")
               }
-              const res = new LoginUseCase(new AuthService());
-              res.username = credentials!.username;
-              res.password = credentials!.password;
-              const user = await res.handle();
+              LoginUseCaseImpl.username = credentials!.username;
+              LoginUseCaseImpl.password = credentials!.password;
+              const user = await LoginUseCaseImpl.handle();
   
               if (user) {
                   return { id: "1", name: user.username, email: user.username }

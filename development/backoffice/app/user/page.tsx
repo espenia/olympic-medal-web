@@ -1,5 +1,5 @@
 import { Card, Title, Text } from '@tremor/react';
-import Search from '../../src/search-bar/search'
+import { Search } from '../../src/search-bar/search'
 
 export default function User() {
     return (

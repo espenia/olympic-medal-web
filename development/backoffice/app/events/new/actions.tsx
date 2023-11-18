@@ -1,8 +1,6 @@
-'use server'
-
-import { revalidatePath } from 'next/cache'
 import { z } from 'zod'
 import EventDto from '../../../../entities/events/event'
+import { CreateEventUseCaseImpl } from '../../../src/server-container';
 
 export async function create(prevState: any, formData: FormData) {
   const schema = z.object({
@@ -18,9 +16,9 @@ export async function create(prevState: any, formData: FormData) {
     path: ["end_date"],
   });
 
-  const data = schema.parse({
-    name: formData.get('username'),
-    description: formData.get('password'),
+  const data : EventDto = schema.parse({
+    name: formData.get('name'),
+    description: formData.get('description'),
     sport_type: formData.get('sport_type'),
     country: formData.get('country'),
     state: formData.get('state'),
@@ -28,19 +26,10 @@ export async function create(prevState: any, formData: FormData) {
     end_date: formData.get('end_date'),
   });
 
-  const event = new EventDto(undefined,
-                             data.name, 
-                             data.description, 
-                             data.sport_type,
-                             data.country,
-                             data.state,
-                             new Date(data.start_date),
-                             new Date(data.end_date))
-
   try {
-    //await 
-    revalidatePath('/')
-    return { message: `Event created successfully: ${data}` }
+    CreateEventUseCaseImpl.event = data;
+    await CreateEventUseCaseImpl.handle();
+    return;
   } catch (e) {
     return { message: 'Failed to create' }
   }

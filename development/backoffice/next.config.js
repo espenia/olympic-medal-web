@@ -5,7 +5,8 @@ const nextConfig = {
     },
     experimental: {
       serverActions: true,
-      externalDir: true
+      externalDir: true,
+      instrumentationHook: true
     },
     output: 'standalone',
 }

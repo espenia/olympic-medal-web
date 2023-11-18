@@ -1,16 +1,32 @@
-import { Card, Title, Text } from '@tremor/react';
-import Search from '../../src/search-bar/search'
+'use client';
+
+import { Card, Title, Text, Button, Flex } from '@tremor/react';
+import { Search } from '../../src/search-bar/search'
+import EventsTable from '@/src/tables/events-table/eventsTable';
+import getEvents from './actions';
+import { useEffect, useState } from 'react';
+import EventDto from '../../../entities/events/event';
 
 export default function Events() {
+  const [events, setEvents] = useState<EventDto[]>([]);
+  const fetchEvents = (text?: string) => {
+    getEvents(text)
+      .then((data) => {
+        setEvents(data)
+      })
+  }
+  
+    useEffect(fetchEvents, []);
+
     return (
         <main className="p-4 md:p-10 mx-auto max-w-7xl">
       <Title>Eventos</Title>
       <Text>
         Conozca el detalle de los eventos disponibles a continuacion
       </Text>
-      <Search />
+      <Search onTextChanged={fetchEvents} />
       <Card className="mt-6">
-        {/* <UsersTable users={users} /> */}
+        <EventsTable events={events} />
       </Card>
     </main>
     );
