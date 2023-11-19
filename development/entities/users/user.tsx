@@ -8,4 +8,8 @@ export default class UserDto {
     password?: string;
     email?: string;
     birthdate?: Date;
+    isProfilePublic?: boolean;
+    goldMedals?: number;
+    silverMedals?: number;
+    bronzeMedals?: number;
 }

@@ -7,7 +7,7 @@ export default async function getUser(id: UUID) : Promise<UserDto> {
     GetUsersUseCaseImpl.firstName = undefined;
     GetUsersUseCaseImpl.lastName = undefined;
 
-    const user = await GetUsersUseCaseImpl.handle();
+    const users = await GetUsersUseCaseImpl.handle();
 
-    return user.at(0)!;
+    return users.length > 0 ? users.at(0)! : new UserDto();
 }
