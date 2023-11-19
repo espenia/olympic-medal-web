@@ -16,6 +16,8 @@ import AuthService from '../../infrastructure/src/auth/authService';
 import UserRepository from '../../infrastructure/src/users/userRepository';
 import LoginUseCase from '../../usecases/auth/loginUseCase';
 import RegistrationUseCase from '../../usecases/auth/registrationUseCase';
+import PasswordRecoverUseCase from '../../usecases/auth/passwordRecoverUseCase';
+import PasswordChangeUseCase from '../../usecases/auth/passwordChangeUseCase';
 import IAuthService from '../../usecases/common/interfaces/authService';
 import IUserService from '../../usecases/common/interfaces/userService';
 
@@ -31,17 +33,20 @@ Container.set<CreateEventUseCase>(CreateEventUseCase, new CreateEventUseCase(Con
 Container.set<LoginUseCase>(LoginUseCase, new LoginUseCase(Container.get<IAuthService>(AuthService)));
 Container.set<RegistrationUseCase>(RegistrationUseCase, new RegistrationUseCase(Container.get<IUserService>(UserService)));
 Container.set<PasswordRecoverUseCase>(PasswordRecoverUseCase, new PasswordRecoverUseCase(Container.get<IAuthService>(AuthService)));
+Container.set<PasswordChangeUseCase>(PasswordChangeUseCase, new PasswordChangeUseCase(Container.get<IAuthService>(AuthService)));
 
 const GetEventUseCaseImpl = Container.get<GetEventsUseCase>(GetEventsUseCase);
 const CreateEventUseCaseImpl = Container.get<CreateEventUseCase>(CreateEventUseCase);
 const LoginUseCaseImpl = Container.get<LoginUseCase>(LoginUseCase);
 const RegistrationUseCaseImpl = Container.get<RegistrationUseCase>(RegistrationUseCase);
 const PasswordRecoverUseCaseImpl = Container.get<PasswordRecoverUseCase>(PasswordRecoverUseCase);
+const PasswordChangeUseCaseImpl = Container.get<PasswordChangeUseCase>(PasswordChangeUseCase);
 
 export {
     GetEventUseCaseImpl,
     CreateEventUseCaseImpl,
     LoginUseCaseImpl,
     RegistrationUseCaseImpl,
-    PasswordRecoverUseCaseImpl
+    PasswordRecoverUseCaseImpl,
+    PasswordChangeUseCaseImpl
 }

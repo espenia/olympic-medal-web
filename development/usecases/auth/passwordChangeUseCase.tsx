@@ -2,10 +2,11 @@ import type IAuthService from "../common/interfaces/authService";
 import IUseCase from "../common/interfaces/useCase";
 import { Inject, Service } from "typedi";
 
-@Service('passwordrecoverusecase')
-export default class PasswordRecoverUseCase implements IUseCase<void> {
+@Service('passwordchangeusecase')
+export default class PasswordChangeUseCase implements IUseCase<void> {
     mail?: string;
-    recoverUrl?: string;
+    password?: string;
+    userName?: string;
 
     private readonly service : IAuthService;
     /**
@@ -16,6 +17,6 @@ export default class PasswordRecoverUseCase implements IUseCase<void> {
     }
 
     handle(): Promise<void> {
-        return this.service.recoverPassword(this.mail!, this.recoverUrl!);
+        return this.service.changePassword(this.mail!, this.userName!, this.password!);
     }
 }
