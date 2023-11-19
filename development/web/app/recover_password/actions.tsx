@@ -2,7 +2,6 @@
 
 import PasswordRecoverUseCase from '../../../usecases/auth/passwordRecoverUseCase'
 import AuthService from '../../../infrastructure/src/auth/authService'
-import {env} from "@headlessui/react/dist/utils/env";
 
 export async function recoverPassword(prevState: any, formData: FormData) {
   try {
