@@ -28,7 +28,7 @@ export default async function RootLayout({
       name: "Eventos", href: "/events"
     } as NavbarItem,
     {
-      name: "Usuarios", href: "/user"
+      name: "Atletas", href: "/athletes"
     } as NavbarItem,
     {
       name: "Mi Perfil", href: "/profile"

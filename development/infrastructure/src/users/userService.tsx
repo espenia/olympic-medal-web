@@ -3,6 +3,7 @@ import UserDto from "../../../entities/users/user";
 import IUserService from "../../../usecases/common/interfaces/userService";
 import { Container, Service } from "typedi";
 import UserRepository from "./userRepository";
+import UserSearchParameters from "../../../entities/users/searchParameters";
 
 @Service('userservice')
 export default class UserService implements IUserService {
@@ -13,6 +14,13 @@ export default class UserService implements IUserService {
      */
     constructor() {
         UserRepository;
+    }
+
+    getUsers(firstName: string | undefined, lastName: string | undefined): Promise<UserDto[]> {
+        const params = new UserSearchParameters();
+        params.firstName = firstName;
+        params.lastName = lastName;
+        return this.repository.getAsync(params);
     }
 
     create(user: UserDto): Promise<void> {
