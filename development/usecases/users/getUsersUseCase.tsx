@@ -1,6 +1,6 @@
-import IUseCase from "@/common/interfaces/useCase";
+import IUseCase from "../common/interfaces/useCase"
 import UserDto from "../../entities/users/user";
-import type IUserService from "@/common/interfaces/userService";
+import type IUserService from "../common/interfaces/userService";
 import { UUID } from "crypto";
 import { Inject, Service } from "typedi";
 
