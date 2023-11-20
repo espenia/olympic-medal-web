@@ -4,6 +4,7 @@ import IGateway from "../interfaces/gateway";
 import axios, { AxiosRequestConfig } from "axios";
 import ApiGatewayRequestError from "./exceptions";
 import { Service } from "typedi";
+import UserSearchParameters from "../../../entities/users/searchParameters";
 
 @Service('apigateway')
 export default class ApiGateway implements IGateway {
@@ -20,6 +21,20 @@ export default class ApiGateway implements IGateway {
         // usar 'springboot' o el nombre del servicio en el docker compose
         // sino, cambiarlo por 'localhost'
         this.apiBaseUrl = "http://springboot:8080";
+    }
+
+    async getUsers(params: UserSearchParameters): Promise<UserDto[]> {
+        const config = this.baseAxiosRequestConfig("get", "/athletes");
+        config.params = {
+            "first_name": params.firstName,
+            "last_name": params.lastName
+        };
+
+        const response = await axios(config);
+
+        const users: UserDto[] = response.data;
+
+        return users;
     }
 
     async createUser(user : UserDto) {
