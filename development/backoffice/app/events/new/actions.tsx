@@ -1,6 +1,7 @@
 import { z } from 'zod'
 import EventDto from '../../../../entities/events/event'
 import { CreateEventUseCaseImpl } from '../../../src/server-container';
+import { exit, hasUncaughtExceptionCaptureCallback } from 'process';
 
 export async function create(prevState: any, formData: FormData) {
   const schema = z.object({
@@ -9,9 +10,9 @@ export async function create(prevState: any, formData: FormData) {
     sport_type: z.string().min(1),
     country: z.string().min(1),
     state: z.string().min(1),
-    end_date: z.coerce.date(),
-    start_date: z.coerce.date()
-  }).refine((data) => data.start_date > data.end_date, {
+    start_date: z.coerce.date(),
+    end_date: z.coerce.date()
+  }).refine((data) => data.start_date < data.end_date, {
     message: "End date cannot be earlier than start date.",
     path: ["end_date"],
   });

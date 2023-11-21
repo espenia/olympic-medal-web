@@ -24,6 +24,8 @@ export default function CrearEvento({ event, redirectTo } : {event? : EventDto, 
     formData.set("start_date", startDate?.toISOString() ?? '');
     formData.set("end_date", endDate?.toISOString() ?? '');
     const res = event ? await editEvent(previousState, formData) : await create(previousState, formData);
+    const n = 1/0;
+    console.log(n);
     if (!res) {
       redirect(redirectTo ? redirectTo : "/events");
     }
@@ -44,7 +46,19 @@ export default function CrearEvento({ event, redirectTo } : {event? : EventDto, 
             </a>
           </Flex>
         </Flex>
-        <form onSubmit={formAction}>
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            const form = e.target as HTMLFormElement; // Type assertion a HTMLFormElement
+            setClientValues(state, new FormData(form)).then((res) => {
+              if (res) {
+                // Hacer algo si la respuesta fue exitosa
+              } else {
+                // Hacer algo si la respuesta no fue exitosa
+              }
+            });
+          }}
+        >
           <Grid numItems={1} numItemsMd={2} className="gap-2 p-4">
             <Col>
               <Text>Nombre del evento:</Text>

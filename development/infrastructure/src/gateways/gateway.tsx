@@ -5,6 +5,8 @@ import axios, { AxiosRequestConfig } from "axios";
 import ApiGatewayRequestError from "./exceptions";
 import { Service } from "typedi";
 import UserSearchParameters from "../../../entities/users/searchParameters";
+import EventSearchParameters from "../../../entities/events/searchParameters";
+import EventDto from "../../../entities/events/event";
 
 @Service('apigateway')
 export default class ApiGateway implements IGateway {
@@ -49,6 +51,39 @@ export default class ApiGateway implements IGateway {
             "birth_date": user.birthdate?.toISOString()
         };
 
+        const response = await axios(config);
+    }
+
+    async getEvents(params: EventSearchParameters): Promise<UserDto[]> {
+        const config = this.baseAxiosRequestConfig("get", "/event");
+        config.params = {
+            "name": params.name,
+            "description": params.description,
+            "sportType": params.sportType,
+            "country": params.country,
+            "state": params.state,
+        };
+
+        const response = await axios(config);
+
+        const events: EventDto[] = response.data;
+
+        return events;
+    }
+
+    async createEvent(event : EventDto) {
+        const config = this.baseAxiosRequestConfig('post',"/event");
+        
+        config.data = {
+            "name": event.name,
+            "description": event.description,
+            "sportType": event.sportType,
+            "country": event.country,
+            "state": event.state,
+            "startDate": event.startDate?.toISOString(),
+            "endDate": event.endDate?.toISOString()
+        };
+        
         const response = await axios(config);
     }
 
