@@ -7,7 +7,7 @@ import UserSearchParameters from "../../../entities/users/searchParameters";
 
 @Service('userservice')
 export default class UserService implements IUserService {
-    private readonly repository : IRepository<UserDto> = Container.get<IRepository<UserDto>>('userrepository');
+    private readonly repository : UserRepository<UserDto> = Container.get<UserRepository<UserDto>>('userrepository');
 
     /**
      *
@@ -25,5 +25,9 @@ export default class UserService implements IUserService {
 
     create(user: UserDto): Promise<void> {
         return this.repository.createAsync(user);
+    }
+
+    changePassword(email: string, userName: string, password: string): Promise<void> {
+        return this.repository.changePassword(email, userName, password);
     }
 }

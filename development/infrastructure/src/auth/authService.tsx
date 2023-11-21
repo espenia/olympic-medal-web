@@ -19,4 +19,10 @@ export default class AuthService implements IAuthService {
     login(username: string, password: string): Promise<UserDto> {
         return this.gateway.login(username, password);
     }
+
+    recoverPassword(mail: string, recoverUrl: string): Promise<void> {
+        return this.gateway.recoverPassword(mail, recoverUrl);
+    }
+
+
 }

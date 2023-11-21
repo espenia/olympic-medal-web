@@ -125,6 +125,14 @@ export default function Navbar({ user, navigation }: { user: any, navigation: Na
                               >
                                 Registro
                               </a>
+                              <a
+                                href="/recover_password"
+                                className={classNames(
+                                    active ? 'bg-gray-100' : '',
+                                    'flex w-full px-4 py-2 text-sm text-gray-700'
+                                )}
+                              >Recuperar Contraseña
+                              </a>
                             </>
                           )}
                         </Menu.Item>
