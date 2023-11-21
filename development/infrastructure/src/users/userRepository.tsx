@@ -23,4 +23,8 @@ export default class UserRepository implements IRepository<UserDto> {
         return this.gateway.createUser(a);
     }
 
+    changePassword(email: string, userName: string, password: string): Promise<void> {
+        return this.gateway.changePassword(email, userName, password);
+    }
+
 }
