@@ -1,7 +1,6 @@
-import { UUID } from "crypto";
 
 export default class EventCommentDto {
-    id?: UUID;
+    id?: number;
     content?: string;
-    eventId?: UUID;
+    eventId?: number;
 }

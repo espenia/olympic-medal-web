@@ -1,14 +1,13 @@
 import EventDto from "../../entities/events/event";
 import type IEventService from "../common/interfaces/eventService";
 import IUseCase from "../common/interfaces/useCase";
-import { UUID } from "crypto";
 import { Inject, Service } from "typedi";
 
 @Service('geteventsusecase')
 export default class GetEventsUseCase implements IUseCase<EventDto[]> {
     private readonly service : IEventService;
     name? : string;
-    id?: UUID;
+    id?: number;
 
     /**
      *
