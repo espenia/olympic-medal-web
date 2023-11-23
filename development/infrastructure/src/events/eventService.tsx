@@ -44,6 +44,7 @@ export default class EventService implements IEventService {
     getEventsAsync(name: string | undefined): Promise<EventDto[]> {
         const parameters = new Parameters<EventDto>();
         parameters.searchText = name;
-        return this.repository_in_mem.getAsync(parameters);
+        //return this.repository_in_mem.getAsync(parameters);
+        return this.repository.getAsync(parameters);
     }
 }
