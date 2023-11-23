@@ -1,8 +1,7 @@
-import { UUID } from "crypto";
 
 export default class EventClassifications {
-    id?: UUID;
-    eventId?: UUID;
+    id?: number;
+    eventId?: number;
     position?: number;
     hours?: number;
     minutes?: number;

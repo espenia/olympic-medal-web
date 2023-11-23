@@ -1,8 +1,7 @@
 import { Card, Title, Text, Button, Flex } from "@tremor/react";
-import { UUID } from "crypto";
 import getEvent from "./actions";
 
-export default async function EventResults({ params }: { params: { slug: UUID }}) {
+export default async function EventResults({ params }: { params: { slug: number }}) {
     const event = await getEvent(params.slug);
 
     return <main className="p-4 md:p-10 mx-auto max-w-7xl">

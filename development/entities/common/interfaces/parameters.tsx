@@ -1,6 +1,5 @@
-import { UUID } from "crypto";
 
 export default class Parameters<T> {
-    id?: UUID;
+    id?: number;
     searchText?: string;
 }

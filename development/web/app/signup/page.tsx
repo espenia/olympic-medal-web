@@ -2,7 +2,7 @@
 
 import "reflect-metadata";
 import React, { useState } from 'react';
-import { Card, Title, Text, TextInput, DatePicker, Grid, Col, Flex } from '@tremor/react';
+import {Card, Title, Text, TextInput, DatePicker, Grid, Col, Flex} from '@tremor/react';
 
 // @ts-ignore
 import { experimental_useFormState as useFormState } from 'react-dom'

@@ -1,7 +1,6 @@
-import { UUID } from "crypto";
 
 export default class UserDto {
-    id?: UUID;
+    id?: number;
     firstName?: string;
     lastName?: string;
     username?: string;

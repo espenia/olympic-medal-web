@@ -23,5 +23,4 @@ export default class UserRepository implements IRepository<UserDto> {
     createAsync(a: UserDto): Promise<void> {
         return this.gateway.createUser(a);
     }
-
 }

@@ -1,8 +1,7 @@
-import { UUID } from "crypto";
 import UserDto from "../../../../entities/users/user";
 import { GetUsersUseCaseImpl } from "@/src/server-container";
 
-export default async function getUser(id: UUID) : Promise<UserDto> {
+export default async function getUser(id: number) : Promise<UserDto> {
     GetUsersUseCaseImpl.id = id;
     GetUsersUseCaseImpl.firstName = undefined;
     GetUsersUseCaseImpl.lastName = undefined;

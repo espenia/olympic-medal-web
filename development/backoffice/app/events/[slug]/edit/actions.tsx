@@ -1,9 +1,8 @@
-import { UUID } from "crypto";
 import { z } from "zod";
 import EventDto from "../../../../../entities/events/event";
 import { GetEventUseCaseImpl } from "@/src/server-container";
 
-export default async function getEvent(id: UUID) {
+export default async function getEvent(id: number) {
     GetEventUseCaseImpl.id = id;
     GetEventUseCaseImpl.name = undefined;
     const result = await GetEventUseCaseImpl.handle();

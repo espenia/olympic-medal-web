@@ -1,9 +1,8 @@
 import { Card, Title, Text, Button, Flex } from '@tremor/react';
-import { UUID } from 'crypto';
 import getEvent from './actions';
 
 
-export default async function Event({ params }: { params: { slug: UUID }}) {
+export default async function Event({ params }: { params: { slug: number }}) {
   const event = await getEvent(params.slug);
 
   const open = event?.endDate && event?.endDate < new Date();

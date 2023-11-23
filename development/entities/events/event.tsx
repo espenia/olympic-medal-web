@@ -1,8 +1,7 @@
-import { UUID } from "crypto";
 import EventCommentDto from "./comment";
 
 export default class EventDto {
-    id?: UUID | undefined;
+    id?: number | undefined;
     name? : string;
     description?: string;
     sportType?: string;
@@ -15,7 +14,7 @@ export default class EventDto {
     /**
      *
      */
-    constructor(id: UUID | undefined = undefined, name: string | undefined = undefined, description: string | undefined = undefined, sportType: string | undefined = undefined, country: string | undefined = undefined, state: string | undefined = undefined, startDate: Date | undefined = undefined, endDate: Date | undefined = undefined, comments: EventCommentDto[] | undefined = undefined) {
+    constructor(id: number | undefined = undefined, name: string | undefined = undefined, description: string | undefined = undefined, sportType: string | undefined = undefined, country: string | undefined = undefined, state: string | undefined = undefined, startDate: Date | undefined = undefined, endDate: Date | undefined = undefined, comments: EventCommentDto[] | undefined = undefined) {
         this.id = id;
         this.name = name;
         this.comments = comments ?? [];

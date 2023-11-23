@@ -1,4 +1,3 @@
-import { UUID, randomUUID } from "crypto";
 import IRepository from "../../../entities/common/interfaces/repository";
 import EventDto from "../../../entities/events/event";
 import { Service } from "typedi";
@@ -14,9 +13,7 @@ export default class EventInMemoryRepository implements IRepository<EventDto> {
     }
 
     createAsync(a: EventDto): Promise<void> {
-        a.id = randomUUID();
         this.events.push(a);
-
         return Promise.resolve();
     }
 
@@ -34,7 +31,7 @@ export default class EventInMemoryRepository implements IRepository<EventDto> {
         return Promise.resolve(events);
     }
 
-    private getFilter(eventId: UUID | null, name: string | undefined) : ((a: EventDto) => boolean) | null {
+    private getFilter(eventId: number | null, name: string | undefined) : ((a: EventDto) => boolean) | null {
         var condition : ((x: EventDto) => boolean)[] = [];
 
         if (name) {
