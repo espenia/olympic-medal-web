@@ -1,6 +1,6 @@
 import IUseCase from "../common/interfaces/useCase";
 import { Inject, Service } from "typedi";
-import type IUserService from "../common/interfaces/userService";
+import type IAuthService from "../common/interfaces/authService";
 
 @Service('passwordchangeusecase')
 export default class PasswordChangeUseCase implements IUseCase<void> {
@@ -8,11 +8,11 @@ export default class PasswordChangeUseCase implements IUseCase<void> {
     password?: string;
     userName?: string;
 
-    private readonly service : IUserService;
+    private readonly service : IAuthService;
     /**
      *
      */
-    constructor(@Inject('userservice') service : IUserService) {
+    constructor(@Inject('authservice') service : IAuthService) {
         this.service = service;
     }
 

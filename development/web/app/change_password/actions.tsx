@@ -1,15 +1,13 @@
 'use server'
 
-import PasswordChangeUseCase from '../../../usecases/auth/passwordChangeUseCase'
-import UserService from '../../../infrastructure/src/users/userService'
+import { ChangePasswordUseCaseImpl } from '../../src/server-container'
 
 export async function changePassword(prevState: any, formData: FormData) {
   try {
-    const useCase = new PasswordChangeUseCase(new UserService());
-    useCase.mail = formData.get('email')?.toString();
-    useCase.userName = formData.get('username')?.toString();
-    useCase.password = formData.get('password')?.toString();
-    return await useCase.handle();
+    ChangePasswordUseCaseImpl.mail = formData.get('email')?.toString();
+    ChangePasswordUseCaseImpl.userName = formData.get('username')?.toString();
+    ChangePasswordUseCaseImpl.password = formData.get('password')?.toString();
+    return await ChangePasswordUseCaseImpl.handle();
   } catch (e) {
     console.error(e);
     return { message: 'Failed to create user' }
