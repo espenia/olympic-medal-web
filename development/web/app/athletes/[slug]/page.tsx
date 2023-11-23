@@ -1,9 +1,8 @@
 import { Card, Title, Text, Button, Flex, Grid, Col, Bold, Subtitle } from "@tremor/react";
-import { UUID } from "crypto";
 import getUser from "./actions";
 import { TrophyIcon } from "@heroicons/react/24/outline";
 
-export default async function UserProfile({ params }: { params: { slug: UUID }}) {
+export default async function UserProfile({ params }: { params: { slug: number }}) {
     const user = await getUser(params.slug);
 
     return <main className="p-4 md:p-10 mx-auto max-w-7xl">

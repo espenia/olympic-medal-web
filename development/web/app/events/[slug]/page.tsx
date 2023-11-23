@@ -1,11 +1,10 @@
 'use client';
 
 import { Card, Title, Text, Button } from '@tremor/react';
-import { UUID } from 'crypto';
-import EventDto from '@../../../../entities/events/event';
+import EventDto from "../../../../entities/events/event";
 
 
-export default function Event({ params }: { params: { slug: UUID }}) {
+export default function Event({ params }: { params: { slug: number }}) {
 
   const eventoDeportivo = new EventDto(
     params.slug,

@@ -1,9 +1,9 @@
 import CredentialDto from "../../../entities/credentials/credential";
 import UserDto from "../../../entities/users/user";
 import IGateway from "../interfaces/gateway";
-import axios, { AxiosRequestConfig } from "axios";
+import axios, {AxiosRequestConfig} from "axios";
 import ApiGatewayRequestError from "./exceptions";
-import { Service } from "typedi";
+import {Service} from "typedi";
 import UserSearchParameters from "../../../entities/users/searchParameters";
 
 @Service('apigateway')
@@ -24,22 +24,22 @@ export default class ApiGateway implements IGateway {
     }
 
     async getUsers(params: UserSearchParameters): Promise<UserDto[]> {
-        const config = this.baseAxiosRequestConfig("get", "/athletes");
-        config.params = {
-            "first_name": params.firstName,
-            "last_name": params.lastName
-        };
-
-        const response = await axios(config);
-
-        const users: UserDto[] = response.data;
-
-        return users;
+        const response = await axios({
+            url: this.apiBaseUrl + "/athletes",
+            headers: {
+                'X-Auth-Token': 'Bearer ' + this.credential?.payload
+            },
+            params : {
+                "first_name": params.firstName,
+                "last_name": params.lastName
+            }
+        });
+        return response.data;
     }
 
     async createUser(user : UserDto) {
         const config = this.signUpAxiosRequestConfig("/auth/signup");
-        
+
         config.data = {
             "user_name": user.username,
             "password": user.password,
@@ -114,14 +114,6 @@ export default class ApiGateway implements IGateway {
         this.credential = new CredentialDto();
         this.credential.payload = response.data["token"];
     };
-
-    // private baseAxiosRequestConfig(method: string, endpoint: string) : AxiosRequestConfig {
-    //     return {
-    //         method: method,
-    //         url: this.apiBaseUrl + endpoint,
-    //         headers: { 'X-Auth-Token': 'Bearer ' + this.credential?.payload }
-    //     };
-    // }
 
     private signUpAxiosRequestConfig( endpoint: string) : AxiosRequestConfig {
         return {

@@ -1,4 +1,3 @@
-import { UUID } from "crypto";
 import EventDto from "../../../entities/events/event";
 import EventCommentDto from "../../../entities/events/comment";
 
@@ -6,5 +5,5 @@ export default interface IEventService {
     createEvent(event: EventDto) : Promise<void>;
     commentEventAsync(comment: EventCommentDto): Promise<void>;
     getEventsAsync(name: string | undefined) : Promise<EventDto[]>;
-    getEventAsync(id: UUID) : Promise<EventDto | undefined>;
+    getEventAsync(id: number) : Promise<EventDto | undefined>;
 }
