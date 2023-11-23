@@ -25,7 +25,7 @@ export default class ApiGateway implements IGateway {
 
     async getUsers(params: UserSearchParameters): Promise<UserDto[]> {
         const response = await axios({
-            url: this.apiBaseUrl + "/athletes",
+            url: this.apiBaseUrl + "/api/athletes",
             headers: {
                 'X-Auth-Token': 'Bearer ' + this.credential?.payload
             },
