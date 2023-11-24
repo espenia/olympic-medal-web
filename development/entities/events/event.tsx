@@ -1,4 +1,5 @@
 import EventCommentDto from "./comment";
+import EventClassificationDto from "./classifications";
 
 export default class EventDto {
     id?: number | undefined;
@@ -7,14 +8,24 @@ export default class EventDto {
     sportType?: string;
     country?: string;
     state?: string;
-    startDate?: Date;
-    endDate?: Date;
+    dateTo?: string;
+    dateFrom?: string;
+    edition?: number;
+    athleteFirstName?: string;
+    athleteLastName?: string;
+    athleteCountry?: string;
+    classification?: EventClassificationDto[];
+
     comments?: EventCommentDto[];
 
     /**
      *
      */
-    constructor(id: number | undefined = undefined, name: string | undefined = undefined, description: string | undefined = undefined, sportType: string | undefined = undefined, country: string | undefined = undefined, state: string | undefined = undefined, startDate: Date | undefined = undefined, endDate: Date | undefined = undefined, comments: EventCommentDto[] | undefined = undefined) {
+    constructor(id: number | undefined = undefined, name: string | undefined = undefined, description: string | undefined = undefined,
+                sportType: string | undefined = undefined, country: string | undefined = undefined, state: string | undefined = undefined,
+                dateFrom: string | undefined = undefined, dateTo: string | undefined = undefined, comments: EventCommentDto[] | undefined = undefined,
+                edition: number | undefined = undefined, athleteFirstName: string | undefined = undefined, athleteLastName: string | undefined = undefined,
+                athleteCountry: string | undefined = undefined, classification: EventClassificationDto[] | [] = [] ) {
         this.id = id;
         this.name = name;
         this.comments = comments ?? [];
@@ -22,7 +33,12 @@ export default class EventDto {
         this.sportType = sportType;
         this.country = country;
         this.state = state;
-        this.startDate = startDate;
-        this.endDate = endDate;
+        this.edition = edition;
+        this.athleteFirstName = athleteLastName;
+        this.athleteLastName = athleteLastName;
+        this.athleteCountry = athleteCountry;
+        this.dateTo = dateTo;
+        this.dateFrom = dateFrom;
+        this.classification = classification;
     }
 }

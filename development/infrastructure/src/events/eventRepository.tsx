@@ -1,4 +1,3 @@
-import { UUID, randomUUID } from "crypto";
 import IRepository from "../../../entities/common/interfaces/repository";
 import EventDto from "../../../entities/events/event";
 import Container, { Service } from "typedi";
@@ -19,10 +18,6 @@ export default class EventRepository implements IRepository<EventDto> {
     }
 
     createAsync(a: EventDto): Promise<void> {
-        /*a.id = randomUUID();
-        this.events.push(a);
-
-        return Promise.resolve();*/
         return this.gateway.createEvent(a);
     }
 
@@ -40,8 +35,8 @@ export default class EventRepository implements IRepository<EventDto> {
         return Promise.resolve(events);
     }
 
-    private getFilter(eventId: UUID | null, name: string | undefined) : ((a: EventDto) => boolean) | null {
-        var condition : ((x: EventDto) => boolean)[] = [];
+    private getFilter(eventId: number | null, name: string | undefined) : ((a: EventDto) => boolean) | null {
+        let condition : ((x: EventDto) => boolean)[] = [];
 
         if (name) {
             condition.push((x: EventDto) => x.name?.toUpperCase().includes(name.toUpperCase()) ?? true);
