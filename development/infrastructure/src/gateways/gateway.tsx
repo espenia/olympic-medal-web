@@ -5,6 +5,8 @@ import axios, {AxiosRequestConfig} from "axios";
 import ApiGatewayRequestError from "./exceptions";
 import {Service} from "typedi";
 import UserSearchParameters from "../../../entities/users/searchParameters";
+import ClassificationSearchParameters from "../../../entities/events/searchParameters";
+import EventClassifications from "../../../entities/events/classifications";
 
 @Service('apigateway')
 export default class ApiGateway implements IGateway {
@@ -26,6 +28,20 @@ export default class ApiGateway implements IGateway {
     async getUsers(params: UserSearchParameters): Promise<UserDto[]> {
         const response = await axios({
             url: this.apiBaseUrl + "/api/athletes",
+            headers: {
+                'X-Auth-Token': 'Bearer ' + this.credential?.payload
+            },
+            params : {
+                "first_name": params.firstName,
+                "last_name": params.lastName
+            }
+        });
+        return response.data;
+    }
+
+    async getClassifications(params: ClassificationSearchParameters): Promise<EventClassifications[]> {
+        const response = await axios({
+            url: this.apiBaseUrl + "/api/classification/search",
             headers: {
                 'X-Auth-Token': 'Bearer ' + this.credential?.payload
             },
