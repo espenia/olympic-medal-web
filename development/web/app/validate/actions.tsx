@@ -1,4 +1,4 @@
-import { GetClassificationUseCaseImpl, AcceptClassificationUseCaseImpl } from "@/src/server-container";
+import { GetClassificationUseCaseImpl, AcceptClassificationUseCaseImpl,DeclineClassificationUseCaseImpl } from "@/src/server-container";
 
 export async function getClassification(firstName: string | undefined, lastName: string | undefined) {
     GetClassificationUseCaseImpl.firstName = firstName;
@@ -10,22 +10,22 @@ export async function getClassification(firstName: string | undefined, lastName:
     return users;
 }
 
-export async function acceptClassification(firstName: string | undefined, lastName: string | undefined,id_clasificacion: number) {
-    GetClassificationUseCaseImpl.firstName = firstName;
-    GetClassificationUseCaseImpl.lastName = lastName;
-    GetClassificationUseCaseImpl.id = id_clasificacion;
+export async function acceptClassification(firstName: string | undefined, lastName: string | undefined,id_clasificacion: number | undefined) {
+    AcceptClassificationUseCaseImpl.firstName = firstName;
+    AcceptClassificationUseCaseImpl.lastName = lastName;
+    AcceptClassificationUseCaseImpl.id = id_clasificacion;
 
-    const users = await GetClassificationUseCaseImpl.handle();
+    const users = await AcceptClassificationUseCaseImpl.handle();
 
     return;
 }
 
-export async function declineClassification(firstName: string | undefined, lastName: string | undefined,id_clasificacion: number) {
-    GetClassificationUseCaseImpl.firstName = firstName;
-    GetClassificationUseCaseImpl.lastName = lastName;
-    GetClassificationUseCaseImpl.id = id_clasificacion;
+export async function declineClassification(firstName: string | undefined, lastName: string | undefined,id_clasificacion: number | undefined) {
+    DeclineClassificationUseCaseImpl.firstName = firstName;
+    DeclineClassificationUseCaseImpl.lastName = lastName;
+    DeclineClassificationUseCaseImpl.id = id_clasificacion;
 
-    const users = await GetClassificationUseCaseImpl.handle();
+    const users = await DeclineClassificationUseCaseImpl.handle();
 
     return ;
 }

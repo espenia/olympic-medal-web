@@ -17,7 +17,7 @@ export default class GetClassificationUseCase implements IUseCase<EventClassific
         this.service = service;
     }
 
-    handle(): Promise<EventClassifications[]> {
+    async handle(): Promise<EventClassifications[]> {
         return this.service.getClassification(this.firstName, this.lastName);
     }
 }

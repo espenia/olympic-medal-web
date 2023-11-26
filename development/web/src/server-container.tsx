@@ -25,6 +25,8 @@ import ChangePasswordUseCase from '../../usecases/auth/passwordChangeUseCase';
 import GetClassificationUseCase from '../../usecases/classifications/getClassificationUseCase';
 import EventClassifications from '../../entities/events/classifications';
 import ClassificationRepository from '../../infrastructure/src/classifications/classificationRepository';
+import AcceptClassificationUseCase from '../../usecases/classifications/acceptClassificationUseCase';
+import DeclineClassificationUseCase from '../../usecases/classifications/declineClassificationUseCase';
 
 
 Container.set<IRepository<EventDto>>(EventInMemoryRepository, new EventInMemoryRepository());
@@ -43,6 +45,9 @@ Container.set<RegistrationUseCase>(RegistrationUseCase, new RegistrationUseCase(
 Container.set<GetUsersUseCase>(GetUsersUseCase, new GetUsersUseCase(Container.get<IUserService>(UserService)));
 Container.set<ChangePasswordUseCase>(ChangePasswordUseCase, new ChangePasswordUseCase(Container.get<IAuthService>(AuthService)));
 Container.set<GetClassificationUseCase>(GetClassificationUseCase, new GetClassificationUseCase(Container.get<IClassificationService>(ClassificationService)));
+Container.set<AcceptClassificationUseCase>(AcceptClassificationUseCase, new AcceptClassificationUseCase(Container.get<IClassificationService>(ClassificationService)));
+Container.set<DeclineClassificationUseCase>(DeclineClassificationUseCase, new DeclineClassificationUseCase(Container.get<IClassificationService>(ClassificationService)));
+
 
 const GetEventUseCaseImpl = Container.get<GetEventsUseCase>(GetEventsUseCase);
 const CreateEventUseCaseImpl = Container.get<CreateEventUseCase>(CreateEventUseCase);
@@ -51,6 +56,8 @@ const RegistrationUseCaseImpl = Container.get<RegistrationUseCase>(RegistrationU
 const GetUsersUseCaseImpl = Container.get<GetUsersUseCase>(GetUsersUseCase);
 const ChangePasswordUseCaseImpl = Container.get<ChangePasswordUseCase>(ChangePasswordUseCase);
 const GetClassificationUseCaseImpl = Container.get<GetClassificationUseCase>(GetClassificationUseCase);
+const AcceptClassificationUseCaseImpl = Container.get<AcceptClassificationUseCase>(AcceptClassificationUseCase);
+const DeclineClassificationUseCaseImpl = Container.get<DeclineClassificationUseCase>(DeclineClassificationUseCase);
 
 export {
     GetEventUseCaseImpl,
@@ -59,5 +66,7 @@ export {
     RegistrationUseCaseImpl,
     GetUsersUseCaseImpl,
     ChangePasswordUseCaseImpl,
-    GetClassificationUseCaseImpl
+    GetClassificationUseCaseImpl,
+    AcceptClassificationUseCaseImpl,
+    DeclineClassificationUseCaseImpl
 }

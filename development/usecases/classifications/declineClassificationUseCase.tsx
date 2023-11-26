@@ -1,10 +1,9 @@
 import IUseCase from "../common/interfaces/useCase"
 import { Inject, Service } from "typedi";
-import EventClassifications from "../../entities/events/classifications";
 import type IClassificationService from "../common/interfaces/classificationService";
 
 @Service('declineclassificationusecase')
-export default class GetClassificationUseCase implements IUseCase<EventClassifications[]> {
+export default class DeclineClassificationUseCase implements IUseCase<void> {
     private readonly service: IClassificationService;
     firstName? : string;
     lastName? : string;

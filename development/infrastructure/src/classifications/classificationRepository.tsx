@@ -4,6 +4,7 @@ import Container, { Service } from "typedi";
 import ApiGateway from "../gateways/gateway";
 import ClassificationSearchParameters from "../../../entities/users/searchParameters";
 import EventClassifications from "../../../entities/events/classifications";
+import ClassificationValidateParameters from "../../../entities/events/validateParameters";
 
 @Service('classificationrepository')
 export default class ClassificationRepository implements IRepository<EventClassifications> {
@@ -23,11 +24,11 @@ export default class ClassificationRepository implements IRepository<EventClassi
         return this.gateway.getClassifications(params);
     }
 
-    putAsync(): Promise<void> {
-        
+    putAsync(params: ClassificationValidateParameters): Promise<void> {
+        return this.gateway.acceptClassifications(params);
     }
 
-    deleteAsync(): Promise<void> {
-        
+    deleteAsync(params: ClassificationValidateParameters): Promise<void> {
+        return this.gateway.declineClassifications(params);
     }
 }

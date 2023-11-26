@@ -1,7 +1,8 @@
 'use client';
 import React, { useState } from 'react';
 import { Card, Title, Text, Button } from '@tremor/react';
-import { acceptClassification } from './actions';
+import { redirect } from 'next/navigation';
+import { acceptClassification, declineClassification } from './actions';
 
 interface ClasificacionEventoProps {
   nombre_deportista: string;
@@ -17,15 +18,15 @@ const ClasificacionEvento: React.FC<ClasificacionEventoProps> = ({
   id_clasificacion,
 }) => {
 
+  const [firstName, setFirstName] = useState<string | undefined>();
+  const [lastName, setLastName] = useState<string | undefined>();
 
   const handleValidar = async () => {
-    const [firstName, setFirstName] = useState<string | undefined>();
-    const [lastName, setLastName] = useState<string | undefined>();
-    
-    const data = await acceptClassification(firstName, lastName,id_clasificacion);
+    const data = await acceptClassification(firstName, lastName, id_clasificacion);
   };
 
-  const handleRechazar = () => {
+  const handleRechazar = async () => {
+    const data = await declineClassification(firstName, lastName, id_clasificacion);
   };
 
   return (

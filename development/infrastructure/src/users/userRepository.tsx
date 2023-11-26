@@ -4,6 +4,7 @@ import UserDto from "../../../entities/users/user";
 import Container, { Service } from "typedi";
 import ApiGateway from "../gateways/gateway";
 import UserSearchParameters from "../../../entities/users/searchParameters";
+import Parameters from "../../../entities/common/interfaces/parameters";
 
 @Service('userrepository')
 export default class UserRepository implements IRepository<UserDto> {
@@ -14,6 +15,12 @@ export default class UserRepository implements IRepository<UserDto> {
      */
     constructor() {
         ApiGateway;
+    }
+    deleteAsync(params: Parameters<UserDto>): Promise<void> {
+        throw new Error("Method not implemented.");
+    }
+    putAsync(params: Parameters<UserDto>): Promise<void> {
+        throw new Error("Method not implemented.");
     }
 
     getAsync(params: UserSearchParameters): Promise<UserDto[]> {

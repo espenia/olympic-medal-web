@@ -7,6 +7,7 @@ import {Service} from "typedi";
 import UserSearchParameters from "../../../entities/users/searchParameters";
 import ClassificationSearchParameters from "../../../entities/events/searchParameters";
 import EventClassifications from "../../../entities/events/classifications";
+import ClassificationValidateParameters from "../../../entities/events/validateParameters";
 
 @Service('apigateway')
 export default class ApiGateway implements IGateway {
@@ -24,6 +25,37 @@ export default class ApiGateway implements IGateway {
         // sino, cambiarlo por 'localhost'
         this.apiBaseUrl = "http://springboot:8080";
     }
+    async acceptClassifications(params: ClassificationValidateParameters): Promise<void> {
+        await axios({
+            method: 'put',
+            url: this.apiBaseUrl + "/api/classification/" + params.idClassification?.toString() + "/accept",
+            headers: {
+                'X-Auth-Token': 'Bearer ' + this.credential?.payload
+            },
+            params : {
+                "first_name": params.firstName,
+                "last_name": params.lastName
+            }
+        });
+        
+        return;
+    }
+
+    async declineClassifications(params: ClassificationValidateParameters): Promise<void> {
+        console.log("decline bien");
+        await axios({
+            method: 'delete',
+            url: this.apiBaseUrl + "/api/classification/" + params.idClassification?.toString() + "/reject",
+            headers: {
+                'X-Auth-Token': 'Bearer ' + this.credential?.payload
+            },
+            params : {
+                "first_name": params.firstName,
+                "last_name": params.lastName
+            }
+        });
+        return;
+    }
 
     async getUsers(params: UserSearchParameters): Promise<UserDto[]> {
         const response = await axios({
@@ -36,6 +68,7 @@ export default class ApiGateway implements IGateway {
                 "last_name": params.lastName
             }
         });
+        
         return response.data;
     }
 
