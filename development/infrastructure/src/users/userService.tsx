@@ -1,26 +1,21 @@
 import type IRepository from "../../../entities/common/interfaces/repository";
 import UserDto from "../../../entities/users/user";
 import IUserService from "../../../usecases/common/interfaces/userService";
-import { Container, Service } from "typedi";
-import UserRepository from "./userRepository";
-import UserSearchParameters from "../../../entities/users/searchParameters";
+import { Service } from "typedi";
 
 @Service('userservice')
 export default class UserService implements IUserService {
-    private readonly repository : IRepository<UserDto> = Container.get<IRepository<UserDto>>('userrepository');
+    private readonly repository : IRepository<UserDto>;
 
     /**
      *
      */
-    constructor() {
-        UserRepository;
+    constructor(repository : IRepository<UserDto>) {
+        this.repository = repository;
     }
 
     getUsers(firstName: string | undefined, lastName: string | undefined): Promise<UserDto[]> {
-        const params = new UserSearchParameters();
-        params.firstName = firstName;
-        params.lastName = lastName;
-        return this.repository.getAsync(params);
+        return this.repository.getAsync(firstName, lastName);
     }
 
     create(user: UserDto): Promise<void> {

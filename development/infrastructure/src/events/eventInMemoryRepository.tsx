@@ -1,7 +1,6 @@
 import IRepository from "../../../entities/common/interfaces/repository";
 import EventDto from "../../../entities/events/event";
 import { Service } from "typedi";
-import Parameters from "../../../entities/common/interfaces/parameters";
 
 @Service('eventinmemoryrepository')
 export default class EventInMemoryRepository implements IRepository<EventDto> {
@@ -17,15 +16,17 @@ export default class EventInMemoryRepository implements IRepository<EventDto> {
         return Promise.resolve();
     }
 
-    getAsync(params: Parameters<EventDto>): Promise<EventDto[]> {
+    getAsync(...args: any[]): Promise<EventDto[]> {
         let events = this.events;
+        const id : number | undefined = args.length >= 1 ? args.at(0) : undefined;
+        const searchText : string | undefined = args.length >= 2 ? args.at(1) : undefined;
 
-        if (params?.searchText) {
-            events = events.filter(x => x.name?.toUpperCase().includes(params!.searchText!.toUpperCase()) ?? true);
+        if (searchText) {
+            events = events.filter(x => x.name?.toUpperCase().includes(searchText!.toUpperCase()) ?? true);
         }
 
-        if (params?.id) {
-            events = events.filter(x => x.id === params!.id!);
+        if (id) {
+            events = events.filter(x => x.id === id!);
         }
 
         return Promise.resolve(events);

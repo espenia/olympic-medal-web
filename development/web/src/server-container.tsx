@@ -20,21 +20,22 @@ import IAuthService from '../../usecases/common/interfaces/authService';
 import IUserService from '../../usecases/common/interfaces/userService';
 import GetUsersUseCase from '../../usecases/users/getUsersUseCase';
 import ChangePasswordUseCase from '../../usecases/auth/passwordChangeUseCase';
+import PasswordRecoverUseCase from '../../usecases/auth/passwordRecoverUseCase';
 
+!Container.has(EventInMemoryRepository) && Container.set<IRepository<EventDto>>(EventInMemoryRepository, new EventInMemoryRepository());
+!Container.has(ApiGateway) && Container.set<IGateway>(ApiGateway, new ApiGateway());
+!Container.has(UserRepository) && Container.set<IRepository<UserDto>>(UserRepository, new UserRepository(Container.get<IGateway>(ApiGateway)));
+!Container.has(EventService) && Container.set<IEventService>(EventService, new EventService(Container.get<IRepository<EventDto>>(EventInMemoryRepository)));
+!Container.has(AuthService) && Container.set<IAuthService>(AuthService, new AuthService(Container.get<IGateway>(ApiGateway)));
+!Container.has(UserService) && Container.set<IUserService>(UserService, new UserService(Container.get<IRepository<UserDto>>(UserRepository)));
+!Container.has(GetEventsUseCase) && Container.set<GetEventsUseCase>(GetEventsUseCase, new GetEventsUseCase(Container.get<IEventService>(EventService)));
+!Container.has(CreateEventUseCase) && Container.set<CreateEventUseCase>(CreateEventUseCase, new CreateEventUseCase(Container.get<IEventService>(EventService)));
+!Container.has(LoginUseCase) && Container.set<LoginUseCase>(LoginUseCase, new LoginUseCase(Container.get<IAuthService>(AuthService)));
+!Container.has(RegistrationUseCase) && Container.set<RegistrationUseCase>(RegistrationUseCase, new RegistrationUseCase(Container.get<IUserService>(UserService)));
+!Container.has(GetUsersUseCase) && Container.set<GetUsersUseCase>(GetUsersUseCase, new GetUsersUseCase(Container.get<IUserService>(UserService)));
+!Container.has(ChangePasswordUseCase) && Container.set<ChangePasswordUseCase>(ChangePasswordUseCase, new ChangePasswordUseCase(Container.get<IAuthService>(AuthService)));
+!Container.has(PasswordRecoverUseCase) && Container.set<PasswordRecoverUseCase>(PasswordRecoverUseCase, new PasswordRecoverUseCase(Container.get<IAuthService>(AuthService)));
 
-Container.set<IRepository<EventDto>>(EventInMemoryRepository, new EventInMemoryRepository());
-Container.set<IGateway>(ApiGateway, new ApiGateway());
-Container.set<IRepository<UserDto>>(UserRepository, new UserRepository());
-Container.set<IEventService>(EventService, new EventService());
-Container.set<IAuthService>(AuthService, new AuthService());
-Container.set<IGateway>(ApiGateway, new ApiGateway());
-Container.set<IUserService>(UserService, new UserService());
-Container.set<GetEventsUseCase>(GetEventsUseCase, new GetEventsUseCase(Container.get<IEventService>(EventService)));
-Container.set<CreateEventUseCase>(CreateEventUseCase, new CreateEventUseCase(Container.get<IEventService>(EventService)));
-Container.set<LoginUseCase>(LoginUseCase, new LoginUseCase(Container.get<IAuthService>(AuthService)));
-Container.set<RegistrationUseCase>(RegistrationUseCase, new RegistrationUseCase(Container.get<IUserService>(UserService)));
-Container.set<GetUsersUseCase>(GetUsersUseCase, new GetUsersUseCase(Container.get<IUserService>(UserService)));
-Container.set<ChangePasswordUseCase>(ChangePasswordUseCase, new ChangePasswordUseCase(Container.get<IAuthService>(AuthService)));
 
 const GetEventUseCaseImpl = Container.get<GetEventsUseCase>(GetEventsUseCase);
 const CreateEventUseCaseImpl = Container.get<CreateEventUseCase>(CreateEventUseCase);
@@ -42,6 +43,7 @@ const LoginUseCaseImpl = Container.get<LoginUseCase>(LoginUseCase);
 const RegistrationUseCaseImpl = Container.get<RegistrationUseCase>(RegistrationUseCase);
 const GetUsersUseCaseImpl = Container.get<GetUsersUseCase>(GetUsersUseCase);
 const ChangePasswordUseCaseImpl = Container.get<ChangePasswordUseCase>(ChangePasswordUseCase);
+const PasswordRecoverUseCaseImpl = Container.get<PasswordRecoverUseCase>(PasswordRecoverUseCase);
 
 export {
     GetEventUseCaseImpl,
@@ -49,5 +51,6 @@ export {
     LoginUseCaseImpl,
     RegistrationUseCaseImpl,
     GetUsersUseCaseImpl,
-    ChangePasswordUseCaseImpl
+    ChangePasswordUseCaseImpl,
+    PasswordRecoverUseCaseImpl
 }

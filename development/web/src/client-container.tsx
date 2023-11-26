@@ -24,11 +24,10 @@ import ChangePasswordUseCase from '../../usecases/auth/passwordChangeUseCase';
 
 Container.set<IRepository<EventDto>>(EventInMemoryRepository, new EventInMemoryRepository());
 Container.set<IGateway>(ApiGateway, new ApiGateway());
-Container.set<IRepository<UserDto>>(UserRepository, new UserRepository());
-Container.set<IEventService>(EventService, new EventService());
-Container.set<IAuthService>(AuthService, new AuthService());
-Container.set<IGateway>(ApiGateway, new ApiGateway());
-Container.set<IUserService>(UserService, new UserService());
+Container.set<IRepository<UserDto>>(UserRepository, new UserRepository(Container.get<IGateway>(ApiGateway)));
+Container.set<IEventService>(EventService, new EventService(Container.get<IRepository<EventDto>>(EventInMemoryRepository)));
+Container.set<IAuthService>(AuthService, new AuthService(Container.get<IGateway>(ApiGateway)));
+Container.set<IUserService>(UserService, new UserService(Container.get<IRepository<UserDto>>(UserRepository)));
 Container.set<GetEventsUseCase>(GetEventsUseCase, new GetEventsUseCase(Container.get<IEventService>(EventService)));
 Container.set<CreateEventUseCase>(CreateEventUseCase, new CreateEventUseCase(Container.get<IEventService>(EventService)));
 Container.set<LoginUseCase>(LoginUseCase, new LoginUseCase(Container.get<IAuthService>(AuthService)));
@@ -36,18 +35,9 @@ Container.set<RegistrationUseCase>(RegistrationUseCase, new RegistrationUseCase(
 Container.set<GetUsersUseCase>(GetUsersUseCase, new GetUsersUseCase(Container.get<IUserService>(UserService)));
 Container.set<ChangePasswordUseCase>(ChangePasswordUseCase, new ChangePasswordUseCase(Container.get<IAuthService>(AuthService)));
 
-const GetEventUseCaseImpl = Container.get<GetEventsUseCase>(GetEventsUseCase);
-const CreateEventUseCaseImpl = Container.get<CreateEventUseCase>(CreateEventUseCase);
-const LoginUseCaseImpl = Container.get<LoginUseCase>(LoginUseCase);
-const RegistrationUseCaseImpl = Container.get<RegistrationUseCase>(RegistrationUseCase);
-const GetUsersUseCaseImpl = Container.get<GetUsersUseCase>(GetUsersUseCase);
-const ChangePasswordUseCaseImpl = Container.get<ChangePasswordUseCase>(ChangePasswordUseCase);
-
-export {
-    GetEventUseCaseImpl,
-    CreateEventUseCaseImpl,
-    LoginUseCaseImpl,
-    RegistrationUseCaseImpl,
-    GetUsersUseCaseImpl,
-    ChangePasswordUseCaseImpl
-}
+export const GetEventUseCaseImpl = Container.get<GetEventsUseCase>(GetEventsUseCase);
+export const CreateEventUseCaseImpl = Container.get<CreateEventUseCase>(CreateEventUseCase);
+export const LoginUseCaseImpl = Container.get<LoginUseCase>(LoginUseCase);
+export const RegistrationUseCaseImpl = Container.get<RegistrationUseCase>(RegistrationUseCase);
+export const GetUsersUseCaseImpl = Container.get<GetUsersUseCase>(GetUsersUseCase);
+export const ChangePasswordUseCaseImpl = Container.get<ChangePasswordUseCase>(ChangePasswordUseCase);

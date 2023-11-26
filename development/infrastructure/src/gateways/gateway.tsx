@@ -4,7 +4,6 @@ import IGateway from "../interfaces/gateway";
 import axios, {AxiosRequestConfig} from "axios";
 import ApiGatewayRequestError from "./exceptions";
 import {Service} from "typedi";
-import UserSearchParameters from "../../../entities/users/searchParameters";
 
 @Service('apigateway')
 export default class ApiGateway implements IGateway {
@@ -21,18 +20,13 @@ export default class ApiGateway implements IGateway {
         // usar 'springboot' o el nombre del servicio en el docker compose
         // sino, cambiarlo por 'localhost'
         this.apiBaseUrl = "http://springboot:8080";
-    }
+            }
 
-    async getUsers(params: UserSearchParameters): Promise<UserDto[]> {
+    async getUsers(...args: any[]): Promise<UserDto[]> {
         const response = await axios({
             url: this.apiBaseUrl + "/api/athletes",
-            headers: {
-                'X-Auth-Token': 'Bearer ' + this.credential?.payload
-            },
-            params : {
-                "first_name": params.firstName,
-                "last_name": params.lastName
-            }
+            headers: this.getEntries(["X-Auth-Token"], ['Bearer ' + this.credential?.payload]),
+            params : this.getEntries(["first_name", "last_name"], args)
         });
         return response.data;
     }
@@ -46,7 +40,9 @@ export default class ApiGateway implements IGateway {
             "mail": user.email,
             "first_name": user.firstName,
             "last_name": user.lastName,
-            "birth_date": user.birthdate?.toISOString()
+            "birth_date": user.birthdate?.toISOString(),
+            "is_athlete": user.isAthlete,
+            "country": user.country
         };
 
         const response = await axios(config);
@@ -100,11 +96,8 @@ export default class ApiGateway implements IGateway {
         const response = await axios({
             method: 'post',
             url: this.apiBaseUrl + "/auth/login",
-            headers: {"Content-Type": "application/json"},
-            data: {
-                user_name: this.username,
-                password: this.password
-            }
+            headers: this.getEntries(["Content-Type"], ["application/json"]),
+            data: this.getEntries(["user_name", "password"], [this.username, this.password])
         });
 
         if (response.status != 200) {
@@ -112,7 +105,7 @@ export default class ApiGateway implements IGateway {
         }
         
         this.credential = new CredentialDto();
-        this.credential.payload = response.data["token"];
+        this.credential.payload = response.data.token;
     };
 
     private signUpAxiosRequestConfig( endpoint: string) : AxiosRequestConfig {
@@ -122,4 +115,14 @@ export default class ApiGateway implements IGateway {
         };
     }
 
+    private zip(keys: string[], values: any[]) : Map<string, any> {
+        return keys.reduce((map, key, index) => {
+            map.set(key, values.at(index) ?? null);
+            return map;
+        }, new Map());
+    }
+
+    private getEntries(keys: string[], values: any[]) {
+        return Object.fromEntries(this.zip(keys, values));
+    }
 }

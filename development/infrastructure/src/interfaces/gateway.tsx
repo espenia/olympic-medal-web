@@ -1,4 +1,3 @@
-import UserSearchParameters from "../../../entities/users/searchParameters";
 import UserDto from "../../../entities/users/user";
 
 export default interface IGateway {
@@ -6,5 +5,5 @@ export default interface IGateway {
     createUser(user: UserDto) : Promise<void>;
     recoverPassword(mail: string, recoverUrl: string): Promise<void>;
     changePassword(mail: string, userName: string, password: string): Promise<void>;
-    getUsers(params: UserSearchParameters) : Promise<UserDto[]>;
+    getUsers(...args: any[]) : Promise<UserDto[]>;
 }
