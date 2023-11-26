@@ -22,8 +22,9 @@ export default class ApiGateway implements IGateway {
         // si el backend esta corriendo en un contenedor de docker, 
         // usar 'springboot' o el nombre del servicio en el docker compose
         // sino, cambiarlo por 'localhost'
-        //this.apiBaseUrl = "http://springboot:8080";
-        this.apiBaseUrl = "http://localhost:8080";
+        this.apiBaseUrl = "http://springboot:8080";
+        //this.apiBaseUrl = "http://localhost:8080";
+
     }
 
     async getUsers(params: UserSearchParameters): Promise<UserDto[]> {
