@@ -1,6 +1,5 @@
 import type IGateway from "../interfaces/gateway";
 import IRepository from "../../../entities/common/interfaces/repository";
-import UserDto from "../../../entities/users/user";
 import Container, { Service } from "typedi";
 import ApiGateway from "../gateways/gateway";
 import ClassificationSearchParameters from "../../../entities/users/searchParameters";
@@ -17,10 +16,18 @@ export default class ClassificationRepository implements IRepository<EventClassi
         ApiGateway;
     }
     createAsync(a: EventClassifications): Promise<void> {
-        throw new Error("Method not implemented.");
+        return Promise.resolve();
     }
 
-    getAsync(params: ClassificationSearchParameters): Promise<UserDto[]> {
+    getAsync(params: ClassificationSearchParameters): Promise<EventClassifications[]> {
         return this.gateway.getClassifications(params);
+    }
+
+    putAsync(): Promise<void> {
+        
+    }
+
+    deleteAsync(): Promise<void> {
+        
     }
 }

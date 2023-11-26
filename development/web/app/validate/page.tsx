@@ -34,6 +34,8 @@ import EventClassifications from '../../../entities/events/classifications';
 
 const ClasificacionDeportista = () => {
 
+  //const instanciasClasificacion = 'a';
+
   const [instanciasClasificacion, setInstanciasClasificacion] = useState<JSX.Element[]>([]);
 
 
@@ -49,21 +51,23 @@ const ClasificacionDeportista = () => {
     async function fetchData() {
       try {
         const data = await getClassification(firstName, lastName);
-        const instancias: JSX.Element[] = []; // Inicializar como un array vacío
+        setClassifications(data);
+        console.log('hola');
+        console.log(data);
 
-        data.forEach((clasificacion: EventClassifications) => {
-          instancias.push(
-            <ClasificacionEvento
-              key={clasificacion.id}
-              nombre_deportista={clasificacion.athlete_first_name + " " + clasificacion.athlete_last_name}
-              nombre_evento={clasificacion.eventName || "Not found"}
-              tiempoClasificacion={clasificacion.hours ? String(clasificacion.hours) : "Tiempo por Defecto"}
-              id_clasificacion={clasificacion.id || -1}
-            />
-          );
-        });
+        const clasificacionComponents = data.map((clasificacion) => (
+          <ClasificacionEvento
+            key={clasificacion.id}
+            nombre_deportista={`${clasificacion.athlete_first_name} ${clasificacion.athlete_last_name}`}
+            nombre_evento={`${clasificacion.eventName} - ${clasificacion.eventName}`}
+            tiempoClasificacion={`${clasificacion.hours} - ${clasificacion.minutes}`}
+            id_clasificacion={clasificacion.id || 0}
+          />
+        ));
 
-        setInstanciasClasificacion(instancias);
+        setInstanciasClasificacion(clasificacionComponents);
+
+        
       } catch (error) {
         console.error('Error fetching data:', error);
       }

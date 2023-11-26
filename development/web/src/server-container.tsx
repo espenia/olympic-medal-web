@@ -23,15 +23,19 @@ import IUserService from '../../usecases/common/interfaces/userService';
 import GetUsersUseCase from '../../usecases/users/getUsersUseCase';
 import ChangePasswordUseCase from '../../usecases/auth/passwordChangeUseCase';
 import GetClassificationUseCase from '../../usecases/classifications/getClassificationUseCase';
+import EventClassifications from '../../entities/events/classifications';
+import ClassificationRepository from '../../infrastructure/src/classifications/classificationRepository';
 
 
 Container.set<IRepository<EventDto>>(EventInMemoryRepository, new EventInMemoryRepository());
 Container.set<IGateway>(ApiGateway, new ApiGateway());
 Container.set<IRepository<UserDto>>(UserRepository, new UserRepository());
+Container.set<IRepository<EventClassifications>>(ClassificationRepository, new ClassificationRepository());
 Container.set<IEventService>(EventService, new EventService());
 Container.set<IAuthService>(AuthService, new AuthService());
 Container.set<IGateway>(ApiGateway, new ApiGateway());
 Container.set<IUserService>(UserService, new UserService());
+Container.set<IClassificationService>(ClassificationService, new ClassificationService());
 Container.set<GetEventsUseCase>(GetEventsUseCase, new GetEventsUseCase(Container.get<IEventService>(EventService)));
 Container.set<CreateEventUseCase>(CreateEventUseCase, new CreateEventUseCase(Container.get<IEventService>(EventService)));
 Container.set<LoginUseCase>(LoginUseCase, new LoginUseCase(Container.get<IAuthService>(AuthService)));

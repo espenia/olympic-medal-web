@@ -3,11 +3,12 @@ import { Inject, Service } from "typedi";
 import EventClassifications from "../../entities/events/classifications";
 import type IClassificationService from "../common/interfaces/classificationService";
 
-@Service('getclassificationusecase')
+@Service('declineclassificationusecase')
 export default class GetClassificationUseCase implements IUseCase<EventClassifications[]> {
     private readonly service: IClassificationService;
     firstName? : string;
     lastName? : string;
+    id_classification?: number;
     id?: number;
 
     /**
@@ -17,7 +18,7 @@ export default class GetClassificationUseCase implements IUseCase<EventClassific
         this.service = service;
     }
 
-    handle(): Promise<EventClassifications[]> {
-        return this.service.getClassification(this.firstName, this.lastName);
+    handle(): Promise<void> {
+        return this.service.declineClassification(this.firstName, this.lastName, this.id_classification);
     }
 }

@@ -9,4 +9,5 @@ export default class EventClassifications {
     seconds?: number;
     athlete_first_name?: string;
     athlete_last_name?: string;
+    event_edition?: string
 }
