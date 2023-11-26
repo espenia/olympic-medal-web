@@ -73,17 +73,15 @@ export default class ApiGateway implements IGateway {
     }
 
     async createEvent(event : EventDto) {
-        const config = this.baseAxiosRequestConfig('post',"/event");
-        
-        config.data = {
-            "name": event.name,
-            "description": event.description,
-            "sportType": event.sportType,
-            "country": event.country,
-            "state": event.state,
-            "startDate": event.startDate?.toISOString(),
-            "endDate": event.endDate?.toISOString()
-        };
+        console.log(this.credential);
+        const config = axios({
+            method: 'post',
+            url: this.apiBaseUrl + "/event",
+            headers: {"Content-Type": "application/json", "X-Auth-Token": 'Bearer ' + this.credential?.payload},
+            data: {
+                event
+            }
+        });
         
         const response = await axios(config);
     }

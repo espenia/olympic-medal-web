@@ -1,12 +1,12 @@
 'use client';
 
-import { Card, Title, Text, Col, TextInput, DatePicker, Textarea, Grid, Flex, Button } from '@tremor/react';
+import {Card, Title, Text, Col, TextInput, DatePicker, Textarea, Grid, Flex, Button, NumberInput} from '@tremor/react';
 
 // @ts-ignore
 import { experimental_useFormState as useFormState } from 'react-dom'
 import { create } from './actions';
 import { SubmitButton } from '@/src/submit-button/submitButton';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { redirect } from 'next/navigation';
 import EventDto from '../../../../entities/events/event';
 import { editEvent } from '../[slug]/edit/actions';
@@ -17,12 +17,20 @@ const initialState = {
 
 export default function CrearEvento({ event, redirectTo } : {event? : EventDto, redirectTo? : string }) {
   const [state, formAction] = useFormState(setClientValues, initialState);
-  const [startDate, setStartDate] = useState(undefined as Date | undefined);
-  const [endDate, setEndDate] = useState(undefined as Date | undefined);
+  const [date, setDate] = useState(undefined as Date | undefined);
 
   async function setClientValues(previousState : any, formData : FormData): Promise<{ message : string } | undefined> {
-    formData.set("start_date", startDate?.toISOString() ?? '');
-    formData.set("end_date", endDate?.toISOString() ?? '');
+    formData.set("date", date?.toISOString() ?? '');
+    const file : File = formData.get('csv') as File;
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      if (event.target?.result) {
+
+        const csvData = event.target.result as string;
+        formData.set("csv", csvData);
+      }
+    }
+    reader.readAsText(file);
     const res = event ? await editEvent(previousState, formData) : await create(previousState, formData);
     const n = 1/0;
     console.log(n);
@@ -47,18 +55,9 @@ export default function CrearEvento({ event, redirectTo } : {event? : EventDto, 
           </Flex>
         </Flex>
         <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            const form = e.target as HTMLFormElement; // Type assertion a HTMLFormElement
-            setClientValues(state, new FormData(form)).then((res) => {
-              if (res) {
-                // Hacer algo si la respuesta fue exitosa
-              } else {
-                // Hacer algo si la respuesta no fue exitosa
-              }
-            });
-          }}
+            action={formAction}
         >
+          <Col><input name="csv" type="file" /></Col>
           <Grid numItems={1} numItemsMd={2} className="gap-2 p-4">
             <Col>
               <Text>Nombre del evento:</Text>
@@ -73,65 +72,80 @@ export default function CrearEvento({ event, redirectTo } : {event? : EventDto, 
             <Col>
               <Text>Tipo de deporte:</Text>
               <TextInput
-                name="sport_type"
-                id="sport_type"
+                name="category"
+                id="category"
                 placeholder=''
-                required
-                value={event?.sportType}
-              />
-            </Col>
-            <Col numColSpan={1} numColSpanMd={2}>
-              <Text>Descripción:</Text>
-              <Textarea
-                id="description"
-                name="description"
-                placeholder=''
-                required
-                value={event?.description}
+                value={event?.category}
               />
             </Col>
             <Col>
               <Text>Pais:</Text>
               <TextInput
                 type="text"
-                name="country"
-                id="country"
+                name="location"
+                id="location"
                 placeholder=''
-                value={event?.country}
-                required
+                value={event?.location}
               />
             </Col>
             <Col>
-              <Text>Estado:</Text>
+              <Text>Distancia:</Text>
+              <NumberInput
+                  type="number"
+                  name="distance"
+                  id="distance"
+                  placeholder=''
+                  value={event?.distance}
+              />
+            </Col>
+            <Col>
+              <Text>Fecha:</Text>
+              <DatePicker
+                  id="date"
+                  minDate={date ?? undefined}
+                  onValueChange={setDate}
+                  value={event?.date}
+                  aria-required={true}
+                  placeholder=''
+              />
+            </Col>
+            <Col>
+              <Text>Cantidad de Participantes:</Text>
+              <NumberInput
+                  type="number"
+                  name="participantCount"
+                  id="participantCount"
+                  placeholder=''
+                  value={event?.participant_count}
+              />
+            </Col>
+            <Col>
+              <Text>Sitio oficial:</Text>
               <TextInput
-                type="text"
-                name="state"
-                id="state"
-                placeholder=''
-                value={event?.state}
-                required
+                  type="text"
+                  name="officialSite"
+                  id="officialSite"
+                  placeholder=''
+                  value={event?.official_site}
               />
             </Col>
             <Col>
-              <Text>Fecha de inicio:</Text>
-              <DatePicker
-                id="start_date"
-                maxDate={endDate ?? undefined}
-                onValueChange={setStartDate}
-                value={event?.startDate}
-                aria-required={true}
-                placeholder=''
+              <Text>Edicion:</Text>
+              <NumberInput
+                  type="number"
+                  name="edition"
+                  id="edition"
+                  placeholder=''
+                  value={event?.edition}
               />
             </Col>
-            <Col>
-              <Text>Fecha de finalizacion:</Text>
-              <DatePicker
-                id="end_date"
-                minDate={startDate ?? undefined}
-                onValueChange={setEndDate}
-                value={event?.endDate}
-                aria-required={true}
-                placeholder=''
+            <Col numColSpan={1} numColSpanMd={2}>
+              <Text>Descripción:</Text>
+              <Textarea
+                  id="description"
+                  name="description"
+                  placeholder=''
+                  value={event?.description}
               />
             </Col>
           </Grid>

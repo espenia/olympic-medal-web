@@ -1,9 +1,11 @@
 
 export default class EventClassificationDto {
     id?: number;
-    eventId?: number;
+    event_id?: number;
     position?: number;
-    hours?: number;
-    minutes?: number;
-    seconds?: number;
+    duration_hours?: number;
+    duration_minutes?: number;
+    duration_seconds?: number;
+    athlete_first_name?: string;
+    athlete_last_name?: string;
 }
