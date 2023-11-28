@@ -6,10 +6,12 @@ import EventCommentDto from '../../../entities/events/comment';
 import { Container } from 'typedi';
 import IEventService from '../../../usecases/common/interfaces/eventService';
 import EventService from './eventService';
+import EventInMemoryRepository from './eventInMemoryRepository';
 
 describe('events use cases', () => {
   test('events repository should be initialized empty', async () => {
     EventService;
+    EventInMemoryRepository;
     const req = new GetEventsUseCase(Container.get<IEventService>('eventservice'));
     const events = await req.handle();
     expect(events.length).toBe(0);

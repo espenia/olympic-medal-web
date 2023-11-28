@@ -23,10 +23,10 @@ import ChangePasswordUseCase from '../../usecases/auth/passwordChangeUseCase';
 import PasswordRecoverUseCase from '../../usecases/auth/passwordRecoverUseCase';
 
 !Container.has(EventInMemoryRepository) && Container.set<IRepository<EventDto>>(EventInMemoryRepository, new EventInMemoryRepository());
-!Container.has(ApiGateway) && Container.set<IGateway>(ApiGateway, new ApiGateway());
-!Container.has(UserRepository) && Container.set<IRepository<UserDto>>(UserRepository, new UserRepository(Container.get<IGateway>(ApiGateway)));
+!Container.has('apigateway') && Container.set<ApiGateway>({ id: 'apigateway', transient: false, global: true, eager: true, multiple: false, value: new ApiGateway() });
+!Container.has(UserRepository) && Container.set<IRepository<UserDto>>(UserRepository, new UserRepository(Container.get<ApiGateway>('apigateway')));
 !Container.has(EventService) && Container.set<IEventService>(EventService, new EventService(Container.get<IRepository<EventDto>>(EventInMemoryRepository)));
-!Container.has(AuthService) && Container.set<IAuthService>(AuthService, new AuthService(Container.get<IGateway>(ApiGateway)));
+!Container.has(AuthService) && Container.set<IAuthService>(AuthService, new AuthService(Container.get<ApiGateway>('apigateway')));
 !Container.has(UserService) && Container.set<IUserService>(UserService, new UserService(Container.get<IRepository<UserDto>>(UserRepository)));
 !Container.has(GetEventsUseCase) && Container.set<GetEventsUseCase>(GetEventsUseCase, new GetEventsUseCase(Container.get<IEventService>(EventService)));
 !Container.has(CreateEventUseCase) && Container.set<CreateEventUseCase>(CreateEventUseCase, new CreateEventUseCase(Container.get<IEventService>(EventService)));
@@ -35,7 +35,6 @@ import PasswordRecoverUseCase from '../../usecases/auth/passwordRecoverUseCase';
 !Container.has(GetUsersUseCase) && Container.set<GetUsersUseCase>(GetUsersUseCase, new GetUsersUseCase(Container.get<IUserService>(UserService)));
 !Container.has(ChangePasswordUseCase) && Container.set<ChangePasswordUseCase>(ChangePasswordUseCase, new ChangePasswordUseCase(Container.get<IAuthService>(AuthService)));
 !Container.has(PasswordRecoverUseCase) && Container.set<PasswordRecoverUseCase>(PasswordRecoverUseCase, new PasswordRecoverUseCase(Container.get<IAuthService>(AuthService)));
-
 
 const GetEventUseCaseImpl = Container.get<GetEventsUseCase>(GetEventsUseCase);
 const CreateEventUseCaseImpl = Container.get<CreateEventUseCase>(CreateEventUseCase);

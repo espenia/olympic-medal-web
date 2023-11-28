@@ -7,13 +7,13 @@ import EventInMemoryRepository from "./eventInMemoryRepository";
 
 @Service('eventservice')
 export default class EventService implements IEventService {
-    private readonly repository : IRepository<EventDto>;
+    private readonly repository : IRepository<EventDto> = Container.get<EventInMemoryRepository>('eventinmemoryrepository');
 
     /**
      *
      */
-    constructor(@Inject('eventinmemoryrepository') repository : IRepository<EventDto>) {
-        this.repository = repository;
+    constructor(repository : IRepository<EventDto>) {
+        //this.repository = repository;
     }
 
     createEvent(event: EventDto): Promise<void> {
@@ -33,6 +33,6 @@ export default class EventService implements IEventService {
     }
 
     getEventsAsync(name: string | undefined): Promise<EventDto[]> {
-        return this.repository.getAsync(name);
+        return this.repository.getAsync(undefined, name);
     }
 }
