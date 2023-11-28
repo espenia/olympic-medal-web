@@ -3,5 +3,4 @@
 export async function register() {
     // import the the sides that you wish
     await import('./server-container')
-    await import('./client-container')
 }

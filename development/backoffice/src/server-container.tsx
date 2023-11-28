@@ -23,11 +23,10 @@ import IUserService from '../../usecases/common/interfaces/userService';
 
 Container.set<IRepository<EventDto>>(EventInMemoryRepository, new EventInMemoryRepository());
 Container.set<IGateway>(ApiGateway, new ApiGateway());
-Container.set<IRepository<UserDto>>(UserRepository, new UserRepository());
-Container.set<IEventService>(EventService, new EventService());
-Container.set<IAuthService>(AuthService, new AuthService());
-Container.set<IGateway>(ApiGateway, new ApiGateway());
-Container.set<IUserService>(UserService, new UserService());
+Container.set<IRepository<UserDto>>(UserRepository, new UserRepository(Container.get<IGateway>(ApiGateway)));
+Container.set<IEventService>(EventService, new EventService(Container.get<IRepository<EventDto>>(EventInMemoryRepository)));
+Container.set<IAuthService>(AuthService, new AuthService(Container.get<IGateway>(ApiGateway)));
+Container.set<IUserService>(UserService, new UserService(Container.get<IRepository<UserDto>>(UserRepository)));
 Container.set<GetEventsUseCase>(GetEventsUseCase, new GetEventsUseCase(Container.get<IEventService>(EventService)));
 Container.set<CreateEventUseCase>(CreateEventUseCase, new CreateEventUseCase(Container.get<IEventService>(EventService)));
 Container.set<LoginUseCase>(LoginUseCase, new LoginUseCase(Container.get<IAuthService>(AuthService)));

@@ -1,9 +1,8 @@
 'use server'
 
 import { z } from 'zod'
-import RegistrationUseCase from '../../../usecases/auth/registrationUseCase'
+import { RegistrationUseCaseImpl } from '../../src/server-container'
 import UserDto from '../../../entities/users/user'
-import UserService from '../../../infrastructure/src/users/userService'
 
 export async function signup(prevState: any, formData: FormData) {
   const schema = z.object({
@@ -21,12 +20,13 @@ export async function signup(prevState: any, formData: FormData) {
     firstName: formData.get('firstName'),
     lastName: formData.get('lastName'),
     birthdate: formData.get('birthdate'),
-  })
+    isAthlete: true,
+    country: formData.get('country')
+  });
 
   try {
-    const useCase = new RegistrationUseCase(new UserService());
-    useCase.user = data;
-    await useCase.handle();
+    RegistrationUseCaseImpl.user = data;
+    await RegistrationUseCaseImpl.handle();
   } catch (e) {
     console.error(e);
     return { message: 'Failed to create user' }

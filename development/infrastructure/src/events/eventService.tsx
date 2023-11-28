@@ -2,20 +2,18 @@ import type IRepository from "../../../entities/common/interfaces/repository";
 import EventDto from "../../../entities/events/event";
 import IEventService from "../../../usecases/common/interfaces/eventService";
 import EventCommentDto from "../../../entities/events/comment";
-import Container, { Service } from "typedi";
+import Container, { Inject, Service } from "typedi";
 import EventInMemoryRepository from "./eventInMemoryRepository";
 import Parameters from "../../../entities/common/interfaces/parameters";
 import EventRepository from "./eventRepository";
 
 @Service('eventservice')
 export default class EventService implements IEventService {
-    private readonly repository_in_mem : IRepository<EventDto> = Container.get<IRepository<EventDto>>('eventinmemoryrepository');
     private readonly repository : IRepository<EventDto> = Container.get<IRepository<EventDto>>('eventrepository');
     /**
      *
      */
     constructor() {
-        EventInMemoryRepository;
         EventRepository;
     }
 
@@ -25,17 +23,13 @@ export default class EventService implements IEventService {
     }
 
     async getEventAsync(id: number): Promise<EventDto | undefined> {
-        const parameters  = new Parameters<EventDto>();
-        parameters.id = id;
-        let events = await this.repository.getAsync(parameters);
+        let events = await this.repository.getAsync(id);
 
         return events[0]!;
     }
 
     async commentEventAsync(comment: EventCommentDto): Promise<void> {
-        const parameters = new Parameters<EventDto>();
-        parameters.id = comment.id;
-        let events = await this.repository.getAsync(parameters);
+        let events = await this.repository.getAsync(comment.id);
         let event = events[0];
         event?.comments?.push(comment);
     }
