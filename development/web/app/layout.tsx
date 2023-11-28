@@ -6,7 +6,6 @@ import Nav from '../src/navbar/nav';
 import { Suspense } from 'react';
 import NavbarItem from '@/src/navbar/navbar-item';
 import { getServerSession } from 'next-auth';
-import 'reflect-metadata';
 
 export const metadata = {
   title: 'Portal de deportistas - Medallero',

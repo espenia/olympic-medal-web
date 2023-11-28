@@ -7,10 +7,8 @@ import {
     TableCell,
     Text,
     Bold,
-    Flex,
   } from '@tremor/react';
 import UserDto from '../../../../entities/users/user';
-import { MagnifyingGlassCircleIcon } from '@heroicons/react/24/outline';
   
   export default function AthletesTable({ users }: { users: UserDto[] }) {
     return (
@@ -33,12 +31,9 @@ import { MagnifyingGlassCircleIcon } from '@heroicons/react/24/outline';
                         <TableCell>
                             <a href={`/athletes/${user.id}`}>
                                 <Text color='blue'>
-                                    <Flex flexDirection='row' justifyContent='start'>
-                                        <Bold>
-                                            {user.username}
-                                        </Bold>
-                                        <MagnifyingGlassCircleIcon width={20}></MagnifyingGlassCircleIcon>
-                                    </Flex>
+                                    <Bold>
+                                        {user.username}
+                                    </Bold>
                                 </Text>
                             </a>
                         </TableCell>

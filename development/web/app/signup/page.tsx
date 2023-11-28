@@ -1,6 +1,5 @@
 'use client';
 
-import "reflect-metadata";
 import React, { useState } from 'react';
 import {Card, Title, Text, TextInput, DatePicker, Grid, Col, Flex} from '@tremor/react';
 
@@ -57,6 +56,10 @@ export default function Registro() {
             <Col>
               <Text>Fecha de nacimiento:</Text>
               <DatePicker aria-required="true" onValueChange={e => setBirthDate(e)} />
+            </Col>
+            <Col>
+              <Text>Nacionalidad:</Text>
+              <TextInput placeholder="" required={true} id='country' name='country' type="text" />
             </Col>
           </Grid>
           <Col>
