@@ -6,6 +6,8 @@ export default interface IGateway {
     createUser(user: UserDto) : Promise<void>;
     recoverPassword(mail: string, recoverUrl: string): Promise<void>;
     changePassword(mail: string, userName: string, password: string): Promise<void>;
+    createEvent(params: EventDto) : Promise<void>;
+    getEvents(params: EventSearchParameters) : Promise<EventDto[]>;
     getUsers(...args: any[]) : Promise<UserDto[]>;
     getEvents(...args: any[]) : Promise<EventDto[]>;
     createEvent(event: EventDto) : Promise<void>;

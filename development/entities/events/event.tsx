@@ -1,4 +1,5 @@
 import EventCommentDto from "./comment";
+import EventClassificationDto from "./classifications";
 
 export default class EventDto {
     id?: number | undefined;

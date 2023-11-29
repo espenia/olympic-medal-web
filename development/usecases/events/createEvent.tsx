@@ -2,6 +2,7 @@ import IUseCase from "../common/interfaces/useCase";
 import type IEventService from "../common/interfaces/eventService";
 import EventDto from "../../entities/events/event";
 import { Inject, Service } from "typedi";
+import { exit, hasUncaughtExceptionCaptureCallback } from "process";
 
 @Service('createeventusecase')
 export default class CreateEventUseCase implements IUseCase<void> {
