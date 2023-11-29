@@ -3,17 +3,16 @@ import EventDto from "../../../entities/events/event";
 import IEventService from "../../../usecases/common/interfaces/eventService";
 import EventCommentDto from "../../../entities/events/comment";
 import Container, { Inject, Service } from "typedi";
-import EventInMemoryRepository from "./eventInMemoryRepository";
+import EventRepository from "./eventRepository";
 
 @Service('eventservice')
 export default class EventService implements IEventService {
-    private readonly repository : IRepository<EventDto> = Container.get<EventInMemoryRepository>('eventinmemoryrepository');
-
+    private readonly repository : IRepository<EventDto> = Container.get<IRepository<EventDto>>('eventrepository');
     /**
      *
      */
-    constructor(repository : IRepository<EventDto>) {
-        //this.repository = repository;
+    constructor() {
+        EventRepository;
     }
 
     createEvent(event: EventDto): Promise<void> {
@@ -33,6 +32,7 @@ export default class EventService implements IEventService {
     }
 
     getEventsAsync(name: string | undefined): Promise<EventDto[]> {
-        return this.repository.getAsync(undefined, name);
+        const parameters = {};
+        return this.repository.getAsync(parameters);
     }
 }

@@ -4,6 +4,8 @@ import axios, {AxiosRequestConfig} from "axios";
 import ApiGatewayRequestError from "./exceptions";
 import {Service} from "typedi";
 import { GlobalRef } from "../../globalRef";
+import EventDto from "../../../entities/events/event";
+import EventSearchParameters from "../../../entities/events/searchParameters";
 
 @Service({ id: 'apigateway', transient: false, global: true, eager: true })
 export default class ApiGateway implements IGateway {
@@ -13,7 +15,8 @@ export default class ApiGateway implements IGateway {
     // si el backend esta corriendo en un contenedor de docker, 
     // usar 'springboot' o el nombre del servicio en el docker compose
     // sino, cambiarlo por 'localhost'
-    private apiBaseUrl = "http://springboot:8080";
+     private apiBaseUrl = "http://springboot:8080";
+    //private apiBaseUrl = "http://localhost:8080";
 
     async getUsers(...args: any[]): Promise<UserDto[]> {
         const params = args.some(x => x) ? "?" + new URLSearchParams(this.getEntries(["first_name", "last_name"], args)) : "";
@@ -64,10 +67,45 @@ export default class ApiGateway implements IGateway {
         const response = await axios(config);
     }
 
+    async getEvents(params: EventSearchParameters): Promise<UserDto[]> {
+        const config = this.baseAxiosRequestConfig("get", "/event");
+        config.params = {
+            "name": params.name,
+            "description": params.description,
+            "sportType": params.sportType,
+            "country": params.country,
+            "state": params.state,
+        };
+
+        const response = await axios(config);
+
+        const events: EventDto[] = response.data;
+
+        return events;
+    }
+
+    async createEvent(event : EventDto) {
+        const config = axios({
+            method: 'post',
+            url: this.apiBaseUrl + "/backoffice/event",
+            headers:  this.getEntries(['Content-Type', 'Accept', 'X-Auth-Token'],
+                ['application/json', 'application/json', `Bearer ${this.token.value}`]),
+            data: event,
+            withCredentials: true
+
+        });
+        const response = await axios(config);
+        if (response.status != 201) {
+            throw new ApiGatewayRequestError("Status error. Expected 201 got " + response.status + ".");
+        }
+        return Promise.resolve();
+    }
+
     async login(username: string, password: string) {
         this.username.value = username;
         this.password.value = password;
         this.token.value = await this.getCredentials();
+        console.log(this.token.value);
         const user = new UserDto();
         user.username = username;
         user.password = password;
