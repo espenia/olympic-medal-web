@@ -43,6 +43,7 @@ export default class ApiGateway implements IGateway {
                 user.silverMedals = Number.parseInt(x.silver_medals);
                 user.bronzeMedals = Number.parseInt(x.bronze_medals);
                 user.username = x.user_name;
+                user.email = x.user_mail;
                 return user;
             });
 
