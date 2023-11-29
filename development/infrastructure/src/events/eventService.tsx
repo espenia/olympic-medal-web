@@ -3,8 +3,6 @@ import EventDto from "../../../entities/events/event";
 import IEventService from "../../../usecases/common/interfaces/eventService";
 import EventCommentDto from "../../../entities/events/comment";
 import Container, { Inject, Service } from "typedi";
-import EventInMemoryRepository from "./eventInMemoryRepository";
-import Parameters from "../../../entities/common/interfaces/parameters";
 import EventRepository from "./eventRepository";
 
 @Service('eventservice')
@@ -19,7 +17,6 @@ export default class EventService implements IEventService {
 
     createEvent(event: EventDto): Promise<void> {
         return this.repository.createAsync(event);
-        //return this.repository_in_mem.createAsync(event);
     }
 
     async getEventAsync(id: number): Promise<EventDto | undefined> {
@@ -35,9 +32,7 @@ export default class EventService implements IEventService {
     }
 
     getEventsAsync(name: string | undefined): Promise<EventDto[]> {
-        const parameters = new Parameters<EventDto>();
-        parameters.searchText = name;
-        //return this.repository_in_mem.getAsync(parameters);
+        const parameters = {};
         return this.repository.getAsync(parameters);
     }
 }

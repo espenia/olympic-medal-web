@@ -1,9 +1,9 @@
 import NextAuth from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
-import { LoginUseCaseImpl } from '@/src/server-container';
+import { LoginUseCaseImpl } from '../../../../src/server-container';
 
 const handler = NextAuth({
-    secret: process.env.SECRET,
+    //secret: process.env.SECRET,
     providers: [
       CredentialsProvider({
           // The name to display on the sign in form (e.g. 'Sign in with...')

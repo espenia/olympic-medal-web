@@ -1,5 +1,3 @@
-'use client';
-
 import { Card, Title, Text, Button, Flex } from '@tremor/react';
 import { Search } from '../../src/search-bar/search'
 import EventsTable from '@/src/tables/events-table/eventsTable';

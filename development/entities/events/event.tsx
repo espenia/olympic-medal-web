@@ -11,12 +11,12 @@ export default class EventDto {
     athlete_first_name?: string;
     athlete_last_name?: string;
     classifications?: EventClassificationDto[];
-    participant_count?: number;
+    participants_count?: number;
     category?: string;
     distance?: number;
     location?: string;
     official_site?: string;
-    date?: string;
+    date?: Date;
     comments?: EventCommentDto[];
 
     /**
@@ -26,7 +26,7 @@ export default class EventDto {
                 category: string | undefined = undefined, location: string | undefined = undefined, participantCount: number | undefined = undefined,
                 dateFrom: string | undefined = undefined, dateTo: string | undefined = undefined, comments: EventCommentDto[] | undefined = undefined,
                 edition: number | undefined = undefined, athleteFirstName: string | undefined = undefined, athleteLastName: string | undefined = undefined,
-                classifications: EventClassificationDto[] | [] = [], date: string | undefined = undefined,
+                classifications: EventClassificationDto[] | [] = [], date: Date | undefined = undefined,
                 distance: number | undefined = undefined, officialSite: string | undefined = undefined) {
         this.id = id;
         this.name = name;
@@ -37,7 +37,7 @@ export default class EventDto {
         this.edition = edition;
         this.athlete_first_name = athleteLastName;
         this.athlete_last_name = athleteLastName;
-        this.participant_count = participantCount;
+        this.participants_count = participantCount;
         this.date_to = dateTo;
         this.date_from = dateFrom;
         this.classifications = classifications;

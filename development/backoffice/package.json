@@ -19,8 +19,6 @@
     "@types/react-router-dom": "^5.3.3",
     "axios": "^1.5.1",
     "csv": "^6.3.5",
-    "csv-parser": "^3.0.0",
-    "csv-string": "^4.1.1",
     "next": "13.5.6",
     "next-auth": "^4.23.1",
     "react": "18.2.0",

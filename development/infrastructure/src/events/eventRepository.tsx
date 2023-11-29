@@ -13,7 +13,7 @@ export default class EventRepository implements IRepository<EventDto> {
     constructor() {
         ApiGateway;
     }
-    getAsync(params: Parameters<EventDto>): Promise<EventDto[]> {
+    getAsync(params: any []): Promise<EventDto[]> {
         return this.gateway.getEvents(params);
     }
 

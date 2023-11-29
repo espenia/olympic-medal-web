@@ -84,23 +84,27 @@ export default class ApiGateway implements IGateway {
     }
 
     async createEvent(event : EventDto) {
-        console.log(this.credential);
         const config = axios({
             method: 'post',
-            url: this.apiBaseUrl + "/event",
-            headers: {"Content-Type": "application/json", "X-Auth-Token": 'Bearer ' + this.credential?.payload},
-            data: {
-                event
-            }
+            url: this.apiBaseUrl + "/backoffice/event",
+            headers:  this.getEntries(['Content-Type', 'Accept', 'X-Auth-Token'],
+                ['application/json', 'application/json', `Bearer ${this.token.value}`]),
+            data: event,
+            withCredentials: true
+
         });
-        
         const response = await axios(config);
+        if (response.status != 201) {
+            throw new ApiGatewayRequestError("Status error. Expected 201 got " + response.status + ".");
+        }
+        return Promise.resolve();
     }
 
     async login(username: string, password: string) {
         this.username.value = username;
         this.password.value = password;
         this.token.value = await this.getCredentials();
+        console.log(this.token.value);
         const user = new UserDto();
         user.username = username;
         user.password = password;
