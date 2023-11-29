@@ -4,6 +4,7 @@ import axios, {AxiosRequestConfig} from "axios";
 import ApiGatewayRequestError from "./exceptions";
 import {Service} from "typedi";
 import { GlobalRef } from "../../globalRef";
+import EventDto from "../../../entities/events/event";
 
 @Service({ id: 'apigateway', transient: false, global: true, eager: true })
 export default class ApiGateway implements IGateway {
@@ -14,6 +15,38 @@ export default class ApiGateway implements IGateway {
     // usar 'springboot' o el nombre del servicio en el docker compose
     // sino, cambiarlo por 'localhost'
     private apiBaseUrl = "http://springboot:8080";
+
+    async createEvent(event: EventDto): Promise<void> {
+        const config = this.getAxiosConfig("post", "/backoffice/event", [], []);
+        config.data = this.getEntries(["name", "category", "date", "description", "distance", "edition", "location", "official_site", "participant_count"], 
+                                      [event.name, event.category, event.date?.toISOString(), event.description, event.distance, event.edition, event.location, event.officialSite, event.participantsCount])
+
+        const response = await axios(config);
+    }
+
+    async getEvents(...args: any[]): Promise<EventDto[]> {
+        const config = this.getAxiosConfig("get", "/api/events", ["id", "name", "category", "location", "date_from", "date_to", "edition", "athlete_first_name", "athlete_last_name", "athlete_country"], args);
+
+        const response = await axios(config);
+
+        const events = response.data.map((x: {[k: string]: string}) => 
+            { 
+                const event = new EventDto();
+                event.id = Number.parseInt(x.id);
+                event.name = x.name;
+                event.category = x.country;
+                event.date = new Date(x.date);
+                event.description = x.description;
+                event.distance = x.distance;
+                event.edition = x.edition;
+                event.location = x.location;
+                event.officialSite = x.official_site;
+                event.participantsCount = Number.parseInt(x.participants_count);
+                return event;
+            });
+
+        return events;
+    }
 
     async getUsers(...args: any[]): Promise<UserDto[]> {
         const params = args.some(x => x) ? "?" + new URLSearchParams(this.getEntries(["first_name", "last_name"], args)) : "";
@@ -137,5 +170,23 @@ export default class ApiGateway implements IGateway {
 
     private getEntries(keys: string[], values: any[]) {
         return Object.fromEntries(this.zip(keys, values));
+    }
+
+    private getUrlWithParameters(endpoint: string, parameterNames: string[], parameterValues: any[]) {
+        const params = parameterValues.some(x => x) ? "?" + new URLSearchParams(this.getEntries(parameterNames, parameterValues)) : "";
+
+        return this.apiBaseUrl + endpoint + params;
+    }
+
+    private getAxiosConfig(method: "post" | "get" | "put", endpoint: string, parameterNames: string[], parameterValues: any[]) : AxiosRequestConfig {
+        const config = {
+            method: method,
+            url: this.getUrlWithParameters(endpoint, parameterNames, parameterValues),
+            headers: this.getEntries(['Content-Type', 'Accept', 'X-Auth-Token'], 
+                                     ['application/json', 'application/json', `Bearer ${this.token.value}`]),
+            withCredentials: true
+        };
+
+        return config;
     }
 }

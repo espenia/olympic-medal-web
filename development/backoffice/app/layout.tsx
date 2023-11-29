@@ -26,18 +26,24 @@ export default async function RootLayout({
     {
       name: "Eventos", href: "/events"
     } as NavbarItem,
+    // {
+    //   name: "Usuarios", href: "/user"
+    // } as NavbarItem,
+    // {
+    //   name: "Crear Evento", href: "/events/new"
+    // } as NavbarItem,
     {
-      name: "Usuarios", href: "/user"
-    } as NavbarItem,
-    {
-      name: "Crear Evento", href: "/events/new"
-    } as NavbarItem,
-    {
-      name: "Validar Clasificacion", href: "/validate"
+      name: "Validar resultados", href: "/validate"
     } as NavbarItem
   ] : [
     {
       name: "Inicio", href: "/"
+    } as NavbarItem,
+    {
+      name: "Registro", href: "/signup"
+    } as NavbarItem,
+    {
+      name: "Iniciar sesion", href: "/api/auth/signin"
     } as NavbarItem,
   ]
   return (

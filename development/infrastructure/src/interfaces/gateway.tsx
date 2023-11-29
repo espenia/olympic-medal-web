@@ -1,3 +1,4 @@
+import EventDto from "../../../entities/events/event";
 import UserDto from "../../../entities/users/user";
 
 export default interface IGateway {
@@ -6,4 +7,6 @@ export default interface IGateway {
     recoverPassword(mail: string, recoverUrl: string): Promise<void>;
     changePassword(mail: string, userName: string, password: string): Promise<void>;
     getUsers(...args: any[]) : Promise<UserDto[]>;
+    getEvents(...args: any[]) : Promise<EventDto[]>;
+    createEvent(event: EventDto) : Promise<void>;
 }
