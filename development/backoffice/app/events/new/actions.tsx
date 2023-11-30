@@ -57,7 +57,7 @@ export async function create(formData: FormData, classifications: EventClassific
     distance: parseInt(formData.get('distance') as string),
     officialSite: formData.get('officialSite')
   });
-
+    event.classifications = classifications;
   try {
     CreateEventUseCaseImpl.event = event;
     await CreateEventUseCaseImpl.handle();
