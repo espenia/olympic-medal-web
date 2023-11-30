@@ -1,4 +1,11 @@
-import { GetClassificationUseCaseImpl, AcceptClassificationUseCaseImpl,DeclineClassificationUseCaseImpl } from "@/src/server-container";
+'use server';
+import { GetClassificationUseCaseImpl, AcceptClassificationUseCaseImpl,DeclineClassificationUseCaseImpl, GetUserUseCaseImpl } from "@/src/server-container";
+
+export async function getUser() {
+    const user = await GetUserUseCaseImpl.handle();
+
+    return user;
+}
 
 export async function getClassification(firstName: string | undefined, lastName: string | undefined) {
     GetClassificationUseCaseImpl.firstName = firstName;

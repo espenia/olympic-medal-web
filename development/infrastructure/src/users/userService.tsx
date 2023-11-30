@@ -18,6 +18,10 @@ export default class UserService implements IUserService {
         return this.repository.getAsync(id, firstName, lastName);
     }
 
+    getUser(): Promise<UserDto> {
+        return this.repository.getOneAsync();
+    }
+
     create(user: UserDto): Promise<void> {
         return this.repository.createAsync(user);
     }

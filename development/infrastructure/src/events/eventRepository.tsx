@@ -13,6 +13,15 @@ export default class EventRepository implements IRepository<EventDto> {
     constructor(gateway : IGateway) {
         this.gateway = gateway;
     }
+    getOneAsync(...args: any[]): Promise<EventDto> {
+        throw new Error("Method not implemented.");
+    }
+    deleteAsync(...args: any[]): Promise<void> {
+        throw new Error("Method not implemented.");
+    }
+    putAsync(...args: any[]): Promise<void> {
+        throw new Error("Method not implemented.");
+    }
 
     getAsync(...args: any[]): Promise<EventDto[]> {
         return this.gateway.getEvents(...args);

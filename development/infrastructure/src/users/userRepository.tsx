@@ -13,10 +13,13 @@ export default class UserRepository implements IRepository<UserDto> {
     constructor(gateway : IGateway) {
         this.gateway = gateway;
     }
-    deleteAsync(params: Parameters<UserDto>): Promise<void> {
+    getOneAsync(...args: any[]): Promise<UserDto> {
+        return this.gateway.getUser();
+    }
+    deleteAsync(...args: any[]): Promise<void> {
         throw new Error("Method not implemented.");
     }
-    putAsync(params: Parameters<UserDto>): Promise<void> {
+    putAsync(...args: any[]): Promise<void> {
         throw new Error("Method not implemented.");
     }
 

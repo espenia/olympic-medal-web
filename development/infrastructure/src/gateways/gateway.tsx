@@ -6,8 +6,6 @@ import {Service} from "typedi";
 import { GlobalRef } from "../../globalRef";
 import EventDto from "../../../entities/events/event";
 import EventClassifications from "../../../entities/events/classifications";
-import ClassificationValidateParameters from "../../../entities/events/validateParameters";
-import ClassificationSearchParameters from "../../../entities/events/searchParameters";
 
 @Service({ id: 'apigateway', transient: false, global: true, eager: true })
 export default class ApiGateway implements IGateway {
@@ -27,20 +25,61 @@ export default class ApiGateway implements IGateway {
 
         const response = await axios(config);
     }
-    async acceptClassifications(params: ClassificationValidateParameters): Promise<void> {
-        await axios({
+    async acceptClassifications(idClassification: string, first_name : string, last_name : string): Promise<void> {
+        const response = await axios({
             method: 'put',
-            url: this.apiBaseUrl + "/api/classification/" + params.idClassification?.toString() + "/accept",
-            headers: {
-                'X-Auth-Token': 'Bearer ' + this.credential?.payload
-            },
-            params : {
-                "first_name": params.firstName,
-                "last_name": params.lastName
+            url: this.apiBaseUrl + "/api/classification/" + idClassification + "/accept",
+            headers: {"Content-Type": "application/json"},
+            data: {
+                "first_name": first_name,
+                "last_name": last_name
             }
         });
-        
-        return;
+
+        if (response.status != 200) {
+            throw new ApiGatewayRequestError("Status error. Expected 200 got " + response.status + ".");
+        }
+        return Promise.resolve();
+    }
+
+    async declineClassifications(idClassification: string, first_name : string, last_name : string): Promise<void> {
+        const response = await axios({
+            method: 'put',
+            url: this.apiBaseUrl + "/api/classification/" + idClassification + "/delete",
+            headers: {"Content-Type": "application/json"},
+            data: {
+                "first_name": first_name,
+                "last_name": last_name
+            }
+        });
+
+        if (response.status != 200) {
+            throw new ApiGatewayRequestError("Status error. Expected 200 got " + response.status + ".");
+        }
+        return Promise.resolve();
+    }
+
+    async getClassifications(...args: any[]): Promise<EventClassifications[]> {
+        const config = this.getAxiosConfig("get", "/api/classification/search", ["first_name", "last_name"], args);
+        const response = await axios(config);
+
+        const classifications = response.data.map((x: {[k: string]: string}) => 
+        { 
+            const classification = new EventClassifications();
+            classification.id = Number.parseInt(x.id);
+            classification.event_id = Number.parseInt(x.event_id);
+            classification.event_name = x.event_name;
+            classification.position = Number.parseInt(x.position);
+            classification.position = Number.parseInt(x.duration_hours);
+            classification.position = Number.parseInt(x.duration_minutes);
+            classification.position = Number.parseInt(x.duration_seconds);
+            classification.athlete_first_name = x.athlete_first_name;
+            classification.athlete_last_name = x.athlete_last_name;
+            return classification;
+        });
+
+    return classifications;
+
     }
 
     async getEvents(...args: any[]): Promise<EventDto[]> {
@@ -66,22 +105,36 @@ export default class ApiGateway implements IGateway {
 
         return events;
     }
-    async declineClassifications(params: ClassificationValidateParameters): Promise<void> {
-        console.log("decline bien");
-        await axios({
-            method: 'delete',
-            url: this.apiBaseUrl + "/api/classification/" + params.idClassification?.toString() + "/reject",
-            headers: {
-                'X-Auth-Token': 'Bearer ' + this.credential?.payload
-            },
-            params : {
-                "first_name": params.firstName,
-                "last_name": params.lastName
-            }
-        });
-        return;
+
+    async getUser(): Promise<UserDto> {
+        const config = {
+            method: 'get',
+            url: this.apiBaseUrl + "/api/athlete",
+            headers: this.getEntries(['Content-Type', 'Accept', 'X-Auth-Token'], 
+                                     ['application/json', 'application/json', `Bearer ${this.token.value}`]),
+            withCredentials: true
+        };
+
+        const response = await axios(config);
+
+        const users = response.data.results.map((x: {[k: string]: string}) => 
+            { 
+                const user = new UserDto();
+                user.id = Number.parseInt(x.id);
+                user.firstName = x.first_name;
+                user.lastName = x.last_name;
+                user.country = x.country;
+                user.birthdate = new Date(x.birth_date);
+                user.goldMedals = Number.parseInt(x.gold_medals);
+                user.silverMedals = Number.parseInt(x.silver_medals);
+                user.bronzeMedals = Number.parseInt(x.bronze_medals);
+                user.username = x.user_name;
+                user.email = x.user_mail;
+                return user;
+            });
+
+        return users[0];
     }
-    
 
     async getUsers(...args: any[]): Promise<UserDto[]> {
         const keyValuePairs = args.at(0) ? [["id"], [args.at(0)]] : [["first_name", "last_name"], args.slice(1)]
@@ -113,20 +166,6 @@ export default class ApiGateway implements IGateway {
             });
 
         return users;
-    }
-
-    async getClassifications(params: ClassificationSearchParameters): Promise<EventClassifications[]> {
-        const response = await axios({
-            url: this.apiBaseUrl + "/api/classification/search",
-            headers: {
-                'X-Auth-Token': 'Bearer ' + this.credential?.payload
-            },
-            params : {
-                "first_name": params.firstName,
-                "last_name": params.lastName
-            }
-        });
-        return response.data;
     }
 
     async createUser(user : UserDto) {

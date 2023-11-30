@@ -1,32 +1,41 @@
 'use client';
 import React, { useState } from 'react';
 import { Card, Title, Text, Button } from '@tremor/react';
-import { redirect } from 'next/navigation';
 import { acceptClassification, declineClassification } from './actions';
+import { getServerSession } from 'next-auth';
 
 interface ClasificacionEventoProps {
   nombre_deportista: string;
   nombre_evento: string;
   tiempoClasificacion: string;
   id_clasificacion: number;
+  firstName:string;
+  lastName:string;
 }
 
-const ClasificacionEvento: React.FC<ClasificacionEventoProps> = ({
+const ClasificacionEvento: React.FC<ClasificacionEventoProps> = async ({
   nombre_deportista,
   nombre_evento,
   tiempoClasificacion,
   id_clasificacion,
+  firstName,
+  lastName
 }) => {
 
-  const [firstName, setFirstName] = useState<string | undefined>();
-  const [lastName, setLastName] = useState<string | undefined>();
-
-  const handleValidar = async () => {
-    const data = await acceptClassification(firstName, lastName, id_clasificacion);
+  const handleValidar = async (id_clasificacion: number) => {
+    try {
+      const data = await acceptClassification(firstName, lastName, id_clasificacion);
+    } catch (error) {
+      console.error('Error al validar:', error);
+    }
   };
 
-  const handleRechazar = async () => {
-    const data = await declineClassification(firstName, lastName, id_clasificacion);
+  const handleRechazar = async (id_clasificacion: number) => {
+    try {
+      const data = await declineClassification(firstName, lastName, id_clasificacion);
+    } catch (error) {
+      console.error('Error al rechazar:', error);
+    }
   };
 
   return (
@@ -43,6 +52,25 @@ const ClasificacionEvento: React.FC<ClasificacionEventoProps> = ({
           <Text>Tiempo de Clasificación: {tiempoClasificacion}</Text>
         </div>
         <Button
+          onClick={() => handleValidar(id_clasificacion)}
+          className="bg-green-500 text-white p-2 mt-4"
+        >
+          Validar
+        </Button>
+        <Button
+          onClick={() => handleRechazar(id_clasificacion)}
+          className="bg-red-500 text-white p-2 mt-4"
+        >
+          Rechazar
+        </Button>
+      </Card>
+    </div>
+  );
+};
+
+export default ClasificacionEvento;
+/*
+        <Button
           onClick={handleValidar}
           className="bg-green-500 text-white p-2 mt-4"
         >
@@ -54,9 +82,4 @@ const ClasificacionEvento: React.FC<ClasificacionEventoProps> = ({
         >
           Rechazar
         </Button>
-      </Card>
-    </div>
-  );
-};
-
-export default ClasificacionEvento;
+*/

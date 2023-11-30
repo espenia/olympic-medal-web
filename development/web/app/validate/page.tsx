@@ -1,84 +1,37 @@
-'use client';
+'use server';
 import React, { useEffect, useState } from 'react';
 import { Card, Title, Text, Button } from '@tremor/react';
 import ClasificacionEvento from './clasification';
-import { getClassification } from './actions';
+import { getClassification, getUser } from './actions';
 import EventClassifications from '../../../entities/events/classifications';
-
-/*const getClassification = (firstName: string, lastName: string) => {
-  // Lógica para obtener la lista de clasificaciones
-  return [
-    {
-      id_clasificacion: 1,
-      posicion: 1,
-      duracion: '2 horas',
-      atleta_first_name: 'Juan',
-      lastname: 'Perez',
-      event_id: 1,
-      event_name: 'Maratón',
-      event_edition: '2023',
-    },
-    {
-      id_clasificacion: 1,
-      posicion: 5,
-      duracion: '5 dias',
-      atleta_first_name: 'Pedro',
-      lastname: 'Dominguez',
-      event_id: 2,
-      event_name: 'Triatlon',
-      event_edition: '2021',
-    },
-    // ... más elementos
-  ];
-};*/
-
-const ClasificacionDeportista = () => {
-
-  //const instanciasClasificacion = 'a';
-
-  const [instanciasClasificacion, setInstanciasClasificacion] = useState<JSX.Element[]>([]);
+import { getServerSession } from 'next-auth';
+import UserDto from '../../../entities/users/user';
 
 
-  /*const firstName = 'a';
-  const lastName = 'a';*/
+const ClasificacionDeportista = async () => {
 
-  const [classifications, setClassifications] = useState<EventClassifications[]>([]);
-  const [firstName, setFirstName] = useState<string | undefined>();
-  const [lastName, setLastName] = useState<string | undefined>();
-  const searchClasifications = getClassification(firstName, lastName).then(classifications => setClassifications(classifications));
 
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        const data = await getClassification(firstName, lastName);
-        setClassifications(data);
-        console.log('hola');
-        console.log(data);
+  const user = await getUser();
+  const firstName = user.firstName;
+  const lastName =user.lastName;
 
-        const clasificacionComponents = data.map((clasificacion) => (
-          <ClasificacionEvento
-            key={clasificacion.id}
-            nombre_deportista={`${clasificacion.athlete_first_name} ${clasificacion.athlete_last_name}`}
-            nombre_evento={`${clasificacion.eventName} - ${clasificacion.eventName}`}
-            tiempoClasificacion={`${clasificacion.hours} - ${clasificacion.minutes}`}
-            id_clasificacion={clasificacion.id || 0}
-          />
-        ));
+  const data = await getClassification(firstName, lastName);
 
-        setInstanciasClasificacion(clasificacionComponents);
-
-        
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
-    }
-
-    fetchData();
-  }, [firstName, lastName]);
+  const clasificacionComponents = data.map((clasificacion) => (
+    <ClasificacionEvento
+      key={clasificacion.id}
+      nombre_deportista={`${clasificacion.athlete_first_name} ${clasificacion.athlete_last_name}`}
+      nombre_evento={`${clasificacion.event_name}`}
+      tiempoClasificacion={`${clasificacion.duration_hours}h - ${clasificacion.duration_minutes}m - ${clasificacion.duration_seconds}s`}
+      id_clasificacion={clasificacion.id || 0}
+      firstName={`${clasificacion.athlete_first_name}`}
+      lastName={`${clasificacion.athlete_last_name}`}
+    />
+  ));
 
   return (
     <div>
-      {instanciasClasificacion}
+      {clasificacionComponents}
     </div>
   );
 }

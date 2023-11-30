@@ -2,33 +2,34 @@ import type IGateway from "../interfaces/gateway";
 import IRepository from "../../../entities/common/interfaces/repository";
 import Container, { Service } from "typedi";
 import ApiGateway from "../gateways/gateway";
-import ClassificationSearchParameters from "../../../entities/users/searchParameters";
 import EventClassifications from "../../../entities/events/classifications";
-import ClassificationValidateParameters from "../../../entities/events/validateParameters";
 
 @Service('classificationrepository')
 export default class ClassificationRepository implements IRepository<EventClassifications> {
-    private readonly gateway : IGateway = Container.get<IGateway>('apigateway');
+    private readonly gateway : IGateway;
 
     /**
      *
      */
-    constructor() {
-        ApiGateway;
+    constructor(gateway : IGateway) {
+        this.gateway = gateway;
+    }
+    getOneAsync(...args: any[]): Promise<EventClassifications> {
+        throw new Error("Method not implemented.");
     }
     createAsync(a: EventClassifications): Promise<void> {
         return Promise.resolve();
     }
 
-    getAsync(params: ClassificationSearchParameters): Promise<EventClassifications[]> {
-        return this.gateway.getClassifications(params);
+    getAsync(...args: any[]): Promise<EventClassifications[]> {
+        return this.gateway.getClassifications(...args);
     }
 
-    putAsync(params: ClassificationValidateParameters): Promise<void> {
-        return this.gateway.acceptClassifications(params);
+    putAsync(...args: any[]): Promise<void> {
+        return this.gateway.acceptClassifications(args[2],args[0],args[1]);
     }
 
-    deleteAsync(params: ClassificationValidateParameters): Promise<void> {
-        return this.gateway.declineClassifications(params);
+    deleteAsync(...args: any[]): Promise<void> {
+        return this.gateway.declineClassifications(args[2],args[0],args[1]);
     }
 }

@@ -3,45 +3,31 @@ import { Container, Service } from "typedi";
 import IClassificationService from "../../../usecases/common/interfaces/classificationService";
 import EventClassifications from "../../../entities/events/classifications";
 import ClassificationRepository from "./classificationRepository";
-import ClassificationSearchParameters from "../../../entities/events/searchParameters";
-import ClassificationValidateParameters from "../../../entities/events/validateParameters";
+
 
 @Service('classificationservice')
 export default class ClassificationService implements IClassificationService {
-    private readonly repository : IRepository<EventClassifications> = Container.get<IRepository<EventClassifications>>('classificationrepository');
+    private readonly repository : IRepository<EventClassifications>;
 
     /**
      *
      */
-    constructor() {
-        ClassificationRepository;
+    constructor(repository : IRepository<EventClassifications>) {
+        this.repository = repository;
     }
     acceptClassification(firstName: string | undefined, lastName: string | undefined, id_clasificacion: number | undefined): Promise<void> {
-        const params = new ClassificationValidateParameters();
-        params.firstName = firstName;
-        params.lastName = lastName;
-        params.idClassification = id_clasificacion;
-        return this.repository.putAsync(params);
+        return this.repository.putAsync(firstName,lastName,id_clasificacion);
     }
     declineClassification(firstName: string | undefined, lastName: string | undefined, id_clasificacion: number | undefined): Promise<void> {
-        const params = new ClassificationValidateParameters();
-        params.firstName = firstName;
-        params.lastName = lastName;
-        params.idClassification = id_clasificacion;
-        return this.repository.deleteAsync(params);
+        return this.repository.deleteAsync(firstName,lastName,id_clasificacion);
     }
 
     getClassification(firstName: string | undefined, lastName: string | undefined): Promise<EventClassifications[]> {
-        const params = new ClassificationSearchParameters();
-        params.firstName = firstName;
-        params.lastName = lastName;
-        return this.repository.getAsync(params);
+        return this.repository.getAsync(firstName,lastName);
     }
 
-    
-
-    create(event: EventClassifications): Promise<void> {
-        return this.repository.createAsync(event);
+    create(classification: EventClassifications): Promise<void> {
+        return this.repository.createAsync(classification);
     }
 
     /*getUsers(firstName: string | undefined, lastName: string | undefined): Promise<UserDto[]> {
