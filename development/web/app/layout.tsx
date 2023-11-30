@@ -6,7 +6,6 @@ import Nav from '../src/navbar/nav';
 import { Suspense } from 'react';
 import NavbarItem from '@/src/navbar/navbar-item';
 import { getServerSession } from 'next-auth';
-import 'reflect-metadata';
 
 export const metadata = {
   title: 'Portal de deportistas - Medallero',
@@ -36,6 +35,12 @@ export default async function RootLayout({
   ] : [
     {
       name: "Inicio", href: "/"
+    } as NavbarItem,
+    {
+      name: "Registro", href: "/signup"
+    } as NavbarItem,
+    {
+      name: "Iniciar sesion", href: "/api/auth/signin"
     } as NavbarItem,
   ]
   return (

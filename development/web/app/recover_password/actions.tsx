@@ -1,14 +1,11 @@
-'use server'
-
-import PasswordRecoverUseCase from '../../../usecases/auth/passwordRecoverUseCase'
-import AuthService from '../../../infrastructure/src/auth/authService'
+import { PasswordRecoverUseCaseImpl } from '../../src/server-container';
 
 export async function recoverPassword(prevState: any, formData: FormData) {
   try {
-    const useCase = new PasswordRecoverUseCase(new AuthService());
-    useCase.mail = formData.get('email')?.toString();
-    useCase.recoverUrl = "http://localhost:35000/change_password";
-    return await useCase.handle();
+    PasswordRecoverUseCaseImpl.mail = formData.get('email')?.toString();
+    PasswordRecoverUseCaseImpl.recoverUrl = 'https://grupo-5.2023.tecnicasdedisenio.com.ar/change_password';
+    //PasswordRecoverUseCaseImpl.recoverUrl = 'http://localhost:35000/change_password';
+    return await PasswordRecoverUseCaseImpl.handle();
   } catch (e) {
     console.error(e);
     return { message: 'Failed to create user' }

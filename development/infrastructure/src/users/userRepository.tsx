@@ -1,20 +1,17 @@
 import type IGateway from "../interfaces/gateway";
 import IRepository from "../../../entities/common/interfaces/repository";
 import UserDto from "../../../entities/users/user";
-import Container, { Service } from "typedi";
-import ApiGateway from "../gateways/gateway";
-import UserSearchParameters from "../../../entities/users/searchParameters";
-import Parameters from "../../../entities/common/interfaces/parameters";
+import { Service } from "typedi";
 
 @Service('userrepository')
 export default class UserRepository implements IRepository<UserDto> {
-    private readonly gateway : IGateway = Container.get<IGateway>('apigateway');
+    private readonly gateway : IGateway;
 
     /**
      *
      */
-    constructor() {
-        ApiGateway;
+    constructor(gateway : IGateway) {
+        this.gateway = gateway;
     }
     deleteAsync(params: Parameters<UserDto>): Promise<void> {
         throw new Error("Method not implemented.");
@@ -23,8 +20,8 @@ export default class UserRepository implements IRepository<UserDto> {
         throw new Error("Method not implemented.");
     }
 
-    getAsync(params: UserSearchParameters): Promise<UserDto[]> {
-        return this.gateway.getUsers(params);
+    getAsync(...args: any[]): Promise<UserDto[]> {
+        return this.gateway.getUsers(...args);
     }
     
     createAsync(a: UserDto): Promise<void> {

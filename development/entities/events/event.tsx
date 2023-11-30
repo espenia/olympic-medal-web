@@ -1,28 +1,16 @@
 import EventCommentDto from "./comment";
+import EventClassificationDto from "./classifications";
 
 export default class EventDto {
     id?: number | undefined;
-    name? : string;
+    category? : string;
+    date?: Date;
     description?: string;
-    sportType?: string;
-    country?: string;
-    state?: string;
-    startDate?: Date;
-    endDate?: Date;
+    distance?: number;
+    edition?: number;
+    location?: string;
+    name?: string;
+    officialSite?: string;
+    participantsCount?: number;
     comments?: EventCommentDto[];
-
-    /**
-     *
-     */
-    constructor(id: number | undefined = undefined, name: string | undefined = undefined, description: string | undefined = undefined, sportType: string | undefined = undefined, country: string | undefined = undefined, state: string | undefined = undefined, startDate: Date | undefined = undefined, endDate: Date | undefined = undefined, comments: EventCommentDto[] | undefined = undefined) {
-        this.id = id;
-        this.name = name;
-        this.comments = comments ?? [];
-        this.description = description;
-        this.sportType = sportType;
-        this.country = country;
-        this.state = state;
-        this.startDate = startDate;
-        this.endDate = endDate;
-    }
 }

@@ -11,4 +11,6 @@ export default class UserDto {
     goldMedals?: number;
     silverMedals?: number;
     bronzeMedals?: number;
+    isAthlete?: boolean = false;
+    country?: string;
 }

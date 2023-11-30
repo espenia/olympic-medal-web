@@ -73,7 +73,7 @@ export default function UserProfile({userProps} : {userProps : object}) {
                         <Text>
                             Fecha de nacimiento
                         </Text>
-                        <DatePicker onValueChange={setBirthDate} value={user?.birthdate} aria-required>
+                        <DatePicker onValueChange={setBirthDate} defaultValue={new Date()} aria-required>
                         </DatePicker>
                     </Col>
                     <Col>

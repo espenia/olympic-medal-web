@@ -1,34 +1,17 @@
-'use client';
+'use server'
 
-import { Card, Title, Text, Col, TextInput, DatePicker, Textarea, Grid, Flex, Button } from '@tremor/react';
+import {Card, Title, Text, Col, TextInput, Textarea, Grid, Flex, Button, Italic} from '@tremor/react';
 
 // @ts-ignore
 import { experimental_useFormState as useFormState } from 'react-dom'
-import { create } from './actions';
+import {formatValuesAndCreate} from './actions';
 import { SubmitButton } from '@/src/submit-button/submitButton';
-import { useState } from 'react';
-import { redirect } from 'next/navigation';
+import React from 'react';
 import EventDto from '../../../../entities/events/event';
-import { editEvent } from '../[slug]/edit/actions';
 
-const initialState = {
-  message : null
-}
 
-export default function CrearEvento({ event, redirectTo } : {event? : EventDto, redirectTo? : string }) {
-  const [state, formAction] = useFormState(setClientValues, initialState);
-  const [startDate, setStartDate] = useState(undefined as Date | undefined);
-  const [endDate, setEndDate] = useState(undefined as Date | undefined);
 
-  async function setClientValues(previousState : any, formData : FormData): Promise<{ message : string } | undefined> {
-    formData.set("start_date", startDate?.toISOString() ?? '');
-    formData.set("end_date", endDate?.toISOString() ?? '');
-    const res = event ? await editEvent(previousState, formData) : await create(previousState, formData);
-    if (!res) {
-      redirect(redirectTo ? redirectTo : "/events");
-    }
-    return res;
-  }
+export default async function CrearEvento({ event } : {event? : EventDto }) {
 
   return (
     <main className="p-4 md:p-10 mx-auto max-w-7xl">
@@ -44,8 +27,10 @@ export default function CrearEvento({ event, redirectTo } : {event? : EventDto, 
             </a>
           </Flex>
         </Flex>
-        <form onSubmit={formAction}>
-          <Grid numItems={1} numItemsMd={2} className="gap-2 p-4">
+        <form
+            action={formatValuesAndCreate}
+        >
+          <Grid numItems={1} numItemsMd={2} className="gap-3 p-4">
             <Col>
               <Text>Nombre del evento:</Text>
               <TextInput
@@ -59,66 +44,84 @@ export default function CrearEvento({ event, redirectTo } : {event? : EventDto, 
             <Col>
               <Text>Tipo de deporte:</Text>
               <TextInput
-                name="sport_type"
-                id="sport_type"
+                name="category"
+                id="category"
                 placeholder=''
-                required
-                value={event?.sportType}
-              />
-            </Col>
-            <Col numColSpan={1} numColSpanMd={2}>
-              <Text>Descripción:</Text>
-              <Textarea
-                id="description"
-                name="description"
-                placeholder=''
-                required
-                value={event?.description}
+                value={event?.category}
               />
             </Col>
             <Col>
               <Text>Pais:</Text>
               <TextInput
                 type="text"
-                name="country"
-                id="country"
+                name="location"
+                id="location"
                 placeholder=''
-                value={event?.country}
-                required
+                value={event?.location}
               />
             </Col>
             <Col>
-              <Text>Estado:</Text>
+              <Text>Distancia:</Text>
               <TextInput
-                type="text"
-                name="state"
-                id="state"
-                placeholder=''
-                value={event?.state}
-                required
+                  type="text"
+                  name="distance"
+                  id="distance"
+                  placeholder=''
+                  value={event?.distance?.toString()}
               />
             </Col>
             <Col>
-              <Text>Fecha de inicio:</Text>
-              <DatePicker
-                id="start_date"
-                maxDate={endDate ?? undefined}
-                onValueChange={setStartDate}
-                value={event?.startDate}
-                aria-required={true}
-                placeholder=''
+              <Text>Fecha:</Text>
+              <input type="date"
+                  name="date"
+                  id="date"
+                     required
+                  placeholder=''
               />
             </Col>
             <Col>
-              <Text>Fecha de finalizacion:</Text>
-              <DatePicker
-                id="end_date"
-                minDate={startDate ?? undefined}
-                onValueChange={setEndDate}
-                value={event?.endDate}
-                aria-required={true}
-                placeholder=''
+              <Text>Cantidad de Participantes:</Text>
+              <TextInput
+                  type="text"
+                  name="participantCount"
+                  id="participantCount"
+                  placeholder=''
+                  value={event?.participantsCount?.toString()}
               />
+            </Col>
+            <Col>
+              <Text>Sitio oficial:</Text>
+              <TextInput
+                  type="text"
+                  name="officialSite"
+                  id="officialSite"
+                  placeholder=''
+                  value={event?.officialSite}
+              />
+            </Col>
+            <Col>
+              <Text>Edicion:</Text>
+              <TextInput
+                  type="text"
+                  name="edition"
+                  id="edition"
+                  placeholder=''
+                  value={event?.edition?.toString()}
+              />
+            </Col>
+            <Col numColSpan={1} numColSpanMd={2}>
+              <Text>Descripción:</Text>
+              <Textarea
+                  id="description"
+                  name="description"
+                  placeholder=''
+                  value={event?.description}
+              />
+            </Col>
+            <Col>
+              <Text>Resultados: </Text>
+              <input name="csv" type="file" /><br></br>
+              <Italic>Extensiones soportadas: .csv</Italic>
             </Col>
           </Grid>
           <Col>
@@ -126,9 +129,6 @@ export default function CrearEvento({ event, redirectTo } : {event? : EventDto, 
               <SubmitButton />
             </Flex>
           </Col>
-          <Text aria-live="polite" className="sr-only" role="status">
-            {state?.message}
-          </Text>
         </form>
       </Card>
     </main>

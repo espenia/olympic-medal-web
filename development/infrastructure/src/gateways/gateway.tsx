@@ -1,29 +1,31 @@
-import CredentialDto from "../../../entities/credentials/credential";
 import UserDto from "../../../entities/users/user";
 import IGateway from "../interfaces/gateway";
 import axios, {AxiosRequestConfig} from "axios";
 import ApiGatewayRequestError from "./exceptions";
 import {Service} from "typedi";
-import UserSearchParameters from "../../../entities/users/searchParameters";
-import ClassificationSearchParameters from "../../../entities/events/searchParameters";
+import { GlobalRef } from "../../globalRef";
+import EventDto from "../../../entities/events/event";
 import EventClassifications from "../../../entities/events/classifications";
 import ClassificationValidateParameters from "../../../entities/events/validateParameters";
+import ClassificationSearchParameters from "../../../entities/events/searchParameters";
 
-@Service('apigateway')
+@Service({ id: 'apigateway', transient: false, global: true, eager: true })
 export default class ApiGateway implements IGateway {
-    private username?: string;
-    private password?: string;
-    private credential?: CredentialDto;
-    private apiBaseUrl : string;
+    private username = new GlobalRef<string>('username');
+    private password = new GlobalRef<string>('password');
+    private token = new GlobalRef<string>('token');
+    // si el backend esta corriendo en un contenedor de docker, 
+    // usar 'springboot' o el nombre del servicio en el docker compose
+    // sino, cambiarlo por 'localhost'
+     private apiBaseUrl = "http://springboot:8080";
+    //private apiBaseUrl = "http://localhost:8080";
 
-    /**
-     *
-     */
-    constructor() {
-        // si el backend esta corriendo en un contenedor de docker, 
-        // usar 'springboot' o el nombre del servicio en el docker compose
-        // sino, cambiarlo por 'localhost'
-        this.apiBaseUrl = "http://springboot:8080";
+    async createEvent(event: EventDto): Promise<void> {
+        const config = this.getAxiosConfig("post", "/backoffice/event", [], []);
+        config.data = this.getEntries(["name", "category", "date", "description", "distance", "edition", "location", "official_site", "participant_count"], 
+                                      [event.name, event.category, event.date?.toISOString(), event.description, event.distance, event.edition, event.location, event.officialSite, event.participantsCount])
+
+        const response = await axios(config);
     }
     async acceptClassifications(params: ClassificationValidateParameters): Promise<void> {
         await axios({
@@ -41,6 +43,29 @@ export default class ApiGateway implements IGateway {
         return;
     }
 
+    async getEvents(...args: any[]): Promise<EventDto[]> {
+        const config = this.getAxiosConfig("get", "/api/events", ["id", "name", "category", "location", "date_from", "date_to", "edition", "athlete_first_name", "athlete_last_name", "athlete_country"], args);
+
+        const response = await axios(config);
+
+        const events = response.data.map((x: {[k: string]: string}) => 
+            { 
+                const event = new EventDto();
+                event.id = Number.parseInt(x.id);
+                event.name = x.name;
+                event.category = x.country;
+                event.date = new Date(x.date);
+                event.description = x.description;
+                event.distance = Number.parseInt(x.distance);
+                event.edition = Number.parseInt(x.edition);
+                event.location = x.location;
+                event.officialSite = x.official_site;
+                event.participantsCount = Number.parseInt(x.participants_count);
+                return event;
+            });
+
+        return events;
+    }
     async declineClassifications(params: ClassificationValidateParameters): Promise<void> {
         console.log("decline bien");
         await axios({
@@ -56,20 +81,38 @@ export default class ApiGateway implements IGateway {
         });
         return;
     }
+    
 
-    async getUsers(params: UserSearchParameters): Promise<UserDto[]> {
-        const response = await axios({
-            url: this.apiBaseUrl + "/api/athletes",
-            headers: {
-                'X-Auth-Token': 'Bearer ' + this.credential?.payload
-            },
-            params : {
-                "first_name": params.firstName,
-                "last_name": params.lastName
-            }
-        });
-        
-        return response.data;
+    async getUsers(...args: any[]): Promise<UserDto[]> {
+        const keyValuePairs = args.at(0) ? [["id"], [args.at(0)]] : [["first_name", "last_name"], args.slice(1)]
+        const params = args.some(x => x) ? "?" + new URLSearchParams(this.getEntries(keyValuePairs[0], keyValuePairs[1])) : "";
+        const config = {
+            method: 'get',
+            url: this.apiBaseUrl + "/api/athletes" + params,
+            headers: this.getEntries(['Content-Type', 'Accept', 'X-Auth-Token'], 
+                                     ['application/json', 'application/json', `Bearer ${this.token.value}`]),
+            withCredentials: true
+        };
+
+        const response = await axios(config);
+
+        const users = response.data.results.map((x: {[k: string]: string}) => 
+            { 
+                const user = new UserDto();
+                user.id = Number.parseInt(x.id);
+                user.firstName = x.first_name;
+                user.lastName = x.last_name;
+                user.country = x.country;
+                user.birthdate = new Date(x.birth_date);
+                user.goldMedals = Number.parseInt(x.gold_medals);
+                user.silverMedals = Number.parseInt(x.silver_medals);
+                user.bronzeMedals = Number.parseInt(x.bronze_medals);
+                user.username = x.user_name;
+                user.email = x.user_mail;
+                return user;
+            });
+
+        return users;
     }
 
     async getClassifications(params: ClassificationSearchParameters): Promise<EventClassifications[]> {
@@ -95,16 +138,19 @@ export default class ApiGateway implements IGateway {
             "mail": user.email,
             "first_name": user.firstName,
             "last_name": user.lastName,
-            "birth_date": user.birthdate?.toISOString()
+            "birth_date": user.birthdate?.toISOString(),
+            "is_athlete": user.isAthlete,
+            "country": user.country
         };
 
         const response = await axios(config);
     }
 
     async login(username: string, password: string) {
-        this.username = username;
-        this.password = password;
-        await this.getCredentials();
+        this.username.value = username;
+        this.password.value = password;
+        this.token.value = await this.getCredentials();
+        console.log(this.token.value);
         const user = new UserDto();
         user.username = username;
         user.password = password;
@@ -145,23 +191,15 @@ export default class ApiGateway implements IGateway {
         return Promise.resolve();
     }
 
-    private async getCredentials() {
+    private async getCredentials() : Promise<string> {
         const response = await axios({
             method: 'post',
             url: this.apiBaseUrl + "/auth/login",
-            headers: {"Content-Type": "application/json"},
-            data: {
-                user_name: this.username,
-                password: this.password
-            }
+            headers: this.getEntries(["Content-Type"], ["application/json"]),
+            data: this.getEntries(["user_name", "password"], [this.username.value, this.password.value])
         });
 
-        if (response.status != 200) {
-            throw new ApiGatewayRequestError("Status error. Expected 200 got " + response.status + ".");
-        }
-        
-        this.credential = new CredentialDto();
-        this.credential.payload = response.data["token"];
+        return response.data.token;
     };
 
     private signUpAxiosRequestConfig( endpoint: string) : AxiosRequestConfig {
@@ -171,4 +209,34 @@ export default class ApiGateway implements IGateway {
         };
     }
 
+    private zip(keys: string[], values: any[]) : Map<string, any> {
+        return keys.reduce((map, key, index) => {
+            if (values.at(index)) {
+                map.set(key, values.at(index));
+            }
+            return map;
+        }, new Map());
+    }
+
+    private getEntries(keys: string[], values: any[]) {
+        return Object.fromEntries(this.zip(keys, values));
+    }
+
+    private getUrlWithParameters(endpoint: string, parameterNames: string[], parameterValues: any[]) {
+        const params = parameterValues.some(x => x) ? "?" + new URLSearchParams(this.getEntries(parameterNames, parameterValues)) : "";
+
+        return this.apiBaseUrl + endpoint + params;
+    }
+
+    private getAxiosConfig(method: "post" | "get" | "put", endpoint: string, parameterNames: string[], parameterValues: any[]) : AxiosRequestConfig {
+        const config = {
+            method: method,
+            url: this.getUrlWithParameters(endpoint, parameterNames, parameterValues),
+            headers: this.getEntries(['Content-Type', 'Accept', 'X-Auth-Token'], 
+                                     ['application/json', 'application/json', `Bearer ${this.token.value}`]),
+            withCredentials: true
+        };
+
+        return config;
+    }
 }

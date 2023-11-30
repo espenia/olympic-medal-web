@@ -7,11 +7,10 @@ export default function EventsTable({ events }: { events: EventDto[] }) {
       <Table>
         <TableHead>
             <TableRow>
-                <TableHeaderCell>Nombre</TableHeaderCell>
-                <TableHeaderCell>Tipo de evento</TableHeaderCell>
-                <TableHeaderCell>Fecha de inicio</TableHeaderCell>
-                <TableHeaderCell>Fecha de finalizacion</TableHeaderCell>
-                <TableHeaderCell>Acciones</TableHeaderCell>
+              <TableHeaderCell>Nombre</TableHeaderCell>
+              <TableHeaderCell>Categoria</TableHeaderCell>
+              <TableHeaderCell>Fecha de inicio</TableHeaderCell>
+              <TableHeaderCell>Acciones</TableHeaderCell>
             </TableRow>
         </TableHead>
         <TableBody>
@@ -36,13 +35,10 @@ export default function EventsTable({ events }: { events: EventDto[] }) {
                 <TableRow key={event.id}>
                   <TableCell>{event.name}</TableCell>
                   <TableCell>
-                    <Text>{event.sportType}</Text>
+                    <Text>{event.category}</Text>
                   </TableCell>
                   <TableCell>
-                    <Text>{event.startDate?.toDateString() ?? "-"}</Text>
-                  </TableCell>
-                  <TableCell>
-                    <Text>{event.endDate?.toDateString() ?? "-"}</Text>
+                    <Text>{event.date?.toDateString() ?? "-"}</Text>
                   </TableCell>
                   <TableCell>
                     <Flex flexDirection="row" justifyContent="start" alignItems="start">
