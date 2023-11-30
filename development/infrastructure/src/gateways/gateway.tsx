@@ -38,8 +38,8 @@ export default class ApiGateway implements IGateway {
                 event.category = x.country;
                 event.date = new Date(x.date);
                 event.description = x.description;
-                event.distance = x.distance;
-                event.edition = x.edition;
+                event.distance = Number.parseInt(x.distance);
+                event.edition = Number.parseInt(x.edition);
                 event.location = x.location;
                 event.officialSite = x.official_site;
                 event.participantsCount = Number.parseInt(x.participants_count);

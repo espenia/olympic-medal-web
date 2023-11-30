@@ -6,8 +6,8 @@ export default class EventDto {
     category? : string;
     date?: Date;
     description?: string;
-    distance?: string;
-    edition?: string;
+    distance?: number;
+    edition?: number;
     location?: string;
     name?: string;
     officialSite?: string;

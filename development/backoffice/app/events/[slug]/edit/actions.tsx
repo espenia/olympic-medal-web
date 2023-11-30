@@ -16,23 +16,24 @@ export async function editEvent(formData: FormData) {
     category: z.string().min(1),
     date: z.coerce.date(),
     description: z.string().min(1),
-    distance: z.string().min(1),
-    edition: z.string().min(1),
+    distance: z.number().min(1),
+    edition: z.number().min(1),
     location: z.string().min(1),
     name: z.string().min(1),
     officialSite: z.string().min(1).url(),
     participantsCount: z.coerce.number()
   });
 
-  const data : EventDto = schema.parse({
-    category: formData.get('category'),
-    date: new Date(formData.get('date')?.toString() ?? ""),
-    description: formData.get('description'),
-    distance: formData.get('distance'),
-    edition: formData.get('edition'),
-    location: formData.get('location'),
+  const event : EventDto = schema.parse({
     name: formData.get('name'),
-    officialSite: formData.get('site'),
-    participantsCount: formData.get('participants')
+    description: formData.get('description'),
+    category: formData.get('category'),
+    location: formData.get('location'),
+    edition: parseInt(formData.get('edition') as string),
+    date: new Date(formData.get('date')?.toString() ?? ""),
+    participantsCount: parseInt(formData.get('participantCount') as string),
+    distance: parseInt(formData.get('distance') as string),
+    officialSite: formData.get('officialSite')
   });
+
   }
