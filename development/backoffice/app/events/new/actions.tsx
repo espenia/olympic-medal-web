@@ -40,7 +40,7 @@ export async function create(formData: FormData, classifications: EventClassific
     category: z.string(),
     location: z.string(),
     date: z.date(),
-    participantCount: z.number(),
+    participantsCount: z.number(),
     distance: z.number().min(1),
     officialSite: z.string(),
     edition: z.number().min(1),
@@ -53,7 +53,7 @@ export async function create(formData: FormData, classifications: EventClassific
     location: formData.get('location'),
     edition: parseInt(formData.get('edition') as string),
     date: date,
-    participantsCount: parseInt(formData.get('participantCount') as string),
+    participantsCount: parseInt(formData.get('participantsCount') as string),
     distance: parseInt(formData.get('distance') as string),
     officialSite: formData.get('officialSite')
   });
