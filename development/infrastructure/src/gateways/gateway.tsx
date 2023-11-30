@@ -50,8 +50,8 @@ export default class ApiGateway implements IGateway {
     }
 
     async getUsers(...args: any[]): Promise<UserDto[]> {
-        const params = args.some(x => x) ? "?" + new URLSearchParams(this.getEntries(["first_name", "last_name"], args)) : "";
-
+        const keyValuePairs = args.at(0) ? [["id"], [args.at(0)]] : [["first_name", "last_name"], args.slice(1)]
+        const params = args.some(x => x) ? "?" + new URLSearchParams(this.getEntries(keyValuePairs[0], keyValuePairs[1])) : "";
         const config = {
             method: 'get',
             url: this.apiBaseUrl + "/api/athletes" + params,

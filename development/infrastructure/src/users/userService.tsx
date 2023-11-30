@@ -14,8 +14,8 @@ export default class UserService implements IUserService {
         this.repository = repository;
     }
 
-    getUsers(firstName: string | undefined, lastName: string | undefined): Promise<UserDto[]> {
-        return this.repository.getAsync(firstName, lastName);
+    getUsers(id: number | undefined, firstName: string | undefined, lastName: string | undefined): Promise<UserDto[]> {
+        return this.repository.getAsync(id, firstName, lastName);
     }
 
     create(user: UserDto): Promise<void> {

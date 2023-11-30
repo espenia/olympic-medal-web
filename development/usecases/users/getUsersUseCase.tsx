@@ -18,6 +18,6 @@ export default class GetUsersUseCase implements IUseCase<UserDto[]> {
     }
 
     handle(): Promise<UserDto[]> {
-        return this.service.getUsers(this.firstName, this.lastName);
+        return this.service.getUsers(this.id, this.firstName, this.lastName);
     }
 }
