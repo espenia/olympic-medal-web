@@ -11,7 +11,9 @@ export async function signup(prevState: any, formData: FormData) {
     email: z.string().email().min(1),
     firstName: z.string().min(1),
     lastName: z.string().min(1),
-    birthdate: z.coerce.date()
+    birthdate: z.coerce.date(),
+    isAthlete: z.boolean(),
+    country: z.string().min(1)
   })
   const data : UserDto = schema.parse({
     username: formData.get('username'),

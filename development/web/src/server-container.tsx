@@ -3,7 +3,6 @@
   import { Container } from 'typedi'
 import GetEventsUseCase from '../../usecases/events/getEvents';
 import EventService from '../../infrastructure/src/events/eventService';
-import EventInMemoryRepository from '../../infrastructure/src/events/eventInMemoryRepository';
 import ApiGateway from '../../infrastructure/src/gateways/gateway';
 import UserService from '../../infrastructure/src/users/userService';
 import CreateEventUseCase from '../../usecases/events/createEvent';
@@ -11,6 +10,7 @@ import IRepository from '../../entities/common/interfaces/repository';
 import EventDto from '../../entities/events/event';
 import IEventService from '../../usecases/common/interfaces/eventService';
 import IGateway from '../../infrastructure/src/interfaces/gateway';
+import EventRepository from '../../infrastructure/src/events/eventRepository';
 import UserDto from '../../entities/users/user';
 import AuthService from '../../infrastructure/src/auth/authService';
 import UserRepository from '../../infrastructure/src/users/userRepository';
@@ -22,10 +22,10 @@ import GetUsersUseCase from '../../usecases/users/getUsersUseCase';
 import ChangePasswordUseCase from '../../usecases/auth/passwordChangeUseCase';
 import PasswordRecoverUseCase from '../../usecases/auth/passwordRecoverUseCase';
 
-!Container.has(EventInMemoryRepository) && Container.set<IRepository<EventDto>>(EventInMemoryRepository, new EventInMemoryRepository());
 !Container.has('apigateway') && Container.set<ApiGateway>({ id: 'apigateway', transient: false, global: true, eager: true, multiple: false, value: new ApiGateway() });
+!Container.has(EventService) && Container.set<IRepository<EventDto>>(EventRepository, new EventRepository(Container.get<ApiGateway>('apigateway')));
 !Container.has(UserRepository) && Container.set<IRepository<UserDto>>(UserRepository, new UserRepository(Container.get<ApiGateway>('apigateway')));
-!Container.has(EventService) && Container.set<IEventService>(EventService, new EventService(Container.get<IRepository<EventDto>>(EventInMemoryRepository)));
+!Container.has(EventService) && Container.set<IEventService>(EventService, new EventService(Container.get<IRepository<EventDto>>(EventRepository)));
 !Container.has(AuthService) && Container.set<IAuthService>(AuthService, new AuthService(Container.get<ApiGateway>('apigateway')));
 !Container.has(UserService) && Container.set<IUserService>(UserService, new UserService(Container.get<IRepository<UserDto>>(UserRepository)));
 !Container.has(GetEventsUseCase) && Container.set<GetEventsUseCase>(GetEventsUseCase, new GetEventsUseCase(Container.get<IEventService>(EventService)));

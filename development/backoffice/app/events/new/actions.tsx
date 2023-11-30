@@ -4,10 +4,11 @@ import {z} from 'zod'
 import { CreateEventUseCaseImpl } from '../../../src/server-container';
 import {redirect} from "next/navigation";
 import EventClassificationDto from "../../../../entities/events/classifications";
+import EventDto from '../../../../entities/events/event';
 
 
 export async function formatValuesAndCreate(formData : FormData) {
-    const date = new Date(formData.get('date') as String);
+    const date = new Date(formData.get('date')?.toString() ?? "");
     const file : File = formData.get('csv') as File;
 
     let classifications : EventClassificationDto[] = [];
@@ -45,31 +46,19 @@ export async function create(formData: FormData, classifications: EventClassific
     edition: z.number().min(1),
   });
 
-  const data  = schema.parse({
+  const event : EventDto = schema.parse({
     name: formData.get('name'),
     description: formData.get('description'),
     category: formData.get('category'),
     location: formData.get('location'),
     edition: parseInt(formData.get('edition') as string),
     date: date,
-    participantCount: parseInt(formData.get('participantCount') as string) | undefined,
+    participantsCount: parseInt(formData.get('participantCount') as string),
     distance: parseInt(formData.get('distance') as string),
     officialSite: formData.get('officialSite')
   });
 
   try {
-    const event = {
-        name: data.name,
-        description: data.description,
-        edition: data.edition,
-        classifications: classifications,
-        participant_count: data.participantCount,
-        category: data.category,
-        distance: data.distance,
-        location: data.location,
-        date: data.date,
-        official_site: data.officialSite,
-    };
     CreateEventUseCaseImpl.event = event;
     await CreateEventUseCaseImpl.handle();
     return;

@@ -10,9 +10,7 @@ import EventInMemoryRepository from './eventInMemoryRepository';
 
 describe('events use cases', () => {
   test('events repository should be initialized empty', async () => {
-    EventService;
-    EventInMemoryRepository;
-    const req = new GetEventsUseCase(Container.get<IEventService>('eventservice'));
+    const req = new GetEventsUseCase(new EventService(new EventInMemoryRepository()));
     const events = await req.handle();
     expect(events.length).toBe(0);
   });
@@ -20,23 +18,25 @@ describe('events use cases', () => {
 
 describe('events use cases', () => {
   test('leaving a valid comment in an event should keep it', async () => {
-    const req = new CreateEventUseCase(Container.get<IEventService>('eventservice'));
+    const repo = new EventInMemoryRepository();
+    const req = new CreateEventUseCase(new EventService(repo));
     const event = new EventDto();
+    event.comments = [];
     event.name = "prueba";
     req.event = event;
     await req.handle();
 
-    const req2 = new GetEventsUseCase(Container.get<IEventService>('eventservice'));
+    const req2 = new GetEventsUseCase(new EventService(repo));
     req2.name = event.name;
     const event2 = await req2.handle();
 
-    const usecase = new CommentEventUseCase(Container.get<IEventService>('eventservice'));
+    const usecase = new CommentEventUseCase(new EventService(repo));
     usecase.comment = new EventCommentDto();
     usecase.comment.eventId = event2.at(0)!.id;
     usecase.comment.content = "Un comentario de prueba";
     await usecase.handle();
 
-    const event3 = new GetEventsUseCase(Container.get<IEventService>('eventservice'));
+    const event3 = new GetEventsUseCase(new EventService(repo));
     event3.id = event2.at(0)!.id;
 
     const events = await event3.handle();

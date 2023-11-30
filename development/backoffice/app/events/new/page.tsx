@@ -1,6 +1,6 @@
 'use server'
 
-import {Card, Title, Text, Col, TextInput, Textarea, Grid, Flex, Button} from '@tremor/react';
+import {Card, Title, Text, Col, TextInput, Textarea, Grid, Flex, Button, Italic} from '@tremor/react';
 
 // @ts-ignore
 import { experimental_useFormState as useFormState } from 'react-dom'
@@ -30,8 +30,7 @@ export default async function CrearEvento({ event } : {event? : EventDto }) {
         <form
             action={formatValuesAndCreate}
         >
-          <Col><input name="csv" type="file" /></Col>
-          <Grid numItems={1} numItemsMd={2} className="gap-2 p-4">
+          <Grid numItems={1} numItemsMd={2} className="gap-3 p-4">
             <Col>
               <Text>Nombre del evento:</Text>
               <TextInput
@@ -64,11 +63,11 @@ export default async function CrearEvento({ event } : {event? : EventDto }) {
             <Col>
               <Text>Distancia:</Text>
               <TextInput
-                  type="number"
+                  type="text"
                   name="distance"
                   id="distance"
                   placeholder=''
-                  value={event?.distance}
+                  value={event?.distance?.toString()}
               />
             </Col>
             <Col>
@@ -83,11 +82,11 @@ export default async function CrearEvento({ event } : {event? : EventDto }) {
             <Col>
               <Text>Cantidad de Participantes:</Text>
               <TextInput
-                  type="number"
+                  type="text"
                   name="participantCount"
                   id="participantCount"
                   placeholder=''
-                  value={event?.participants_count}
+                  value={event?.participantsCount?.toString()}
               />
             </Col>
             <Col>
@@ -97,17 +96,17 @@ export default async function CrearEvento({ event } : {event? : EventDto }) {
                   name="officialSite"
                   id="officialSite"
                   placeholder=''
-                  value={event?.official_site}
+                  value={event?.officialSite}
               />
             </Col>
             <Col>
               <Text>Edicion:</Text>
               <TextInput
-                  type="number"
+                  type="text"
                   name="edition"
                   id="edition"
                   placeholder=''
-                  value={event?.edition}
+                  value={event?.edition?.toString()}
               />
             </Col>
             <Col numColSpan={1} numColSpanMd={2}>
@@ -118,6 +117,11 @@ export default async function CrearEvento({ event } : {event? : EventDto }) {
                   placeholder=''
                   value={event?.description}
               />
+            </Col>
+            <Col>
+              <Text>Resultados: </Text>
+              <input name="csv" type="file" /><br></br>
+              <Italic>Extensiones soportadas: .csv</Italic>
             </Col>
           </Grid>
           <Col>

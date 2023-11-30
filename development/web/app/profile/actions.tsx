@@ -8,8 +8,8 @@ import UserDto from '../../../entities/users/user';
 
 export async function getUserProfile() {
   const session = await getServerSession();
-  GetUsersUseCaseImpl.firstName = session?.user?.name?.split(' ')[0];
-  GetUsersUseCaseImpl.lastName = session?.user?.name?.split(' ')[1];
+  GetUsersUseCaseImpl.firstName = session?.user?.name ?? undefined;
+  GetUsersUseCaseImpl.lastName = undefined;
   GetUsersUseCaseImpl.id = undefined;
 
   const users = await GetUsersUseCaseImpl.handle();

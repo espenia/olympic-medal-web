@@ -8,6 +8,14 @@ export default class GetEventsUseCase implements IUseCase<EventDto[]> {
     private readonly service : IEventService;
     name? : string;
     id?: number;
+    category?: string;
+    location?: string; 
+    edition?: string;
+    dateFrom?: Date; 
+    dateTo?: Date; 
+    athleteFirstName?: string; 
+    athleteLastName?: string;
+    athleteCountry?: string;
 
     /**
      *
@@ -21,6 +29,14 @@ export default class GetEventsUseCase implements IUseCase<EventDto[]> {
             const event = await this.service.getEventAsync(this.id);
             return [event!];
         }
-        return this.service.getEventsAsync(this.name);
+        return this.service.getEventsAsync(this.name, 
+                                           this.category, 
+                                           this.location, 
+                                           this.edition, 
+                                           this.dateFrom, 
+                                           this.dateTo, 
+                                           this.athleteFirstName, 
+                                           this.athleteLastName, 
+                                           this.athleteCountry);
     }
 }

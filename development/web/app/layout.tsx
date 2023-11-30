@@ -36,6 +36,12 @@ export default async function RootLayout({
     {
       name: "Inicio", href: "/"
     } as NavbarItem,
+    {
+      name: "Registro", href: "/signup"
+    } as NavbarItem,
+    {
+      name: "Iniciar sesion", href: "/api/auth/signin"
+    } as NavbarItem,
   ]
   return (
     <html lang="en" className="h-full bg-gray-50">

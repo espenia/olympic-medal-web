@@ -5,7 +5,6 @@ import ApiGatewayRequestError from "./exceptions";
 import {Service} from "typedi";
 import { GlobalRef } from "../../globalRef";
 import EventDto from "../../../entities/events/event";
-import EventSearchParameters from "../../../entities/events/searchParameters";
 
 @Service({ id: 'apigateway', transient: false, global: true, eager: true })
 export default class ApiGateway implements IGateway {
@@ -18,9 +17,41 @@ export default class ApiGateway implements IGateway {
      private apiBaseUrl = "http://springboot:8080";
     //private apiBaseUrl = "http://localhost:8080";
 
-    async getUsers(...args: any[]): Promise<UserDto[]> {
-        const params = args.some(x => x) ? "?" + new URLSearchParams(this.getEntries(["first_name", "last_name"], args)) : "";
+    async createEvent(event: EventDto): Promise<void> {
+        const config = this.getAxiosConfig("post", "/backoffice/event", [], []);
+        config.data = this.getEntries(["name", "category", "date", "description", "distance", "edition", "location", "official_site", "participant_count"], 
+                                      [event.name, event.category, event.date?.toISOString(), event.description, event.distance, event.edition, event.location, event.officialSite, event.participantsCount])
 
+        const response = await axios(config);
+    }
+
+    async getEvents(...args: any[]): Promise<EventDto[]> {
+        const config = this.getAxiosConfig("get", "/api/events", ["id", "name", "category", "location", "date_from", "date_to", "edition", "athlete_first_name", "athlete_last_name", "athlete_country"], args);
+
+        const response = await axios(config);
+
+        const events = response.data.map((x: {[k: string]: string}) => 
+            { 
+                const event = new EventDto();
+                event.id = Number.parseInt(x.id);
+                event.name = x.name;
+                event.category = x.country;
+                event.date = new Date(x.date);
+                event.description = x.description;
+                event.distance = Number.parseInt(x.distance);
+                event.edition = Number.parseInt(x.edition);
+                event.location = x.location;
+                event.officialSite = x.official_site;
+                event.participantsCount = Number.parseInt(x.participants_count);
+                return event;
+            });
+
+        return events;
+    }
+
+    async getUsers(...args: any[]): Promise<UserDto[]> {
+        const keyValuePairs = args.at(0) ? [["id"], [args.at(0)]] : [["first_name", "last_name"], args.slice(1)]
+        const params = args.some(x => x) ? "?" + new URLSearchParams(this.getEntries(keyValuePairs[0], keyValuePairs[1])) : "";
         const config = {
             method: 'get',
             url: this.apiBaseUrl + "/api/athletes" + params,
@@ -65,40 +96,6 @@ export default class ApiGateway implements IGateway {
         };
 
         const response = await axios(config);
-    }
-
-    async getEvents(params: EventSearchParameters): Promise<UserDto[]> {
-        const config = this.baseAxiosRequestConfig("get", "/event");
-        config.params = {
-            "name": params.name,
-            "description": params.description,
-            "sportType": params.sportType,
-            "country": params.country,
-            "state": params.state,
-        };
-
-        const response = await axios(config);
-
-        const events: EventDto[] = response.data;
-
-        return events;
-    }
-
-    async createEvent(event : EventDto) {
-        const config = axios({
-            method: 'post',
-            url: this.apiBaseUrl + "/backoffice/event",
-            headers:  this.getEntries(['Content-Type', 'Accept', 'X-Auth-Token'],
-                ['application/json', 'application/json', `Bearer ${this.token.value}`]),
-            data: event,
-            withCredentials: true
-
-        });
-        const response = await axios(config);
-        if (response.status != 201) {
-            throw new ApiGatewayRequestError("Status error. Expected 201 got " + response.status + ".");
-        }
-        return Promise.resolve();
     }
 
     async login(username: string, password: string) {
@@ -175,5 +172,23 @@ export default class ApiGateway implements IGateway {
 
     private getEntries(keys: string[], values: any[]) {
         return Object.fromEntries(this.zip(keys, values));
+    }
+
+    private getUrlWithParameters(endpoint: string, parameterNames: string[], parameterValues: any[]) {
+        const params = parameterValues.some(x => x) ? "?" + new URLSearchParams(this.getEntries(parameterNames, parameterValues)) : "";
+
+        return this.apiBaseUrl + endpoint + params;
+    }
+
+    private getAxiosConfig(method: "post" | "get" | "put", endpoint: string, parameterNames: string[], parameterValues: any[]) : AxiosRequestConfig {
+        const config = {
+            method: method,
+            url: this.getUrlWithParameters(endpoint, parameterNames, parameterValues),
+            headers: this.getEntries(['Content-Type', 'Accept', 'X-Auth-Token'], 
+                                     ['application/json', 'application/json', `Bearer ${this.token.value}`]),
+            withCredentials: true
+        };
+
+        return config;
     }
 }
