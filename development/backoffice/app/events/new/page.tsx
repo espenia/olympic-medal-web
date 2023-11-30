@@ -63,7 +63,7 @@ export default async function CrearEvento({ event } : {event? : EventDto }) {
             <Col>
               <Text>Distancia:</Text>
               <TextInput
-                  type="number"
+                  type="text"
                   name="distance"
                   id="distance"
                   placeholder=''
@@ -82,7 +82,7 @@ export default async function CrearEvento({ event } : {event? : EventDto }) {
             <Col>
               <Text>Cantidad de Participantes:</Text>
               <TextInput
-                  type="number"
+                  type="text"
                   name="participantsCount"
                   id="participantsCount"
                   placeholder=''
@@ -102,7 +102,7 @@ export default async function CrearEvento({ event } : {event? : EventDto }) {
             <Col>
               <Text>Edicion:</Text>
               <TextInput
-                  type="number"
+                  type="text"
                   name="edition"
                   id="edition"
                   placeholder=''
