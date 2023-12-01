@@ -5,6 +5,7 @@ import ApiGatewayRequestError from "./exceptions";
 import {Service} from "typedi";
 import { GlobalRef } from "../../globalRef";
 import EventDto from "../../../entities/events/event";
+import EventClassificationDto from "../../../entities/events/classifications";
 
 @Service({ id: 'apigateway', transient: false, global: true, eager: true })
 export default class ApiGateway implements IGateway {
@@ -16,6 +17,34 @@ export default class ApiGateway implements IGateway {
     // sino, cambiarlo por 'localhost'
     private apiBaseUrl = "http://springboot:8080";
     //private apiBaseUrl = "http://localhost:8080";
+    
+    /*
+    async getClassifications(athlete_id: number): Promise<EventClassificationDto[]> {
+        const classif1 = new EventClassificationDto();
+        classif1.id = 1;
+        classif1.event_id = 1;
+        classif1.position = 1;
+        classif1.duration_hours = 1;
+        classif1.duration_minutes = 1;
+        classif1.duration_seconds = 1;
+        classif1.athlete_first_name = "fer";
+        classif1.athlete_last_name = "fer";
+
+        const classif2 = new EventClassificationDto();
+        classif2.id = 2;
+        classif2.event_id = 2;
+        classif2.position = 2;
+        classif2.duration_hours = 2;
+        classif2.duration_minutes = 2;
+        classif2.duration_seconds = 2;
+        classif2.athlete_first_name = "fer";
+        classif2.athlete_last_name = "fer";
+
+        const classifications = [classif1, classif2];
+        
+        return new Promise<EventClassificationDto[]>(resolve => resolve(classifications));
+    }
+    */
 
     async createEvent(event: EventDto): Promise<void> {
         const config = this.getAxiosConfig("post", "/backoffice/event", [], []);

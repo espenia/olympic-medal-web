@@ -1,10 +1,10 @@
 import { Card, Title, Text, Button, Flex, Grid, Col, Bold, Subtitle } from "@tremor/react";
-import getUser from "./actions";
+import getUser, { getClassifications } from "./actions";
 import { TrophyIcon } from "@heroicons/react/24/outline";
 
 export default async function UserProfile({ params }: { params: { slug: number }}) {
     const user = await getUser(params.slug);
-
+    const classifications = await getClassifications(params.slug);
     return <main className="p-4 md:p-10 mx-auto max-w-7xl">
         <Card>
                 <Flex justifyContent="between" className="pb-8" alignItems="center">
@@ -48,6 +48,35 @@ export default async function UserProfile({ params }: { params: { slug: number }
                         </Flex>
                     </Col>
                 </Grid>
+        </Card>
+        <Card>
+            <Flex justifyContent="center">
+                Clasificaciones
+            </Flex>
+            classifications.map((classification) => (
+                <Grid numItems={1} numItemsMd={2} className="gap-5 p-4">
+                    <Col>
+                        <Text>
+                            Evento: <Bold>{classification.event_id}</Bold>
+                        </Text>
+                    </Col>
+                    <Col>
+                        <Text>
+                            Posición: <Bold>{classification.position}</Bold>
+                        </Text>
+                    </Col>
+                    <Col>
+                        <Text>
+                            Duración: <Bold>{classification.duration_hours}:{classification.duration_minutes}:{classification.duration_seconds}</Bold>
+                        </Text>
+                    </Col>
+                    <Col>
+                        <Text>
+                            Atleta: <Bold>{classification.athlete_first_name} {classification.athlete_last_name}</Bold>
+                        </Text>
+                    </Col>
+                </Grid>
+            ))
         </Card>
     </main>
 }

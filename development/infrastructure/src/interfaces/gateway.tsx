@@ -1,3 +1,4 @@
+import EventClassificationDto from "../../../entities/events/classifications";
 import EventDto from "../../../entities/events/event";
 import UserDto from "../../../entities/users/user";
 
@@ -11,4 +12,5 @@ export default interface IGateway {
     getUsers(...args: any[]) : Promise<UserDto[]>;
     getEvents(...args: any[]) : Promise<EventDto[]>;
     createEvent(event: EventDto) : Promise<void>;
+    //getClassifications(athlete_id: number): Promise<EventClassificationDto[]>;
 }
