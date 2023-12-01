@@ -5,6 +5,7 @@ import ApiGatewayRequestError from "./exceptions";
 import {Service} from "typedi";
 import { GlobalRef } from "../../globalRef";
 import EventDto from "../../../entities/events/event";
+import EventClassificationDto from "../../../entities/events/classifications";
 
 @Service({ id: 'apigateway', transient: false, global: true, eager: true })
 export default class ApiGateway implements IGateway {
@@ -34,15 +35,38 @@ export default class ApiGateway implements IGateway {
 
         const response = await axios(config);
 
-        console.log("[DEBUG] response...")
-        console.log(response.data.results)
+        type ApiClassification = {
+            id: string;
+            duration_hours: string;
+            duration_minutes: string;
+            duration_seconds: string;
+            athlete: null | string;
+            event: null | string;
+            position: string;
+            athlete_first_name: string;
+            athlete_last_name: string;
+          };
+          
+          type ApiEvent = {
+            id: string;
+            name: string;
+            edition: string;
+            participants_count: string;
+            category: string;
+            distance: string;
+            location: string;
+            description: string;
+            date: string;
+            classifications: ApiClassification[];
+            official_site: string;
+          };
 
-        const events = response.data.results.map((x: {[k: string]: string}) =>
-            {
+        const events = response.data.results.map((x: ApiEvent) =>
+            { 
                 const event = new EventDto();
                 event.id = Number.parseInt(x.id);
                 event.name = x.name;
-                event.category = x.country;
+                event.category = x.category;
                 event.date = new Date(x.date);
                 event.description = x.description;
                 event.distance = Number.parseInt(x.distance);
@@ -50,6 +74,18 @@ export default class ApiGateway implements IGateway {
                 event.location = x.location;
                 event.officialSite = x.official_site;
                 event.participantsCount = Number.parseInt(x.participants_count);
+                event.classifications = x.classifications?.map(x => {
+                    const classification = new EventClassificationDto();
+                    classification.athlete_first_name = x.athlete_first_name;
+                    classification.athlete_last_name = x.athlete_last_name;
+                    classification.duration_hours = Number.parseInt(x.duration_hours);
+                    classification.duration_minutes = Number.parseInt(x.duration_minutes);
+                    classification.duration_seconds = Number.parseInt(x.duration_seconds);
+                    classification.event_id = x.event ? Number.parseInt(x.event) : 0;
+                    classification.position = Number.parseInt(x.position);
+                    classification.id = Number.parseInt(x.id);
+                    return classification;
+                })
                 return event;
             });
 
@@ -57,7 +93,7 @@ export default class ApiGateway implements IGateway {
     }
 
     async getUsers(...args: any[]): Promise<UserDto[]> {
-        const keyValuePairs = args.at(0) ? [["id"], [args.at(0)]] : [["first_name", "last_name"], args.slice(1)]
+        const keyValuePairs = args.at(0) ? [["id"], [args.at(0)]] : [["first_name", "last_name", "mail"], args.slice(1)]
         const params = args.some(x => x) ? "?" + new URLSearchParams(this.getEntries(keyValuePairs[0], keyValuePairs[1])) : "";
         const config = {
             method: 'get',
@@ -109,10 +145,22 @@ export default class ApiGateway implements IGateway {
         this.username.value = username;
         this.password.value = password;
         this.token.value = await this.getCredentials();
-        console.log(this.token.value);
+
+        const config = this.getAxiosConfig("get", "/api/athlete", [], []);
+        const result = await axios(config);
+
         const user = new UserDto();
-        user.username = username;
-        user.password = password;
+        user.id = Number.parseInt(result.data.id);
+        user.firstName = result.data.first_name;
+        user.lastName = result.data.last_name;
+        user.country = result.data.country;
+        user.birthdate = new Date(result.data.birth_date);
+        user.goldMedals = Number.parseInt(result.data.gold_medals);
+        user.silverMedals = Number.parseInt(result.data.silver_medals);
+        user.bronzeMedals = Number.parseInt(result.data.bronze_medals);
+        user.username = result.data.user_name;
+        user.email = result.data.user_mail;
+
         return user;
     }
 

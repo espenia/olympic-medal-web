@@ -7,6 +7,7 @@ export async function getUsers(firstName: string | undefined, lastName: string |
     GetUsersUseCaseImpl.firstName = !isStringNullEmptyOrWhitespace(firstName) ? firstName : undefined;
     GetUsersUseCaseImpl.lastName = !isStringNullEmptyOrWhitespace(lastName) ? lastName : undefined;;
     GetUsersUseCaseImpl.id = undefined;
+    GetUsersUseCaseImpl.email = undefined;
 
     const users = await GetUsersUseCaseImpl.handle();
 
