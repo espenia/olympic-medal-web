@@ -26,26 +26,19 @@ export default class ApiGateway implements IGateway {
     }
 
     async getEvents(...args: any[]): Promise<EventDto[]> {
+
         let config = this.getAxiosConfig("get", "/api/events", ["id", "name", "category", "location", "date_from", "date_to", "edition", "athlete_first_name", "athlete_last_name", "athlete_country"], args);
 
-        if(args.at(0)){
+        if(args.some(x => x)){
             config = this.getAxiosConfig("get", "/api/events/search", ["id", "name", "category", "location", "date_from", "date_to", "edition", "athlete_first_name", "athlete_last_name", "athlete_country"], args);
-            //DEBUG
-            console.log("[DEBUG]\n");
-            console.log(config);
         }
         const response = await axios(config);
 
         let events;
 
-        //DEBUG
-
-        console.log("[DEBUG]\n");
-        console.log(response.data);
         //Como para los "search" recibe un EventLookupDTO, la lista se encuentra dentro de "results"
-        if(args.at(0)){
-            console.log("[DEBUG]\n");
-            console.log(response.data.results);
+        if(args.some(x => x)){
+
             events = response.data.results.map((x: {[k: string]: string}) =>
             {
                 const event = new EventDto();
