@@ -10,27 +10,22 @@ export async function getUser() {
 export async function getClassification(firstName: string | undefined, lastName: string | undefined) {
     GetClassificationUseCaseImpl.firstName = firstName;
     GetClassificationUseCaseImpl.lastName = lastName;
-    GetClassificationUseCaseImpl.id = undefined;
 
     const users = await GetClassificationUseCaseImpl.handle();
 
     return users;
 }
 
-export async function acceptClassification(firstName: string | undefined, lastName: string | undefined,id_clasificacion: number | undefined) {
-    AcceptClassificationUseCaseImpl.firstName = firstName;
-    AcceptClassificationUseCaseImpl.lastName = lastName;
-    AcceptClassificationUseCaseImpl.id = id_clasificacion;
+export async function acceptClassification(id_clasificacion: number | undefined) {
+    AcceptClassificationUseCaseImpl.id_classification = id_clasificacion;
 
     const users = await AcceptClassificationUseCaseImpl.handle();
 
     return;
 }
 
-export async function declineClassification(firstName: string | undefined, lastName: string | undefined,id_clasificacion: number | undefined) {
-    DeclineClassificationUseCaseImpl.firstName = firstName;
-    DeclineClassificationUseCaseImpl.lastName = lastName;
-    DeclineClassificationUseCaseImpl.id = id_clasificacion;
+export async function declineClassification(id_clasificacion: number | undefined) {
+    DeclineClassificationUseCaseImpl.id_classification = id_clasificacion;
 
     const users = await DeclineClassificationUseCaseImpl.handle();
 

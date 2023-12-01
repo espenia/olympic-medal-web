@@ -26,10 +26,10 @@ export default class ClassificationRepository implements IRepository<EventClassi
     }
 
     putAsync(...args: any[]): Promise<void> {
-        return this.gateway.acceptClassifications(args[2],args[0],args[1]);
+        return this.gateway.acceptClassifications(args[0]);
     }
 
     deleteAsync(...args: any[]): Promise<void> {
-        return this.gateway.declineClassifications(args[2],args[0],args[1]);
+        return this.gateway.declineClassifications(args[0]);
     }
 }

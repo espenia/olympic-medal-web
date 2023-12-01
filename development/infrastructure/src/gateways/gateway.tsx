@@ -3,7 +3,7 @@ import IGateway from "../interfaces/gateway";
 import axios, {AxiosRequestConfig} from "axios";
 import ApiGatewayRequestError from "./exceptions";
 import {Service} from "typedi";
-import { GlobalRef } from "../../globalRef";
+import {GlobalRef} from "../../globalRef";
 import EventDto from "../../../entities/events/event";
 import EventClassifications from "../../../entities/events/classifications";
 
@@ -25,16 +25,9 @@ export default class ApiGateway implements IGateway {
 
         const response = await axios(config);
     }
-    async acceptClassifications(idClassification: string, first_name : string, last_name : string): Promise<void> {
-        const response = await axios({
-            method: 'put',
-            url: this.apiBaseUrl + "/api/classification/" + idClassification + "/accept",
-            headers: {"Content-Type": "application/json"},
-            data: {
-                "first_name": first_name,
-                "last_name": last_name
-            }
-        });
+    async acceptClassifications(idClassification: string): Promise<void> {
+        const config = this.getAxiosConfig("put", "/api/classification/" + idClassification + "/accept", [], []);
+        const response = await axios(config);
 
         if (response.status != 200) {
             throw new ApiGatewayRequestError("Status error. Expected 200 got " + response.status + ".");
@@ -42,16 +35,9 @@ export default class ApiGateway implements IGateway {
         return Promise.resolve();
     }
 
-    async declineClassifications(idClassification: string, first_name : string, last_name : string): Promise<void> {
-        const response = await axios({
-            method: 'put',
-            url: this.apiBaseUrl + "/api/classification/" + idClassification + "/delete",
-            headers: {"Content-Type": "application/json"},
-            data: {
-                "first_name": first_name,
-                "last_name": last_name
-            }
-        });
+    async declineClassifications(idClassification: string): Promise<void> {
+        const config = this.getAxiosConfig("put", "/api/classification/" + idClassification + "/reject", [], []);
+        const response = await axios(config);
 
         if (response.status != 200) {
             throw new ApiGatewayRequestError("Status error. Expected 200 got " + response.status + ".");
@@ -60,19 +46,19 @@ export default class ApiGateway implements IGateway {
     }
 
     async getClassifications(...args: any[]): Promise<EventClassifications[]> {
-        const config = this.getAxiosConfig("get", "/api/classification/search", ["first_name", "last_name"], args);
+        const config = this.getAxiosConfig("get", "/api/classifications/search", ["athlete_first_name", "athlete_last_name"], args);
         const response = await axios(config);
 
-        const classifications = response.data.map((x: {[k: string]: string}) => 
+        const classifications = response.data.results.map((x: {[k: string]: any}) =>
         { 
             const classification = new EventClassifications();
             classification.id = Number.parseInt(x.id);
-            classification.event_id = Number.parseInt(x.event_id);
-            classification.event_name = x.event_name;
+            classification.event_id = Number.parseInt(x.event.id);
+            classification.event_name = x.event.name;
             classification.position = Number.parseInt(x.position);
-            classification.position = Number.parseInt(x.duration_hours);
-            classification.position = Number.parseInt(x.duration_minutes);
-            classification.position = Number.parseInt(x.duration_seconds);
+            classification.duration_hours = Number.parseInt(x.duration_hours);
+            classification.duration_minutes = Number.parseInt(x.duration_minutes);
+            classification.duration_seconds = Number.parseInt(x.duration_seconds);
             classification.athlete_first_name = x.athlete_first_name;
             classification.athlete_last_name = x.athlete_last_name;
             return classification;
@@ -87,7 +73,7 @@ export default class ApiGateway implements IGateway {
 
         const response = await axios(config);
 
-        const events = response.data.results.map((x: {[k: string]: string}) =>
+        const events = response.data.results.map((x: {[k: string]: any}) =>
             { 
                 const event = new EventDto();
                 event.id = Number.parseInt(x.id);
@@ -117,23 +103,18 @@ export default class ApiGateway implements IGateway {
 
         const response = await axios(config);
 
-        const users = response.data.results.map((x: {[k: string]: string}) => 
-            { 
-                const user = new UserDto();
-                user.id = Number.parseInt(x.id);
-                user.firstName = x.first_name;
-                user.lastName = x.last_name;
-                user.country = x.country;
-                user.birthdate = new Date(x.birth_date);
-                user.goldMedals = Number.parseInt(x.gold_medals);
-                user.silverMedals = Number.parseInt(x.silver_medals);
-                user.bronzeMedals = Number.parseInt(x.bronze_medals);
-                user.username = x.user_name;
-                user.email = x.user_mail;
-                return user;
-            });
-
-        return users[0];
+        return {
+            id: Number.parseInt(response.data.id),
+            firstName: response.data.first_name,
+            lastName: response.data.last_name,
+            country: response.data.country,
+            birthdate: new Date(response.data.birth_date),
+            goldMedals: Number.parseInt(response.data.gold_medals),
+            silverMedals: Number.parseInt(response.data.silver_medals),
+            bronzeMedals: Number.parseInt(response.data.bronze_medals),
+            username: response.data.user_name,
+            email: response.data.user_mail
+        };
     }
 
     async getUsers(...args: any[]): Promise<UserDto[]> {
@@ -149,7 +130,7 @@ export default class ApiGateway implements IGateway {
 
         const response = await axios(config);
 
-        const users = response.data.results.map((x: {[k: string]: string}) => 
+        const users = response.data.results.map((x: {[k: string]: any}) =>
             { 
                 const user = new UserDto();
                 user.id = Number.parseInt(x.id);
@@ -267,7 +248,7 @@ export default class ApiGateway implements IGateway {
         return this.apiBaseUrl + endpoint + params;
     }
 
-    private getAxiosConfig(method: "post" | "get" | "put", endpoint: string, parameterNames: string[], parameterValues: any[]) : AxiosRequestConfig {
+    private getAxiosConfig(method: "post" | "get" | "put" | "delete", endpoint: string, parameterNames: string[], parameterValues: any[]) : AxiosRequestConfig {
         const config = {
             method: method,
             url: this.getUrlWithParameters(endpoint, parameterNames, parameterValues),

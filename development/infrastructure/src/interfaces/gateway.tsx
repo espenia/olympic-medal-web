@@ -9,8 +9,8 @@ export default interface IGateway {
     createUser(user: UserDto) : Promise<void>;
     recoverPassword(mail: string, recoverUrl: string): Promise<void>;
     changePassword(mail: string, userName: string, password: string): Promise<void>;
-    acceptClassifications(idClassification: string, first_name : string, last_name : string): Promise<void>
-    declineClassifications(idClassification: string, first_name : string, last_name : string): Promise<void>
+    acceptClassifications(idClassification: string): Promise<void>
+    declineClassifications(idClassification: string): Promise<void>
     createEvent(params: EventDto) : Promise<void>;
     getEvents(...args: any[]) : Promise<EventDto[]>;
     getUsers(...args: any[]) : Promise<UserDto[]>;

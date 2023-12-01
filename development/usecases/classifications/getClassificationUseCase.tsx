@@ -8,7 +8,6 @@ export default class GetClassificationUseCase implements IUseCase<EventClassific
     private readonly service: IClassificationService;
     firstName? : string;
     lastName? : string;
-    id?: number;
 
     /**
      *

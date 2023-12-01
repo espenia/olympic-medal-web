@@ -32,9 +32,6 @@ export default async function RootLayout({
     // {
     //   name: "Crear Evento", href: "/events/new"
     // } as NavbarItem,
-    {
-      name: "Validar resultados", href: "/validate"
-    } as NavbarItem
   ] : [
     {
       name: "Inicio", href: "/"

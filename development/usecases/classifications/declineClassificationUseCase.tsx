@@ -5,11 +5,7 @@ import type IClassificationService from "../common/interfaces/classificationServ
 @Service('declineclassificationusecase')
 export default class DeclineClassificationUseCase implements IUseCase<void> {
     private readonly service: IClassificationService;
-    firstName? : string;
-    lastName? : string;
     id_classification?: number;
-    id?: number;
-
     /**
      *
      */
@@ -18,6 +14,6 @@ export default class DeclineClassificationUseCase implements IUseCase<void> {
     }
 
     handle(): Promise<void> {
-        return this.service.declineClassification(this.firstName, this.lastName, this.id_classification);
+        return this.service.declineClassification(this.id_classification);
     }
 }

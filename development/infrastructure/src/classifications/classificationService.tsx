@@ -15,11 +15,11 @@ export default class ClassificationService implements IClassificationService {
     constructor(repository : IRepository<EventClassifications>) {
         this.repository = repository;
     }
-    acceptClassification(firstName: string | undefined, lastName: string | undefined, id_clasificacion: number | undefined): Promise<void> {
-        return this.repository.putAsync(firstName,lastName,id_clasificacion);
+    acceptClassification(id_clasificacion: number | undefined): Promise<void> {
+        return this.repository.putAsync(id_clasificacion);
     }
-    declineClassification(firstName: string | undefined, lastName: string | undefined, id_clasificacion: number | undefined): Promise<void> {
-        return this.repository.deleteAsync(firstName,lastName,id_clasificacion);
+    declineClassification(id_clasificacion: number | undefined): Promise<void> {
+        return this.repository.deleteAsync(id_clasificacion);
     }
 
     getClassification(firstName: string | undefined, lastName: string | undefined): Promise<EventClassifications[]> {
