@@ -15,22 +15,24 @@ export default function EventsTable({ events }: { events: EventDto[] }) {
             {!events || events.length === 0 
              ? 
              <TableRow>
-                <TableCell colSpan={5} align="center">No se encontraron eventos</TableCell> 
+                <TableCell colSpan={3} align="center">No se encontraron eventos</TableCell> 
              </TableRow>
              : events.map((event) => (
-                <TableRow key={event.id}>
+                <TableRow key={event.id} className="transition-colors hover:border-gray-50 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-200/30">
                   <TableCell>
                     <a href={`/events/${event.id}`}>
-                      <Bold color="blue">
-                        {event.name}
-                      </Bold>
+                      <Text color="blue">
+                        <Bold>
+                          {event.name}
+                        </Bold>                      
+                      </Text>
                     </a>
                   </TableCell>
                   <TableCell>
-                    <Text>{event.category}</Text>
+                    {event.category}
                   </TableCell>
                   <TableCell>
-                    <Text>{event.date?.toDateString() ?? "-"}</Text>
+                    {event.date?.toDateString() ?? "-"}
                   </TableCell>
                 </TableRow>
               ))}

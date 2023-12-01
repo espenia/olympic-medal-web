@@ -1,6 +1,8 @@
+'use server';
+
 import { Card, Title, Text, Accordion, AccordionBody, AccordionHeader, Col, Grid, TextInput } from '@tremor/react';
 import EventsTable from '@/src/tables/events-table/eventsTable';
-import {getEvents, filter} from './actions';
+import {filter, getEvents} from './actions';
 import { SubmitButton } from '@/src/submit-button/submitButton';
 
 export default async function Events({
@@ -39,7 +41,7 @@ export default async function Events({
       <Accordion className='mt-4'>
         <AccordionHeader>Filtros</AccordionHeader>
         <AccordionBody>
-          <form action={filter}>
+        <form action={filter}>
             <Grid numItemsMd={2} numItems={1} className='p-4 gap-3'>
               <Col>
                 <Text>Nombre</Text>
@@ -85,7 +87,7 @@ export default async function Events({
         </AccordionBody>
       </Accordion>
       <Card className="mt-6">
-        <EventsTable events={events} />
+        <EventsTable events={events}></EventsTable>
       </Card>
     </main>
     );
