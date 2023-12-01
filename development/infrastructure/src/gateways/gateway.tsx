@@ -15,13 +15,13 @@ export default class ApiGateway implements IGateway {
     // si el backend esta corriendo en un contenedor de docker, 
     // usar 'springboot' o el nombre del servicio en el docker compose
     // sino, cambiarlo por 'localhost'
-     private apiBaseUrl = "http://springboot:8080";
+    private apiBaseUrl = "http://springboot:8080";
     //private apiBaseUrl = "http://localhost:8080";
 
     async createEvent(event: EventDto): Promise<void> {
         const config = this.getAxiosConfig("post", "/backoffice/event", [], []);
-        config.data = this.getEntries(["name", "category", "date", "description", "distance", "edition", "location", "official_site", "participant_count"], 
-                                      [event.name, event.category, event.date?.toISOString(), event.description, event.distance, event.edition, event.location, event.officialSite, event.participantsCount])
+        config.data = this.getEntries(["name", "category", "date", "description", "distance", "edition", "location", "official_site", "participant_count", "classifications"],
+                                      [event.name, event.category, event.date?.toISOString(), event.description, event.distance, event.edition, event.location, event.officialSite, event.participantsCount, event.classifications])
 
         const response = await axios(config);
     }
@@ -83,11 +83,11 @@ export default class ApiGateway implements IGateway {
     }
 
     async getEvents(...args: any[]): Promise<EventDto[]> {
-        const config = this.getAxiosConfig("get", "/api/events", ["id", "name", "category", "location", "date_from", "date_to", "edition", "athlete_first_name", "athlete_last_name", "athlete_country"], args);
+        const config = this.getAxiosConfig("get", "/api/events/search?", ["id", "name", "category", "location", "date_from", "date_to", "edition", "athlete_first_name", "athlete_last_name", "athlete_country"], args);
 
         const response = await axios(config);
 
-        const events = response.data.map((x: {[k: string]: string}) => 
+        const events = response.data.results.map((x: {[k: string]: string}) =>
             { 
                 const event = new EventDto();
                 event.id = Number.parseInt(x.id);
