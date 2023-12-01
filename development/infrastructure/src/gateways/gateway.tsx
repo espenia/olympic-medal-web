@@ -27,19 +27,11 @@ export default class ApiGateway implements IGateway {
 
     async getEvents(...args: any[]): Promise<EventDto[]> {
 
-        let config = this.getAxiosConfig("get", "/api/events", ["id", "name", "category", "location", "date_from", "date_to", "edition", "athlete_first_name", "athlete_last_name", "athlete_country"], args);
+        const config = this.getAxiosConfig("get", "/api/events/search", ["id", "name", "category", "location", "date_from", "date_to", "edition", "athlete_first_name", "athlete_last_name", "athlete_country"], args);
 
-        if(args.some(x => x)){
-            config = this.getAxiosConfig("get", "/api/events/search", ["id", "name", "category", "location", "date_from", "date_to", "edition", "athlete_first_name", "athlete_last_name", "athlete_country"], args);
-        }
         const response = await axios(config);
 
-        let events;
-
-        //Como para los "search" recibe un EventLookupDTO, la lista se encuentra dentro de "results"
-        if(args.some(x => x)){
-
-            events = response.data.results.map((x: {[k: string]: string}) =>
+        const events = response.data.results.map((x: {[k: string]: string}) =>
             {
                 const event = new EventDto();
                 event.id = Number.parseInt(x.id);
@@ -54,23 +46,6 @@ export default class ApiGateway implements IGateway {
                 event.participantsCount = Number.parseInt(x.participants_count);
                 return event;
             });
-        }
-        else {
-            events = response.data.map((x: { [k: string]: string }) => {
-                const event = new EventDto();
-                event.id = Number.parseInt(x.id);
-                event.name = x.name;
-                event.category = x.country;
-                event.date = new Date(x.date);
-                event.description = x.description;
-                event.distance = Number.parseInt(x.distance);
-                event.edition = Number.parseInt(x.edition);
-                event.location = x.location;
-                event.officialSite = x.official_site;
-                event.participantsCount = Number.parseInt(x.participants_count);
-                return event;
-            });
-        }
 
         return events;
     }
