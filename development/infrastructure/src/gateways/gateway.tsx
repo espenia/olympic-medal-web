@@ -50,7 +50,7 @@ export default class ApiGateway implements IGateway {
     }
 
     async getUsers(...args: any[]): Promise<UserDto[]> {
-        const keyValuePairs = args.at(0) ? [["id"], [args.at(0)]] : [["first_name", "last_name"], args.slice(1)]
+        const keyValuePairs = args.at(0) ? [["id"], [args.at(0)]] : [["first_name", "last_name", "email"], args.slice(1)]
         const params = args.some(x => x) ? "?" + new URLSearchParams(this.getEntries(keyValuePairs[0], keyValuePairs[1])) : "";
         const config = {
             method: 'get',
@@ -102,10 +102,22 @@ export default class ApiGateway implements IGateway {
         this.username.value = username;
         this.password.value = password;
         this.token.value = await this.getCredentials();
-        console.log(this.token.value);
+
+        const config = this.getAxiosConfig("get", "/api/athlete", [], []);
+        const result = await axios(config);
+
         const user = new UserDto();
-        user.username = username;
-        user.password = password;
+        user.id = Number.parseInt(result.data.id);
+        user.firstName = result.data.first_name;
+        user.lastName = result.data.last_name;
+        user.country = result.data.country;
+        user.birthdate = new Date(result.data.birth_date);
+        user.goldMedals = Number.parseInt(result.data.gold_medals);
+        user.silverMedals = Number.parseInt(result.data.silver_medals);
+        user.bronzeMedals = Number.parseInt(result.data.bronze_medals);
+        user.username = result.data.user_name;
+        user.email = result.data.user_mail;
+
         return user;
     }
 
