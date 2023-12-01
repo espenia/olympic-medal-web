@@ -19,8 +19,8 @@ export default class ApiGateway implements IGateway {
 
     async createEvent(event: EventDto): Promise<void> {
         const config = this.getAxiosConfig("post", "/backoffice/event", [], []);
-        config.data = this.getEntries(["name", "category", "date", "description", "distance", "edition", "location", "official_site", "participant_count"], 
-                                      [event.name, event.category, event.date?.toISOString(), event.description, event.distance, event.edition, event.location, event.officialSite, event.participantsCount])
+        config.data = this.getEntries(["name", "category", "date", "description", "distance", "edition", "location", "official_site", "participant_count", "classifications"],
+                                      [event.name, event.category, event.date?.toISOString(), event.description, event.distance, event.edition, event.location, event.officialSite, event.participantsCount, event.classifications])
 
         const response = await axios(config);
     }
@@ -78,47 +78,9 @@ export default class ApiGateway implements IGateway {
                 event.participantsCount = Number.parseInt(x.participants_count);
                 return event;
             });
-        }
-        // //DEBUG
-        // console.log("[DEBUG]\n");
-        // console.log(response.data);
-
 
         return events;
     }
-
-    // async getEvent(...args: any[]): Promise<EventDto[]> {
-    //     const config = {
-    //         method : 'get',
-    //         url: this.apiBaseUrl + "/api/events/" + args,
-    //         headers: this.getEntries(['Content-Type', 'Accept', 'X-Auth-Token'],
-    //             ['application/json', 'application/json', `Bearer ${this.token.value}`]),
-    //         withCredentials: true
-    //     }
-    //
-    //     const response = await axios(config);
-    //
-    //     //DEBUG
-    //     console.log("[DEBUG]\n");
-    //     console.log(response.data);
-    //     const events = response.data.map((x: {[k: string]: string}) =>
-    //     {
-    //         const event = new EventDto();
-    //         event.id = Number.parseInt(x.id);
-    //         event.name = x.name;
-    //         event.category = x.country;
-    //         event.date = new Date(x.date);
-    //         event.description = x.description;
-    //         event.distance = Number.parseInt(x.distance);
-    //         event.edition = Number.parseInt(x.edition);
-    //         event.location = x.location;
-    //         event.officialSite = x.official_site;
-    //         event.participantsCount = Number.parseInt(x.participants_count);
-    //         return event;
-    //     });
-    //
-    //     return events;
-    // }
 
     async getUsers(...args: any[]): Promise<UserDto[]> {
         const keyValuePairs = args.at(0) ? [["id"], [args.at(0)]] : [["first_name", "last_name"], args.slice(1)]

@@ -12,5 +12,6 @@ export default class EventDto {
     name?: string;
     officialSite?: string;
     participantsCount?: number;
+    classifications?: EventClassificationDto[];
     comments?: EventCommentDto[];
 }

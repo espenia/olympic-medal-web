@@ -83,8 +83,8 @@ export default async function CrearEvento({ event } : {event? : EventDto }) {
               <Text>Cantidad de Participantes:</Text>
               <TextInput
                   type="text"
-                  name="participantCount"
-                  id="participantCount"
+                  name="participantsCount"
+                  id="participantsCount"
                   placeholder=''
                   value={event?.participantsCount?.toString()}
               />

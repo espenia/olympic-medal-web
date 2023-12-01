@@ -57,6 +57,10 @@ export default function Registro() {
               <Text>Fecha de nacimiento:</Text>
               <DatePicker aria-required="true" onValueChange={e => setBirthDate(e)} />
             </Col>
+            <Col>
+              <Text>Nacionalidad:</Text>
+              <TextInput placeholder='' required={true} id='country' name='country' type="text" />
+            </Col>
           </Grid>
           <Col>
               <Flex justifyContent="end" className="pe-4">
