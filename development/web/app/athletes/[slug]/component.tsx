@@ -9,7 +9,7 @@ import EventClassificationDto from "../../../../entities/events/classifications"
 
 export default async function AthleteClassifications({classificationsList} : {classificationsList : any}) {
     //const classifications = classificationsList as EventClassificationDto[];
-    const classifications: EventClassificationDto[] = [];
+    const classifications: EventClassifications[] = [];
     return (
     <Card>
         <Flex justifyContent="center">

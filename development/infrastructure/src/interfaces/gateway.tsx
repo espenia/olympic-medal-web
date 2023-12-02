@@ -18,5 +18,5 @@ export default interface IGateway {
     getUser(...args: any[]): Promise<UserDto>;
     getEvents(...args: any[]) : Promise<EventDto[]>;
     createEvent(event: EventDto) : Promise<void>;
-    getClassificationsById(athlete_id: number): Promise<EventClassificationDto[]>
+    getClassificationsById(athlete_id: number): Promise<EventClassifications[]>
 }

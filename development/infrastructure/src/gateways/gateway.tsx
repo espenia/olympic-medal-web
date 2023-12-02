@@ -19,7 +19,7 @@ export default class ApiGateway implements IGateway {
     //private apiBaseUrl = "http://localhost:8080";
     
     
-    async getClassificationsById(athlete_id: number): Promise<EventClassificationDto[]> {
+    async getClassificationsById(athlete_id: number): Promise<EventClassifications[]> {
         const config = this.getAxiosConfig("get", `/api/classifications_by_athlete/${athlete_id}`,[], []);
         const response = await axios(config);
         return response.data.map((x: any) => {
@@ -86,7 +86,7 @@ export default class ApiGateway implements IGateway {
     }
 
     async getClassifications(...args: any[]): Promise<EventClassificationDto[]> {
-        const config = this.getAxiosConfig("get", "/api/classifications/search", ["athlete_first_name", "athlete_last_name"], args);
+        const config = this.getAxiosConfig("get", "/api/classifications/search", ["athlete_first_name", "athlete_last_name", "user_id"], args);
         const response = await axios(config);
 
         const classifications = response.data.results.map((x: {[k: string]: any}) =>

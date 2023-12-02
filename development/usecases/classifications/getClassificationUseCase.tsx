@@ -8,6 +8,7 @@ export default class GetClassificationUseCase implements IUseCase<EventClassific
     private readonly service: IClassificationService;
     firstName? : string;
     lastName? : string;
+    userId? : number;
 
     /**
      *
@@ -17,6 +18,6 @@ export default class GetClassificationUseCase implements IUseCase<EventClassific
     }
 
     async handle(): Promise<EventClassifications[]> {
-        return this.service.getClassification(this.firstName, this.lastName);
+        return this.service.getClassification(this.firstName, this.lastName, this.userId);
     }
 }

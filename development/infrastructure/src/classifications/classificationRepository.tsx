@@ -13,9 +13,11 @@ export default class ClassificationRepository implements IRepository<EventClassi
     constructor(gateway : IGateway) {
         this.gateway = gateway;
     }
+    
     getOneAsync(...args: any[]): Promise<EventClassifications> {
         throw new Error("Method not implemented.");
     }
+
     createAsync(a: EventClassifications): Promise<void> {
         return Promise.resolve();
     }
