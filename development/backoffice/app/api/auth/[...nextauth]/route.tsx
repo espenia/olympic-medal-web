@@ -27,20 +27,22 @@ const handler = NextAuth({
               if (!credentials || !credentials.username || !credentials.password || credentials.username.trim() === "" || credentials.password.trim() === "") {
                   throw new Error("Usuario y contrasenia requeridos.")
               }
+
               LoginUseCaseImpl.username = credentials!.username;
               LoginUseCaseImpl.password = credentials!.password;
-              const user = await LoginUseCaseImpl.handle();
-  
-              if (user) {
-                  return { id: "1", name: user.username, email: user.username }
-              }
+              let userRes : { name?: string, email?: string } | null = null;
+
+              await LoginUseCaseImpl.handle().then(user => userRes = {
+                name: user.username, 
+                email: user.email
+              });
+
+              return userRes;
+
             } catch(e) {
               console.log(e);
               return null;
             }
-  
-            // Return null if user data could not be retrieved
-            return null
           }
         })
     ],

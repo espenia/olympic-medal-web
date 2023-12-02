@@ -39,7 +39,8 @@ export async function filter(formData: FormData) {
     params.set('athlete_first_name', formData.get('athlete_first_name')?.toString() ?? "");
     params.set('athlete_last_name', formData.get('athlete_last_name')?.toString() ?? "");
     params.set('athlete_country', formData.get('athlete_country')?.toString() ?? "");
-return redirect(`/events?` + params);
+
+    return redirect(`/events?` + params);
 }
 
 function isStringNullEmptyOrWhitespace(str: string | null | undefined) {
