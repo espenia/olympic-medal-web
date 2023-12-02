@@ -1,18 +1,25 @@
-import { Card, Title, Text, Button, Flex, Subtitle, Grid, Col } from '@tremor/react';
+import { Card, Title, Button, Subtitle, Flex, Grid, Col, Divider, Bold, Badge } from '@tremor/react';
 import getEvent from './actions';
+import ClassificationsTable from '@/src/tables/events-table/classificationsTable';
 
 
 export default async function Event({ params }: { params: { slug: number }}) {
   const event = await getEvent(params.slug);
-
-  const open = event?.date && event?.date >= new Date();
+  const open = event?.date && event.date! >= new Date();
 
   return (
     <main className="p-4 md:p-10 mx-auto max-w-7xl">
       <Card>
         <Flex justifyContent="between" className="pb-8" alignItems="center">
           <Flex flexDirection='col' alignItems='start' className='ps-4'>
-            <Title>{event?.name}</Title>
+            <Flex flexDirection='row' justifyContent='start' alignItems='center' className='gap-3'>
+              <Title>
+                {event?.name}
+              </Title>
+              <Badge color={open ? "green" : "red"}>
+                {open ? "Abierto" : "Cerrado"}
+              </Badge>
+            </Flex>
             <Subtitle>{event?.category}</Subtitle>
           </Flex>
           <Flex justifyContent="end" className="pe-4">
@@ -23,19 +30,43 @@ export default async function Event({ params }: { params: { slug: number }}) {
         </Flex>
         <Grid numItems={1} numItemsMd={2} className="gap-5 p-4">
           <Col>
-            <Text className="text-lg">{`Descripcion: ${event?.description}`}</Text>
-          </Col>
-            <Text className="text-lg">{`Localización: ${event?.location}`}</Text>
-          <Col>
-            <Text className="text-lg">{`Distancia: ${event?.distance}`}</Text>
-          </Col>
-          <Col>
-            <Text className="text-lg">{`Edicion: ${event?.edition}`}</Text>
+            <Flex flexDirection='row' justifyContent='start' className='gap-2'>
+              <Bold>
+                Descripcion:
+              </Bold>
+              {event?.description}
+            </Flex>
           </Col>
           <Col>
-            <Text className={`text-lg ${open ? 'text-green-500' : 'text-red-500'}`}>Estado: {open ? "Abierto" : "Cerrado"}</Text>
+            <Flex flexDirection='row' justifyContent='start' className='gap-2'>
+              <Bold>
+                Ubicacion:
+              </Bold>
+              {event?.location}
+            </Flex>
+          </Col>
+          <Col>
+            <Flex flexDirection='row' justifyContent='start' className='gap-2'>
+              <Bold>
+                Distancia: 
+              </Bold>
+              {event?.distance}
+            </Flex>
+          </Col>
+          <Col>
+            <Flex flexDirection='row' justifyContent='start' className='gap-2'>
+              <Bold>
+                Edicion: 
+              </Bold>
+              {event?.edition}
+            </Flex>
           </Col>
         </Grid>
+        <Divider></Divider>
+        <Title className='ps-4'>
+          Clasificaciones
+        </Title>
+        <ClassificationsTable classifications={JSON.parse(JSON.stringify(event?.classifications))}></ClassificationsTable>
       </Card>
     </main>
   );

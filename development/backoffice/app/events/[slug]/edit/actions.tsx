@@ -8,7 +8,7 @@ export default async function getEvent(id: number) {
     GetEventUseCaseImpl.id = id;
     GetEventUseCaseImpl.name = undefined;
     const result = await GetEventUseCaseImpl.handle();
-    return result?.at(0);
+    return result?.at(0) ?? new EventDto();
 }
 
 export async function editEvent(formData: FormData) {
