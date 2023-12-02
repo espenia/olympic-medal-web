@@ -34,16 +34,6 @@ export default async function Home() {
             </p>
           </a>
         </Card>
-        <Card className='group rounded-lg border border-transparent transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-200/30'>
-          <a href="/validate" className="px-5 py-4">
-            <h2 className={`mb-3 text-2xl font-semibold`}>
-              Validar resultados
-            </h2>
-            <p className={`m-0 text-sm opacity-50`}>
-              Administre los resultados enviados por deportistas.
-            </p>
-          </a>
-        </Card>
        </Grid>
        </>
        :

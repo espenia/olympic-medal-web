@@ -1,8 +1,6 @@
 import './globals.css';
 
-// import { Analytics } from '@vercel/analytics/react';
 import Nav from '../src/navbar/nav';
-// import Toast from './toast';
 import { Suspense } from 'react';
 import NavbarItem from '@/src/navbar/navbar-item';
 import { getServerSession } from 'next-auth';
@@ -28,6 +26,9 @@ export default async function RootLayout({
     } as NavbarItem,
     {
       name: "Atletas", href: "/athletes"
+    } as NavbarItem,
+    {
+      name: "Validar Clasificaciones", href: "/validate"
     } as NavbarItem,
     {
       name: "Mi Perfil", href: "/profile"
