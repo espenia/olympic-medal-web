@@ -1,6 +1,7 @@
-import { Card, Title, Text, Button, Flex, Grid, Col, Bold, Subtitle } from "@tremor/react";
+import { Card, Title, Text, Button, Flex, Grid, Col, Bold, Subtitle, TableCell, TableRow, Table, TableHead, TableHeaderCell, TableBody } from "@tremor/react";
 import getUser, { getClassifications } from "./actions";
 import { TrophyIcon } from "@heroicons/react/24/outline";
+import AthleteClassifications from "./component";
 
 export default async function UserProfile({ params }: { params: { slug: number }}) {
     const user = await getUser(params.slug);
@@ -49,34 +50,7 @@ export default async function UserProfile({ params }: { params: { slug: number }
                     </Col>
                 </Grid>
         </Card>
-        <Card>
-            <Flex justifyContent="center">
-                Clasificaciones
-            </Flex>
-            classifications.map((classification) => (
-                <Grid numItems={1} numItemsMd={2} className="gap-5 p-4">
-                    <Col>
-                        <Text>
-                            Evento: <Bold>{classification.event_id}</Bold>
-                        </Text>
-                    </Col>
-                    <Col>
-                        <Text>
-                            Posición: <Bold>{classification.position}</Bold>
-                        </Text>
-                    </Col>
-                    <Col>
-                        <Text>
-                            Duración: <Bold>{classification.duration_hours}:{classification.duration_minutes}:{classification.duration_seconds}</Bold>
-                        </Text>
-                    </Col>
-                    <Col>
-                        <Text>
-                            Atleta: <Bold>{classification.athlete_first_name} {classification.athlete_last_name}</Bold>
-                        </Text>
-                    </Col>
-                </Grid>
-            ))
-        </Card>
+        <AthleteClassifications classificationsList={JSON.parse(JSON.stringify(classifications))}/>
+        
     </main>
 }

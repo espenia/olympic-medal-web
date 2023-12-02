@@ -18,33 +18,45 @@ export default class ApiGateway implements IGateway {
     private apiBaseUrl = "http://springboot:8080";
     //private apiBaseUrl = "http://localhost:8080";
     
-    /*
-    async getClassifications(athlete_id: number): Promise<EventClassificationDto[]> {
-        const classif1 = new EventClassificationDto();
-        classif1.id = 1;
-        classif1.event_id = 1;
-        classif1.position = 1;
-        classif1.duration_hours = 1;
-        classif1.duration_minutes = 1;
-        classif1.duration_seconds = 1;
-        classif1.athlete_first_name = "fer";
-        classif1.athlete_last_name = "fer";
+    
+    async getClassificationsById(athlete_id: number): Promise<EventClassificationDto[]> {
+        const config = this.getAxiosConfig("get", `/api/classifications_by_athlete/${athlete_id}`,[], []);
+        const response = await axios(config);
+        return response.data.map((x: any) => {
+            const classification = new EventClassificationDto();
+            classification.id = Number.parseInt(x.id);
+            classification.position = Number.parseInt(x.position);
+            classification.duration_hours = Number.parseInt(x.duration_hours);
+            classification.duration_minutes = Number.parseInt(x.duration_minutes);
+            classification.duration_seconds = Number.parseInt(x.duration_seconds);
 
-        const classif2 = new EventClassificationDto();
-        classif2.id = 2;
-        classif2.event_id = 2;
-        classif2.position = 2;
-        classif2.duration_hours = 2;
-        classif2.duration_minutes = 2;
-        classif2.duration_seconds = 2;
-        classif2.athlete_first_name = "fer";
-        classif2.athlete_last_name = "fer";
+            const event = new EventDto();
+            event.id = Number.parseInt(x.event?.id);
+            event.name = x.event?.name;
+            event.category = x.event?.category;
+            event.date = new Date(x.event?.date);
+            event.description = x.event?.description;
+            event.distance = Number.parseInt(x.event?.distance);
 
-        const classifications = [classif1, classif2];
-        
-        return new Promise<EventClassificationDto[]>(resolve => resolve(classifications));
+            classification.event = event;
+
+            const athlete = new UserDto();
+            athlete.id = Number.parseInt(x.athlete?.id);
+            athlete.firstName = x.athlete?.first_name;
+            athlete.lastName = x.athlete?.last_name;
+            athlete.country = x.athlete?.country;
+            athlete.birthdate = new Date(x.athlete?.birth_date);
+            athlete.goldMedals = Number.parseInt(x.athlete?.gold_medals);
+            athlete.silverMedals = Number.parseInt(x.athlete?.silver_medals);
+            athlete.bronzeMedals = Number.parseInt(x.athlete?.bronze_medals);
+            athlete.username = x.athlete?.user_name;
+            athlete.email = x.athlete?.user_mail;
+            
+            classification.athlete = athlete;
+            return classification;
+        });
     }
-    */
+    
 
     async createEvent(event: EventDto): Promise<void> {
         const config = this.getAxiosConfig("post", "/backoffice/event", [], []);
