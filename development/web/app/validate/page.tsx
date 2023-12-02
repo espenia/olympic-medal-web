@@ -1,11 +1,6 @@
 'use server';
-import React, { useEffect, useState } from 'react';
-import { Card, Title, Text, Button } from '@tremor/react';
 import ClasificacionEvento from './clasification';
 import { getClassification, getUser } from './actions';
-import EventClassifications from '../../../entities/events/classifications';
-import { getServerSession } from 'next-auth';
-import UserDto from '../../../entities/users/user';
 
 
 const ClasificacionDeportista = async () => {

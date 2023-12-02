@@ -1,8 +1,8 @@
 'use client';
-import React, { useState } from 'react';
+import React from 'react';
 import { Card, Title, Text, Button } from '@tremor/react';
 import { acceptClassification, declineClassification } from './actions';
-import { getServerSession } from 'next-auth';
+import {router} from "next/client";
 
 interface ClasificacionEventoProps {
   nombre_deportista: string;
@@ -25,6 +25,7 @@ const ClasificacionEvento: React.FC<ClasificacionEventoProps> = async ({
   const handleValidar = async (id_clasificacion: number) => {
     try {
       const data = await acceptClassification(id_clasificacion);
+      router.reload();
     } catch (error) {
       console.error('Error al validar:', error);
     }
@@ -33,6 +34,7 @@ const ClasificacionEvento: React.FC<ClasificacionEventoProps> = async ({
   const handleRechazar = async (id_clasificacion: number) => {
     try {
       const data = await declineClassification(id_clasificacion);
+      router.reload();
     } catch (error) {
       console.error('Error al rechazar:', error);
     }

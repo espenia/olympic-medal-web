@@ -36,7 +36,7 @@ export default class ApiGateway implements IGateway {
     }
 
     async declineClassifications(idClassification: string): Promise<void> {
-        const config = this.getAxiosConfig("put", "/api/classification/" + idClassification + "/reject", [], []);
+        const config = this.getAxiosConfig("delete", "/api/classification/" + idClassification + "/reject", [], []);
         const response = await axios(config);
 
         if (response.status != 200) {
@@ -45,13 +45,13 @@ export default class ApiGateway implements IGateway {
         return Promise.resolve();
     }
 
-    async getClassifications(...args: any[]): Promise<EventClassifications[]> {
+    async getClassifications(...args: any[]): Promise<EventClassificationDto[]> {
         const config = this.getAxiosConfig("get", "/api/classifications/search", ["athlete_first_name", "athlete_last_name"], args);
         const response = await axios(config);
 
         const classifications = response.data.results.map((x: {[k: string]: any}) =>
         { 
-            const classification = new EventClassifications();
+            const classification = new EventClassificationDto();
             classification.id = Number.parseInt(x.id);
             classification.event_id = Number.parseInt(x.event.id);
             classification.event_name = x.event.name;

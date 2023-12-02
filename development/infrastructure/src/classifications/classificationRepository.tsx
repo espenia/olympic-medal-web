@@ -1,7 +1,6 @@
 import type IGateway from "../interfaces/gateway";
 import IRepository from "../../../entities/common/interfaces/repository";
-import Container, { Service } from "typedi";
-import ApiGateway from "../gateways/gateway";
+import { Service } from "typedi";
 import EventClassifications from "../../../entities/events/classifications";
 
 @Service('classificationrepository')

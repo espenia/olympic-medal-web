@@ -20,7 +20,6 @@ export async function acceptClassification(id_clasificacion: number | undefined)
     AcceptClassificationUseCaseImpl.id_classification = id_clasificacion;
 
     const users = await AcceptClassificationUseCaseImpl.handle();
-
     return;
 }
 
