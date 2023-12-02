@@ -1,61 +1,34 @@
-'use client';
-import React, { useState } from 'react';
-import { Card, Title, Text, Button } from '@tremor/react';
+'use server';
+import ClasificacionEvento from './clasification';
+import { getClassification, getUser } from './actions';
 
-const ClasificacionDeportista = () => {
 
-  const deportista = {
-    id: 1,
-    nombre: "Juan",
-    apellido: "Perez",
-  };
-  const evento = {
-    id: 1,
-    nombre: "Maraton 10k BSAS",
-  };
-  const tiempoClasificacion = "2 horas 30 minutos";
+const ClasificacionDeportista = async () => {
 
-  const [estadoClasificacion, setEstadoClasificacion] = useState('Pendiente');
 
-  const handleValidar = () => {
-    setEstadoClasificacion('Validado');
-  };
+  const user = await getUser();
+  const firstName = user.firstName;
+  const lastName =user.lastName;
 
-  const handleRechazar = () => {
-    setEstadoClasificacion('Rechazado');
-  };
+  const data = await getClassification(firstName, lastName);
+
+  const clasificacionComponents = data.map((clasificacion) => (
+    <ClasificacionEvento
+      key={clasificacion.id}
+      nombre_deportista={`${clasificacion.athlete_first_name} ${clasificacion.athlete_last_name}`}
+      nombre_evento={`${clasificacion.event_name}`}
+      tiempoClasificacion={`${clasificacion.duration_hours}h - ${clasificacion.duration_minutes}m - ${clasificacion.duration_seconds}s`}
+      id_clasificacion={clasificacion.id || 0}
+      firstName={`${clasificacion.athlete_first_name}`}
+      lastName={`${clasificacion.athlete_last_name}`}
+    />
+  ));
 
   return (
-    <main className="p-4 md:p-10 mx-auto max-w-7xl">
-      <Card>
-        <Title>Clasificación de Deportista</Title>
-        <div>
-          <Text>Deportista: {deportista.nombre} {deportista.apellido}</Text>
-        </div>
-        <div>
-          <Text>Evento: {evento.nombre}</Text>
-        </div>
-        <div>
-          <Text>Tiempo de Clasificación: {tiempoClasificacion}</Text>
-        </div>
-        <div>
-          <Text>Estado de Clasificación: {estadoClasificacion}</Text>
-        </div>
-        <Button
-          onClick={handleValidar}
-          className="bg-green-500 text-white p-2 mt-4"
-        >
-          Validar
-        </Button>
-        <Button
-          onClick={handleRechazar}
-          className="bg-red-500 text-white p-2 mt-4"
-        >
-          Rechazar
-        </Button>
-      </Card>
-    </main>
+    <div>
+      {clasificacionComponents}
+    </div>
   );
-};
+}
 
 export default ClasificacionDeportista;

@@ -10,6 +10,12 @@ export default class EventInMemoryRepository implements IRepository<EventDto> {
     constructor() {
         this.events = [];
     }
+    deleteAsync(params: Parameters<EventDto>): Promise<void> {
+        throw new Error("Method not implemented.");
+    }
+    putAsync(params: Parameters<EventDto>): Promise<void> {
+        throw new Error("Method not implemented.");
+    }
 
     createAsync(a: EventDto): Promise<void> {
         this.events.push(a);
