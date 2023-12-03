@@ -12,7 +12,7 @@ const initialState = {
   message: null,
 }
 
-export default function Recover() {
+export default async function Recover() {
   const [state, formAction] = useFormState(setClientValues, initialState);
 
   async function setClientValues(previousState : any, formData : FormData): Promise<void | { message: string }> {

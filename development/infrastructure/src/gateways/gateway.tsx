@@ -229,14 +229,14 @@ export default class ApiGateway implements IGateway {
         return user;
     }
 
-    async changePassword(mail: string, userName: string, password: string): Promise<void> {
+    async changePassword(mail: string, password: string): Promise<void> {
         const response = await axios({
             method: 'put',
             url: this.apiBaseUrl + "/auth/password/" + mail,
             headers: {"Content-Type": "application/json"},
             data: {
                 password: password,
-                user_name: userName
+                // user_name: userName
             }
         });
 

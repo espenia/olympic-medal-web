@@ -6,7 +6,6 @@ import type IAuthService from "../common/interfaces/authService";
 export default class PasswordChangeUseCase implements IUseCase<void> {
     mail?: string;
     password?: string;
-    userName?: string;
 
     private readonly service : IAuthService;
     /**
@@ -17,6 +16,6 @@ export default class PasswordChangeUseCase implements IUseCase<void> {
     }
 
     handle(): Promise<void> {
-        return this.service.changePassword(this.mail!, this.userName!, this.password!);
+        return this.service.changePassword(this.mail!, this.password!);
     }
 }
