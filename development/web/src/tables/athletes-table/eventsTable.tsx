@@ -32,7 +32,11 @@ export default function EventsTable({ events }: { events: EventDto[] }) {
                     {event.category}
                   </TableCell>
                   <TableCell>
-                    {event.date?.toDateString() ?? "-"}
+                    {event.date?.toLocaleDateString('es-ES', {
+                            year: 'numeric',
+                            month: 'long',
+                            day: 'numeric',
+                        }) ?? "-"}
                   </TableCell>
                 </TableRow>
               ))}
