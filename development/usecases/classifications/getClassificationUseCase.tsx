@@ -1,10 +1,10 @@
 import IUseCase from "../common/interfaces/useCase"
 import { Inject, Service } from "typedi";
-import EventClassifications from "../../entities/events/classifications";
 import type IClassificationService from "../common/interfaces/classificationService";
+import EventClassificationDto from "../../entities/events/classifications";
 
 @Service('getclassificationusecase')
-export default class GetClassificationUseCase implements IUseCase<EventClassifications[]> {
+export default class GetClassificationUseCase implements IUseCase<EventClassificationDto[]> {
     private readonly service: IClassificationService;
     firstName? : string;
     lastName? : string;
@@ -17,7 +17,7 @@ export default class GetClassificationUseCase implements IUseCase<EventClassific
         this.service = service;
     }
 
-    async handle(): Promise<EventClassifications[]> {
+    async handle(): Promise<EventClassificationDto[]> {
         return this.service.getClassification(this.firstName, this.lastName, this.userId);
     }
 }

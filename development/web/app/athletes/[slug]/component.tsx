@@ -7,9 +7,8 @@ import { ShieldCheckIcon } from '@heroicons/react/20/solid';
 import { StarIcon } from '@heroicons/react/24/solid';
 import EventClassificationDto from "../../../../entities/events/classifications";
 
-export default async function AthleteClassifications({classificationsList} : {classificationsList : any}) {
-    //const classifications = classificationsList as EventClassificationDto[];
-    const classifications: EventClassifications[] = [];
+export default function AthleteClassifications({ classifications } : { classifications: any }) {
+    const classificationsList = classifications as EventClassificationDto[] | undefined;
     return (
     <Card>
         <Flex justifyContent="center">
@@ -24,12 +23,12 @@ export default async function AthleteClassifications({classificationsList} : {cl
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                {!classifications || classifications.length === 0 
+                {!classificationsList || classificationsList.length === 0
                 ? 
                 <TableRow>
                     <TableCell colSpan={5} align="center">No se encontraron clasificaciones</TableCell> 
                 </TableRow>
-                : classifications.map((classification) => (
+                : classificationsList.map((classification) => (
                 <TableRow key={classification.id} className="transition-colors hover:border-gray-50 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-200/30">
                     
                     <TableCell>
@@ -54,33 +53,7 @@ export default async function AthleteClassifications({classificationsList} : {cl
                 </TableRow>
                 ))}
                 </TableBody>
-            </Table>
-            /*
-            classifications.map((classification) => (
-                <Grid numItems={1} numItemsMd={2} className="gap-5 p-4">
-                    <Col>
-                        <Text>
-                            Evento: <Bold>{classification.event_id}</Bold>
-                        </Text>
-                    </Col>
-                    <Col>
-                        <Text>
-                            Posición: <Bold>{classification.position}</Bold>
-                        </Text>
-                    </Col>
-                    <Col>
-                        <Text>
-                            Duración: <Bold>{classification.duration_hours}:{classification.duration_minutes}:{classification.duration_seconds}</Bold>
-                        </Text>
-                    </Col>
-                    <Col>
-                        <Text>
-                            Atleta: <Bold>{classification.athlete_first_name} {classification.athlete_last_name}</Bold>
-                        </Text>
-                    </Col>
-                </Grid>
-            ))
-            */}
+            </Table>}
         </Card>
     );
 }

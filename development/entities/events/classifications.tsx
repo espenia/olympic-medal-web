@@ -7,5 +7,8 @@ export default class EventClassificationDto {
     duration_minutes?: number;
     duration_seconds?: number;
     event_name?: string;
+    event_id?: number;
+    athlete_first_name?: string;
+    athlete_last_name?: string;
     event?: EventDto;
 }

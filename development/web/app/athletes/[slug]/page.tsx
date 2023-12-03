@@ -50,7 +50,7 @@ export default async function UserProfile({ params }: { params: { slug: number }
                     </Col>
                 </Grid>
         </Card>
-        <AthleteClassifications classificationsList={JSON.parse(JSON.stringify(classifications))}/>
+        <AthleteClassifications classifications={JSON.parse(JSON.stringify(classifications))}/>
         
     </main>
 }

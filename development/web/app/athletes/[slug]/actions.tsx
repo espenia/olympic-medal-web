@@ -14,7 +14,7 @@ export default async function getUser(id: number) : Promise<UserDto> {
     return users.length > 0 ? users.at(0)! : new UserDto();
 }
 
-export async function getClassifications(athlete_id: number): Promise<EventClassifications[]> {
+export async function getClassifications(athlete_id: number): Promise<EventClassificationDto[]> {
     GetClassificationUseCaseImpl.firstName = undefined;
     GetClassificationUseCaseImpl.lastName = undefined;
     GetClassificationUseCaseImpl.userId = athlete_id;

@@ -1,11 +1,10 @@
 
-import EventClassifications from "../../../entities/events/classifications";
 import UserDto from "../../../entities/users/user";
 import EventDto from "../../../entities/events/event";
 import EventClassificationDto from "../../../entities/events/classifications";
 
 export default interface IGateway {
-    getClassifications(...args: any[]): Promise<EventClassifications[]>;
+    getClassifications(...args: any[]): Promise<EventClassificationDto[]>;
     login(username: string, password: string) : Promise<UserDto>;
     createUser(user: UserDto) : Promise<void>;
     recoverPassword(mail: string, recoverUrl: string): Promise<void>;
@@ -18,5 +17,4 @@ export default interface IGateway {
     getUser(...args: any[]): Promise<UserDto>;
     getEvents(...args: any[]) : Promise<EventDto[]>;
     createEvent(event: EventDto) : Promise<void>;
-    getClassificationsById(athlete_id: number): Promise<EventClassifications[]>
 }

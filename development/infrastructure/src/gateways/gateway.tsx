@@ -17,46 +17,6 @@ export default class ApiGateway implements IGateway {
     // sino, cambiarlo por 'localhost'
     private apiBaseUrl = "http://springboot:8080";
     //private apiBaseUrl = "http://localhost:8080";
-    
-    
-    async getClassificationsById(athlete_id: number): Promise<EventClassifications[]> {
-        const config = this.getAxiosConfig("get", `/api/classifications_by_athlete/${athlete_id}`,[], []);
-        const response = await axios(config);
-        return response.data.map((x: any) => {
-            const classification = new EventClassificationDto();
-            classification.id = Number.parseInt(x.id);
-            classification.position = Number.parseInt(x.position);
-            classification.duration_hours = Number.parseInt(x.duration_hours);
-            classification.duration_minutes = Number.parseInt(x.duration_minutes);
-            classification.duration_seconds = Number.parseInt(x.duration_seconds);
-
-            const event = new EventDto();
-            event.id = Number.parseInt(x.event?.id);
-            event.name = x.event?.name;
-            event.category = x.event?.category;
-            event.date = new Date(x.event?.date);
-            event.description = x.event?.description;
-            event.distance = Number.parseInt(x.event?.distance);
-
-            classification.event = event;
-
-            const athlete = new UserDto();
-            athlete.id = Number.parseInt(x.athlete?.id);
-            athlete.firstName = x.athlete?.first_name;
-            athlete.lastName = x.athlete?.last_name;
-            athlete.country = x.athlete?.country;
-            athlete.birthdate = new Date(x.athlete?.birth_date);
-            athlete.goldMedals = Number.parseInt(x.athlete?.gold_medals);
-            athlete.silverMedals = Number.parseInt(x.athlete?.silver_medals);
-            athlete.bronzeMedals = Number.parseInt(x.athlete?.bronze_medals);
-            athlete.username = x.athlete?.user_name;
-            athlete.email = x.athlete?.user_mail;
-            
-            classification.athlete = athlete;
-            return classification;
-        });
-    }
-    
 
     async createEvent(event: EventDto): Promise<void> {
         const config = this.getAxiosConfig("post", "/backoffice/event", [], []);
@@ -64,6 +24,7 @@ export default class ApiGateway implements IGateway {
                                       [event.name, event.category, event.date?.toISOString(), event.description, event.distance, event.edition, event.location, event.officialSite, event.participantsCount, event.classifications])
 
         const response = await axios(config);
+        return Promise.resolve();
     }
     async acceptClassifications(idClassification: string): Promise<void> {
         const config = this.getAxiosConfig("put", "/api/classification/" + idClassification + "/accept", [], []);
