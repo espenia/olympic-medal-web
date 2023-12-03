@@ -8,6 +8,7 @@ import { experimental_useFormState as useFormState } from 'react-dom'
 import { changePassword } from './actions';
 import { SubmitButton } from '@/src/submit-button/submitButton';
 import UserDto from "../../../entities/users/user";
+import {redirect} from "next/navigation";
 
 const initialState = {
   message: null,
@@ -17,7 +18,9 @@ export default function ChangePassword() {
   const [state, formAction] = useFormState(setClientValues, initialState);
 
   async function setClientValues(previousState : any, formData : FormData): Promise<void | { message: string }> {
-    return await changePassword(previousState, formData);
+    await changePassword(previousState, formData);
+    alert("Contraseña cambiada exitosamente")
+    redirect("/")
   }
 
   return (
