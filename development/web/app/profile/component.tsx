@@ -1,40 +1,12 @@
-'use client';
-
-import { SubmitButton } from '@/src/submit-button/submitButton';
 import { TrophyIcon } from '@heroicons/react/24/outline';
-import { Card, Flex, Title, Button, Grid, Col, TextInput, Select, SelectItem, Text, Subtitle, DatePicker } from '@tremor/react';
+import { Card, Flex, Title, Button, Grid, Col, TextInput, Text, Subtitle } from '@tremor/react';
 import UserDto from '../../../entities/users/user';
 
-// @ts-ignore
-import { experimental_useFormState as useFormState } from 'react-dom'
-
-import { changePrivacy } from './actions';
-import { useState } from 'react';
-import { redirect } from 'next/navigation';
-
-const initialState = {
-    message: null 
-}
-
-export default function UserProfile({userProps} : {userProps : object}) {
-    const user : UserDto = userProps;
-    const [state, formAction] = useFormState(setClientValues, initialState);
-    const [birthdate, setBirthDate] = useState<Date | undefined>(user?.birthdate);
-    const [isProfilePublic, setIsProfilePublic] = useState<boolean>(user?.isProfilePublic ?? false);
-
-    async function setClientValues(previousState : any, formData : FormData): Promise<{ message : string } | undefined> {
-        formData.set("birthdate", birthdate?.toISOString() ?? '');
-        formData.set("isProfilePublic", isProfilePublic.toString());
-        const res = await changePrivacy(previousState, formData);
-        if (!res) {
-          redirect("/");
-        }
-        return res;
-      }
+export default function UserProfile({userProps} : {userProps : UserDto}) {
+    const user = userProps;
 
     return (
         <main className="p-4 md:p-10 mx-auto max-w-7xl">
-            <form action={formAction}>
             <Card>
                 <Flex justifyContent="between" className="pb-8" alignItems="center">
                     <Flex flexDirection='col' alignItems='start' className='ps-4'>
@@ -52,40 +24,36 @@ export default function UserProfile({userProps} : {userProps : object}) {
                         <Text>
                             Nombre 
                         </Text>
-                        <TextInput placeholder='' name='firstName' id='firstName' value={user.firstName} required>
+                        <TextInput readOnly placeholder='' name='firstName' id='firstName' value={user.firstName} required>
                         </TextInput>
                     </Col>
                     <Col>
                         <Text>
                             Apellido 
                         </Text>
-                        <TextInput placeholder='' name='lastName' id='lastName' value={user.lastName} required>
+                        <TextInput readOnly placeholder='' name='lastName' id='lastName' value={user.lastName} required>
                         </TextInput>
                     </Col>
                     <Col>
                         <Text>
                             Email 
                         </Text>
-                        <TextInput placeholder='' type='email' name='email' id='email' value={user.email} required>
+                        <TextInput readOnly placeholder='' type='email' name='email' id='email' value={user.email} required>
                         </TextInput>
                     </Col>
                     <Col>
                         <Text>
                             Fecha de nacimiento
                         </Text>
-                        <DatePicker onValueChange={setBirthDate} defaultValue={new Date()} aria-required>
-                        </DatePicker>
+                        <TextInput readOnly value={new Date(user.birthdate ?? new Date()).toLocaleDateString('es-ES', {
+                            year: 'numeric',
+                            month: 'long',
+                            day: 'numeric',
+                        })}></TextInput>
                     </Col>
                     <Col>
                         <Text>Privacidad del perfil</Text>
-                        <Select onValueChange={e => setIsProfilePublic(e === 'true')} value={isProfilePublic.toString()} aria-required>
-                            <SelectItem value={'true'}>
-                                Publico
-                            </SelectItem>
-                            <SelectItem value={'false'}>
-                                Privado
-                            </SelectItem>
-                        </Select>
+                        <TextInput readOnly value='Publico'></TextInput>
                     </Col>
                     <Col>
                         <Flex flexDirection="row" alignItems="center" justifyContent="start">
@@ -101,12 +69,7 @@ export default function UserProfile({userProps} : {userProps : object}) {
                         </Flex>
                     </Col>
                 </Grid>
-                <Flex justifyContent='end' className='pe-4'>
-                    <SubmitButton></SubmitButton>
-                </Flex>
-                {state && state.message && state.message.length > 0 && <Text>{state.message}</Text>}
             </Card>
-            </form>
         </main>
     );
 }
