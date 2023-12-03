@@ -51,11 +51,12 @@ export default class ApiGateway implements IGateway {
         const response = await axios(config);
 
         const classifications = response.data.results.map((x: {[k: string]: any}) =>
-        { 
+        {
             const classification = new EventClassificationDto();
             classification.id = Number.parseInt(x.id);
             classification.event_id = Number.parseInt(x.event.id);
             classification.event_name = x.event.name;
+            classification.event = x.event as EventDto;
             classification.position = Number.parseInt(x.position);
             classification.duration_hours = Number.parseInt(x.duration_hours);
             classification.duration_minutes = Number.parseInt(x.duration_minutes);
@@ -65,8 +66,7 @@ export default class ApiGateway implements IGateway {
             return classification;
         });
 
-    return classifications;
-
+        return classifications;
     }
 
     async getEvents(...args: any[]): Promise<EventDto[]> {

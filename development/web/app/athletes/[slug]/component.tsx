@@ -1,7 +1,6 @@
 "use client";
 
-import { Badge, Bold, Card, Flex, Table, TableBody, TableCell, TableHead, TableHeaderCell, TableRow } from "@tremor/react";
-import { getClassifications } from "./actions";
+import { Badge, Bold, Card, Flex, Table, TableBody, TableCell, TableHead, TableHeaderCell, TableRow, Title } from "@tremor/react";
 import { TrophyIcon } from '@heroicons/react/24/outline';
 import { ShieldCheckIcon } from '@heroicons/react/20/solid';
 import { StarIcon } from '@heroicons/react/24/solid';
@@ -11,25 +10,43 @@ export default function AthleteClassifications({ classifications } : { classific
     const classificationsList = classifications as EventClassificationDto[] | undefined;
     return (
     <Card>
-        <Flex justifyContent="center">
-            Clasificaciones
+        <Flex justifyContent="center" className="pb-8" alignItems="center">
+            <Title>Clasificaciones</Title>
         </Flex>
             {
             <Table>
                 <TableHead>
                     <TableRow>
-                        <TableHeaderCell>Posicion</TableHeaderCell>
+                        <TableHeaderCell>Evento</TableHeaderCell>
+                        <TableHeaderCell>Categoria</TableHeaderCell>
                         <TableHeaderCell>Duracion</TableHeaderCell>
+                        <TableHeaderCell>Posicion</TableHeaderCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
                 {!classificationsList || classificationsList.length === 0
                 ? 
                 <TableRow>
-                    <TableCell colSpan={5} align="center">No se encontraron clasificaciones</TableCell> 
+                    <TableCell colSpan={5} align="center">
+                        <Flex justifyContent="center">
+                            No se encontraron clasificaciones
+                        </Flex>
+                    </TableCell> 
                 </TableRow>
                 : classificationsList.map((classification) => (
                 <TableRow key={classification.id} className="transition-colors hover:border-gray-50 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-200/30">
+
+                    <TableCell>
+                        {classification.event_name}
+                    </TableCell>
+
+                    <TableCell>
+                        {classification.event?.category}
+                    </TableCell>
+
+                    <TableCell>
+                        {`${pad(classification.duration_hours ?? 0, 2)}:${pad(classification.duration_minutes ?? 0, 2)}:${pad(classification.duration_seconds ?? 0, 2)}`}
+                    </TableCell>
                     
                     <TableCell>
                         {classification.position! < 4 ? 
@@ -47,13 +64,11 @@ export default function AthleteClassifications({ classifications } : { classific
                             }
                     </TableCell>
 
-                    <TableCell>
-                        {`${pad(classification.duration_hours ?? 0, 2)}:${pad(classification.duration_minutes ?? 0, 2)}:${pad(classification.duration_seconds ?? 0, 2)}`}
-                    </TableCell>
                 </TableRow>
                 ))}
                 </TableBody>
-            </Table>}
+            </Table>
+            }
         </Card>
     );
 }
