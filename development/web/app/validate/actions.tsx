@@ -1,13 +1,8 @@
 'use server';
 import { getServerSession } from 'next-auth';
-import { GetClassificationUseCaseImpl, AcceptClassificationUseCaseImpl,DeclineClassificationUseCaseImpl, GetUserUseCaseImpl, GetUsersUseCaseImpl } from "@/src/server-container";
+import { GetClassificationUseCaseImpl, AcceptClassificationUseCaseImpl,DeclineClassificationUseCaseImpl, GetUsersUseCaseImpl } from "@/src/server-container";
 import UserDto from '../../../entities/users/user';
-
-/*export async function getUser() {
-    const user = await GetUserUseCaseImpl.handle();
-
-    return user;
-}*/
+import {redirect} from "next/navigation";
 
 export async function getUser() {
     const session = await getServerSession();
@@ -34,13 +29,12 @@ export async function acceptClassification(id_clasificacion: number | undefined)
     AcceptClassificationUseCaseImpl.id_classification = id_clasificacion;
 
     const users = await AcceptClassificationUseCaseImpl.handle();
-    return;
+    return redirect('/validate');
 }
 
-export async function declineClassification(id_clasificacion: number | undefined) {
-    DeclineClassificationUseCaseImpl.id_classification = id_clasificacion;
-
-    const users = await DeclineClassificationUseCaseImpl.handle();
-
-    return ;
-}
+// export async function declineClassification(id_clasificacion: number | undefined) {
+//     DeclineClassificationUseCaseImpl.id_classification = id_clasificacion;
+//
+//     const users = await DeclineClassificationUseCaseImpl.handle();
+//     return redirect('/validate');
+// }

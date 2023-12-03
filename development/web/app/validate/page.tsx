@@ -1,6 +1,7 @@
 'use server';
 import ClasificacionEvento from './clasification';
 import { getClassification, getUser } from './actions';
+import {Card, Flex, Title} from "@tremor/react";
 
 
 const ClasificacionDeportista = async () => {
@@ -26,7 +27,19 @@ const ClasificacionDeportista = async () => {
 
   return (
     <div>
-      {clasificacionComponents}
+      <Card>
+        <Flex justifyContent="center" className="pb-8" alignItems="center">
+          <Title>Validar Clasificaciones</Title>
+        </Flex>
+        <div>
+          {clasificacionComponents.length === 0 ?
+              <Flex justifyContent="center">
+                No se encontraron clasificaciones para validar
+              </Flex>
+              : clasificacionComponents }
+        </div>
+
+        </Card>
     </div>
   );
 }

@@ -2,7 +2,6 @@
 import React from 'react';
 import { Card, Title, Text, Button } from '@tremor/react';
 import { acceptClassification, declineClassification } from './actions';
-import {router} from "next/client";
 
 interface ClasificacionEventoProps {
   nombre_deportista: string;
@@ -25,7 +24,6 @@ const ClasificacionEvento: React.FC<ClasificacionEventoProps> = async ({
   const handleValidar = async (id_clasificacion: number) => {
     try {
       const data = await acceptClassification(id_clasificacion);
-      router.reload();
     } catch (error) {
       console.error('Error al validar:', error);
     }
@@ -34,14 +32,13 @@ const ClasificacionEvento: React.FC<ClasificacionEventoProps> = async ({
   const handleRechazar = async (id_clasificacion: number) => {
     try {
       const data = await declineClassification(id_clasificacion);
-      router.reload();
     } catch (error) {
       console.error('Error al rechazar:', error);
     }
   };
 
   return (
-    <div className="p-4 md:p-10 mx-auto max-w-7xl">
+    <div className="p-4 mx-auto max-w-7xl">
       <Card>
         <Title>Clasificación de Deportista</Title>
         <div>
@@ -59,29 +56,15 @@ const ClasificacionEvento: React.FC<ClasificacionEventoProps> = async ({
         >
           Validar
         </Button>
-        <Button
-          onClick={() => handleRechazar(id_clasificacion)}
-          className="bg-red-500 text-white p-2 mt-4"
-        >
-          Rechazar
-        </Button>
+        {/*<Button*/}
+        {/*  onClick={() => handleRechazar(id_clasificacion)}*/}
+        {/*  className="bg-red-500 text-white p-2 mt-4"*/}
+        {/*>*/}
+        {/*  Rechazar*/}
+        {/*</Button>*/}
       </Card>
     </div>
   );
 };
 
 export default ClasificacionEvento;
-/*
-        <Button
-          onClick={handleValidar}
-          className="bg-green-500 text-white p-2 mt-4"
-        >
-          Validar
-        </Button>
-        <Button
-          onClick={handleRechazar}
-          className="bg-red-500 text-white p-2 mt-4"
-        >
-          Rechazar
-        </Button>
-*/
