@@ -24,6 +24,7 @@ export default class ApiGateway implements IGateway {
                                       [event.name, event.category, event.date?.toISOString(), event.description, event.distance, event.edition, event.location, event.officialSite, event.participantsCount, event.classifications])
 
         const response = await axios(config);
+        return Promise.resolve();
     }
     async acceptClassifications(idClassification: string): Promise<void> {
         const config = this.getAxiosConfig("put", "/api/classification/" + idClassification + "/accept", [], []);
@@ -46,15 +47,16 @@ export default class ApiGateway implements IGateway {
     }
 
     async getClassifications(...args: any[]): Promise<EventClassificationDto[]> {
-        const config = this.getAxiosConfig("get", "/api/classifications/search", ["athlete_first_name", "athlete_last_name"], args);
+        const config = this.getAxiosConfig("get", "/api/classifications/search", ["athlete_first_name", "athlete_last_name", "user_id"], args);
         const response = await axios(config);
 
         const classifications = response.data.results.map((x: {[k: string]: any}) =>
-        { 
+        {
             const classification = new EventClassificationDto();
             classification.id = Number.parseInt(x.id);
             classification.event_id = Number.parseInt(x.event.id);
             classification.event_name = x.event.name;
+            classification.event = x.event as EventDto;
             classification.position = Number.parseInt(x.position);
             classification.duration_hours = Number.parseInt(x.duration_hours);
             classification.duration_minutes = Number.parseInt(x.duration_minutes);
@@ -64,8 +66,7 @@ export default class ApiGateway implements IGateway {
             return classification;
         });
 
-    return classifications;
-
+        return classifications;
     }
 
     async getEvents(...args: any[]): Promise<EventDto[]> {

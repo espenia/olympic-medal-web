@@ -25,19 +25,19 @@ import GetUserUseCase from '../../usecases/users/getUserUseCase';
 import ChangePasswordUseCase from '../../usecases/auth/passwordChangeUseCase';
 import PasswordRecoverUseCase from '../../usecases/auth/passwordRecoverUseCase';
 import GetClassificationUseCase from '../../usecases/classifications/getClassificationUseCase';
-import EventClassifications from '../../entities/events/classifications';
 import ClassificationRepository from '../../infrastructure/src/classifications/classificationRepository';
 import AcceptClassificationUseCase from '../../usecases/classifications/acceptClassificationUseCase';
 import DeclineClassificationUseCase from '../../usecases/classifications/declineClassificationUseCase';
+  import EventClassificationDto from "../../entities/events/classifications";
 
 !Container.has('apigateway') && Container.set<ApiGateway>({ id: 'apigateway', transient: false, global: true, eager: true, multiple: false, value: new ApiGateway() });
 !Container.has(EventService) && Container.set<IRepository<EventDto>>(EventRepository, new EventRepository(Container.get<ApiGateway>('apigateway')));
 !Container.has(UserRepository) && Container.set<IRepository<UserDto>>(UserRepository, new UserRepository(Container.get<ApiGateway>('apigateway')));
-!Container.has(ClassificationRepository) && Container.set<IRepository<EventClassifications>>(ClassificationRepository, new ClassificationRepository(Container.get<ApiGateway>('apigateway')));
+!Container.has(ClassificationRepository) && Container.set<IRepository<EventClassificationDto>>(ClassificationRepository, new ClassificationRepository(Container.get<ApiGateway>('apigateway')));
 !Container.has(EventService) && Container.set<IEventService>(EventService, new EventService(Container.get<IRepository<EventDto>>(EventRepository)));
 !Container.has(AuthService) && Container.set<IAuthService>(AuthService, new AuthService(Container.get<ApiGateway>('apigateway')));
 !Container.has(UserService) && Container.set<IUserService>(UserService, new UserService(Container.get<IRepository<UserDto>>(UserRepository)));
-!Container.has(ClassificationService) && Container.set<IClassificationService>(ClassificationService, new ClassificationService(Container.get<IRepository<EventClassifications>>(ClassificationRepository)));
+!Container.has(ClassificationService) && Container.set<IClassificationService>(ClassificationService, new ClassificationService(Container.get<IRepository<EventClassificationDto>>(ClassificationRepository)));
 !Container.has(GetEventsUseCase) && Container.set<GetEventsUseCase>(GetEventsUseCase, new GetEventsUseCase(Container.get<IEventService>(EventService)));
 !Container.has(CreateEventUseCase) && Container.set<CreateEventUseCase>(CreateEventUseCase, new CreateEventUseCase(Container.get<IEventService>(EventService)));
 !Container.has(LoginUseCase) && Container.set<LoginUseCase>(LoginUseCase, new LoginUseCase(Container.get<IAuthService>(AuthService)));
@@ -52,9 +52,6 @@ import DeclineClassificationUseCase from '../../usecases/classifications/decline
 !Container.has(GetClassificationUseCase) && Container.set<GetClassificationUseCase>(GetClassificationUseCase, new GetClassificationUseCase(Container.get<IClassificationService>(ClassificationService)));
 
 
-/*Container.set<DeclineClassificationUseCase>(DeclineClassificationUseCase, new DeclineClassificationUseCase(Container.get<IClassificationService>(ClassificationService)));
-Container.set<AcceptClassificationUseCase>(AcceptClassificationUseCase, new AcceptClassificationUseCase(Container.get<IClassificationService>(ClassificationService)));
-Container.set<GetClassificationUseCase>(GetClassificationUseCase, new GetClassificationUseCase(Container.get<IClassificationService>(ClassificationService)));*/
 const GetEventUseCaseImpl = Container.get<GetEventsUseCase>(GetEventsUseCase);
 const CreateEventUseCaseImpl = Container.get<CreateEventUseCase>(CreateEventUseCase);
 const LoginUseCaseImpl = Container.get<LoginUseCase>(LoginUseCase);

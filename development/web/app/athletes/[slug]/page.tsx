@@ -1,10 +1,11 @@
-import { Card, Title, Text, Button, Flex, Grid, Col, Bold, Subtitle } from "@tremor/react";
-import getUser from "./actions";
+import { Card, Title, Text, Button, Flex, Grid, Col, Bold, Subtitle, TableCell, TableRow, Table, TableHead, TableHeaderCell, TableBody } from "@tremor/react";
+import getUser, { getClassifications } from "./actions";
 import { TrophyIcon } from "@heroicons/react/24/outline";
+import AthleteClassifications from "./component";
 
 export default async function UserProfile({ params }: { params: { slug: number }}) {
     const user = await getUser(params.slug);
-
+    const classifications = await getClassifications(params.slug);
     return <main className="p-4 md:p-10 mx-auto max-w-7xl">
         <Card>
                 <Flex justifyContent="between" className="pb-8" alignItems="center">
@@ -49,5 +50,7 @@ export default async function UserProfile({ params }: { params: { slug: number }
                     </Col>
                 </Grid>
         </Card>
+        <AthleteClassifications classifications={JSON.parse(JSON.stringify(classifications))}/>
+        
     </main>
 }

@@ -1,10 +1,10 @@
 import type IGateway from "../interfaces/gateway";
 import IRepository from "../../../entities/common/interfaces/repository";
 import { Service } from "typedi";
-import EventClassifications from "../../../entities/events/classifications";
+import EventClassificationDto from "../../../entities/events/classifications";
 
 @Service('classificationrepository')
-export default class ClassificationRepository implements IRepository<EventClassifications> {
+export default class ClassificationRepository implements IRepository<EventClassificationDto> {
     private readonly gateway : IGateway;
 
     /**
@@ -13,14 +13,16 @@ export default class ClassificationRepository implements IRepository<EventClassi
     constructor(gateway : IGateway) {
         this.gateway = gateway;
     }
-    getOneAsync(...args: any[]): Promise<EventClassifications> {
+    
+    getOneAsync(...args: any[]): Promise<EventClassificationDto> {
         throw new Error("Method not implemented.");
     }
-    createAsync(a: EventClassifications): Promise<void> {
+
+    createAsync(a: EventClassificationDto): Promise<void> {
         return Promise.resolve();
     }
 
-    getAsync(...args: any[]): Promise<EventClassifications[]> {
+    getAsync(...args: any[]): Promise<EventClassificationDto[]> {
         return this.gateway.getClassifications(...args);
     }
 

@@ -1,8 +1,8 @@
-import EventClassifications from "../../../entities/events/classifications";
+import EventClassificationDto from "../../../entities/events/classifications";
 
 export default interface IClassificationService {
-    create(classification: EventClassifications) : Promise<void>;
-    getClassification(firstName: string | undefined, lastName: string | undefined) : Promise<EventClassifications[]>;
+    create(classification: EventClassificationDto) : Promise<void>;
+    getClassification(firstName: string | undefined, lastName: string | undefined, userId: number | undefined) : Promise<EventClassificationDto[]>;
     acceptClassification(id_clasificacion: number | undefined) : Promise<void>;
     declineClassification(id_clasificacion: number | undefined) : Promise<void>;
 }
