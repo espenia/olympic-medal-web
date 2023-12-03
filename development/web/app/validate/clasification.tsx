@@ -1,7 +1,7 @@
 'use client';
 import React from 'react';
 import { Card, Title, Text, Button } from '@tremor/react';
-import { acceptClassification, declineClassification } from './actions';
+import { acceptClassification } from './actions';
 
 interface ClasificacionEventoProps {
   nombre_deportista: string;
