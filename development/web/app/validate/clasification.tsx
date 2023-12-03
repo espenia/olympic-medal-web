@@ -29,13 +29,13 @@ const ClasificacionEvento: React.FC<ClasificacionEventoProps> = async ({
     }
   };
 
-  const handleRechazar = async (id_clasificacion: number) => {
-    try {
-      const data = await declineClassification(id_clasificacion);
-    } catch (error) {
-      console.error('Error al rechazar:', error);
-    }
-  };
+  // const handleRechazar = async (id_clasificacion: number) => {
+  //   try {
+  //     const data = await declineClassification(id_clasificacion);
+  //   } catch (error) {
+  //     console.error('Error al rechazar:', error);
+  //   }
+  // };
 
   return (
     <div className="p-4 mx-auto max-w-7xl">
