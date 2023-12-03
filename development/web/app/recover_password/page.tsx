@@ -16,6 +16,7 @@ export default async function Recover() {
   const [state, formAction] = useFormState(setClientValues, initialState);
 
   async function setClientValues(previousState : any, formData : FormData): Promise<void | { message: string }> {
+    alert("Revise su casilla correo electronico (posiblemente en el spam)")
     return await recoverPassword(previousState, formData);
   }
 
