@@ -23,7 +23,7 @@ export default class AuthService implements IAuthService {
         return this.gateway.recoverPassword(mail, recoverUrl);
     }
 
-    changePassword(email: string, userName: string, password: string): Promise<void> {
-        return this.gateway.changePassword(email, userName, password);
+    changePassword(email: string, password: string): Promise<void> {
+        return this.gateway.changePassword(email, password);
     }
 }

@@ -15,8 +15,8 @@ export default class ApiGateway implements IGateway {
     // si el backend esta corriendo en un contenedor de docker, 
     // usar 'springboot' o el nombre del servicio en el docker compose
     // sino, cambiarlo por 'localhost'
-    //private apiBaseUrl = "http://springboot:8080";
-    private apiBaseUrl = "http://localhost:8080";
+    private apiBaseUrl = "http://springboot:8080";
+    //private apiBaseUrl = "http://localhost:8080";
 
     async createEvent(event: EventDto): Promise<void> {
         const config = this.getAxiosConfig("post", "/backoffice/event", [], []);
@@ -228,14 +228,14 @@ export default class ApiGateway implements IGateway {
         return user;
     }
 
-    async changePassword(mail: string, userName: string, password: string): Promise<void> {
+    async changePassword(mail: string, password: string): Promise<void> {
         const response = await axios({
             method: 'put',
             url: this.apiBaseUrl + "/auth/password/" + mail,
             headers: {"Content-Type": "application/json"},
             data: {
                 password: password,
-                user_name: userName
+                // user_name: userName
             }
         });
 

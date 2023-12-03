@@ -7,6 +7,7 @@ import {Card, Title, Text, TextInput, Grid, Col, Flex} from '@tremor/react';
 import { experimental_useFormState as useFormState } from 'react-dom'
 import { changePassword } from './actions';
 import { SubmitButton } from '@/src/submit-button/submitButton';
+import UserDto from "../../../entities/users/user";
 
 const initialState = {
   message: null,
@@ -26,16 +27,12 @@ export default function ChangePassword() {
           <form action={formAction}>
             <Grid numItems={1} numItemsMd={2} className="gap-2 p-4">
               <Col>
-                <Text>Nombre de usuario:</Text>
-                <TextInput placeholder='' required={true} id='username' name='username' type="text" />
+                <Text>Email:</Text>
+                <TextInput placeholder='' required={true} id='email' name='email' type="email" />
               </Col>
               <Col>
                 <Text>Contraseña:</Text>
                 <TextInput placeholder='' required={true}  name='password' id='password' type="password" />
-              </Col>
-              <Col>
-                <Text>Email:</Text>
-                <TextInput placeholder='' required={true} id='email' name='email' type="email" />
               </Col>
             </Grid>
             <Col>
