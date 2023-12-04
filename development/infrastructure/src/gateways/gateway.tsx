@@ -126,6 +126,7 @@ export default class ApiGateway implements IGateway {
                     classification.id = Number.parseInt(x.id);
                     return classification;
                 })
+                event.classifications = event.classifications?.sort((x, y) => (x.position ?? 0) - (y.position ?? 0));
                 return event;
             });
 
