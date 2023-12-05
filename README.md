@@ -8,6 +8,10 @@ https://backoffice.grupo-5.2023.tecnicasdedisenio.com.ar/
 ## Link Jira
 https://tdd-grupo-5.atlassian.net/jira/software/projects/TDD/boards/1
 
+## Link backend project
+https://gitlab.com/efpenia/medallero
+
+
 ## Presentacion Power Point
 ![Presentacion](./docs/Tecnicas-de-diseño.pptx)
 
